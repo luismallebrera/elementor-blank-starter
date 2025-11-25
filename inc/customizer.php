@@ -398,6 +398,23 @@ new \Kirki\Field\Color(
 );
 
 /**
+ * Enable Transition Borders
+ */
+new \Kirki\Field\Checkbox_Switch(
+    array(
+        'settings'    => 'enable_page_transitions_borders',
+        'label'       => esc_html__('Enable Transition Borders', 'elementor-blank-starter'),
+        'description' => esc_html__('Enable border frame animation during page transitions.', 'elementor-blank-starter'),
+        'section'     => 'page_transitions_section',
+        'default'     => true,
+        'choices'     => array(
+            'on'  => esc_html__('Enabled', 'elementor-blank-starter'),
+            'off' => esc_html__('Disabled', 'elementor-blank-starter'),
+        ),
+    )
+);
+
+/**
  * Transition Borders Color
  */
 new \Kirki\Field\Color(
@@ -407,6 +424,13 @@ new \Kirki\Field\Color(
         'description' => esc_html__('Background color of the transition borders.', 'elementor-blank-starter'),
         'section'     => 'page_transitions_section',
         'default'     => '#121e50',
+        'active_callback' => array(
+            array(
+                'setting'  => 'enable_page_transitions_borders',
+                'operator' => '==',
+                'value'    => true,
+            ),
+        ),
     )
 );
 
