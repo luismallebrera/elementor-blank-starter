@@ -87,6 +87,15 @@ if (get_theme_mod('enable_animate_on_scroll', false)) {
     if (file_exists($aos_plugin)) {
         include_once $aos_plugin;
     }
+    
+    /**
+     * Incluir Elementor Custom Class & Attributes Extension
+     * Solo se carga cuando AOS está activado
+     */
+    $elementor_custom_class = get_template_directory() . '/inc/elementor-custom-class-attributes.php';
+    if (file_exists($elementor_custom_class)) {
+        include_once $elementor_custom_class;
+    }
 }
 
 /**
