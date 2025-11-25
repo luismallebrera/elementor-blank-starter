@@ -13,13 +13,18 @@
     height: 100%;
     background: #000;
     z-index: 99999;
+    opacity: 1;
     visibility: hidden;
     pointer-events: none;
+    transform: scaleY(0);
+    transform-origin: top;
 }
 
 .transition-pannel-bg.active {
+    opacity: 1;
     visibility: visible;
     pointer-events: auto;
+    transform: scaleY(1);
 }
 
 /* Transition Borders Background (optional decoration) */

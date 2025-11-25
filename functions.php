@@ -86,7 +86,7 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/css/page-transitions.css',
             array(),
-            '1.2'
+            '1.3'
         );
         
         // Add inline CSS for dynamic settings
@@ -113,17 +113,17 @@ function elementor_blank_scripts() {
         // Determine transition properties based on animation type
         if ($transition_animation === 'fade') {
             $transition_property = 'transform, opacity, visibility';
-            $transition_timing = 'cubic-bezier(0.19, 1, 0.22, 1), ease-in-out, step-end';
+            $transition_timing = 'cubic-bezier(0.19, 1, 0.22, 1), ease-in-out, step-start';
             $transition_duration = "{$duration_seconds}s, {$duration_seconds}s, 0s";
-            $transition_delay_initial = "0s, 0s, {$duration_seconds}s";
-            $transition_delay_active = "0s, 0s, 0s";
+            $transition_delay_initial = "0s, 0s, 0s";
+            $transition_delay_active = "0s, 0s, {$duration_seconds}s";
         } else {
             // slide-down and slide-up without opacity
             $transition_property = 'transform, visibility';
-            $transition_timing = 'cubic-bezier(0.19, 1, 0.22, 1), step-end';
+            $transition_timing = 'cubic-bezier(0.19, 1, 0.22, 1), step-start';
             $transition_duration = "{$duration_seconds}s, 0s";
-            $transition_delay_initial = "0s, {$duration_seconds}s";
-            $transition_delay_active = "0s, 0s";
+            $transition_delay_initial = "0s, 0s";
+            $transition_delay_active = "0s, {$duration_seconds}s";
         }
         
         $custom_css = "
@@ -140,6 +140,8 @@ function elementor_blank_scripts() {
             .transition-pannel-bg.active {
                 opacity: {$opacity_final};
                 transform: scaleY(1);
+                transition-property: {$transition_property};
+                transition-timing-function: {$transition_timing};
                 transition-duration: {$transition_duration};
                 transition-delay: {$transition_delay_active};
             }
