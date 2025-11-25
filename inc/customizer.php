@@ -477,6 +477,69 @@ new \Kirki\Section(
 );
 
 /**
+ * Sección: Custom Post Types
+ */
+new \Kirki\Section(
+    'custom_post_types_section',
+    array(
+        'title'       => esc_html__('Custom Post Types', 'elementor-blank-starter'),
+        'panel'       => 'theme_options',
+        'priority'    => 70,
+    )
+);
+
+/**
+ * Enable Portfolio CPT
+ */
+new \Kirki\Field\Checkbox_Switch(
+    array(
+        'settings'    => 'enable_portfolio_cpt',
+        'label'       => esc_html__('Enable Portfolio', 'elementor-blank-starter'),
+        'description' => esc_html__('Enable Portfolio custom post type with categories and tags.', 'elementor-blank-starter'),
+        'section'     => 'custom_post_types_section',
+        'default'     => false,
+        'choices'     => array(
+            'on'  => esc_html__('Enabled', 'elementor-blank-starter'),
+            'off' => esc_html__('Disabled', 'elementor-blank-starter'),
+        ),
+    )
+);
+
+/**
+ * Enable Proyectos CPT
+ */
+new \Kirki\Field\Checkbox_Switch(
+    array(
+        'settings'    => 'enable_proyectos_cpt',
+        'label'       => esc_html__('Enable Proyectos', 'elementor-blank-starter'),
+        'description' => esc_html__('Enable Proyectos custom post type with categories and tags.', 'elementor-blank-starter'),
+        'section'     => 'custom_post_types_section',
+        'default'     => false,
+        'choices'     => array(
+            'on'  => esc_html__('Enabled', 'elementor-blank-starter'),
+            'off' => esc_html__('Disabled', 'elementor-blank-starter'),
+        ),
+    )
+);
+
+/**
+ * Enable Noticias CPT
+ */
+new \Kirki\Field\Checkbox_Switch(
+    array(
+        'settings'    => 'enable_noticias_cpt',
+        'label'       => esc_html__('Enable Noticias', 'elementor-blank-starter'),
+        'description' => esc_html__('Enable Noticias custom post type with categories and tags.', 'elementor-blank-starter'),
+        'section'     => 'custom_post_types_section',
+        'default'     => false,
+        'choices'     => array(
+            'on'  => esc_html__('Enabled', 'elementor-blank-starter'),
+            'off' => esc_html__('Disabled', 'elementor-blank-starter'),
+        ),
+    )
+);
+
+/**
  * Enable Grid Line
  */
 new \Kirki\Field\Checkbox_Switch(
