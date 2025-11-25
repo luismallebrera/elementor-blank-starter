@@ -195,7 +195,7 @@ function ecc_add_image_custom_class_attributes( $html, $settings, $image_size_ke
     }
     if ( ! empty( $settings['ecc_easing_function'] ) ) {
         $easing_value = str_replace('easing-', '', $settings['ecc_easing_function']);
-        $attributes[] = 'data-aos-easing="' . esc_attr( $easing_value ) . '"';
+        $attributes[] = 'data-aos-easing=' . esc_attr( $easing_value );
     }
     if ( isset( $settings['ecc_duration']['size'] ) && $settings['ecc_duration']['size'] > 0 ) {
         $attributes[] = 'data-aos-duration="' . esc_attr( $settings['ecc_duration']['size'] ) . '"';
