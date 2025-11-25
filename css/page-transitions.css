@@ -56,6 +56,29 @@ body.close {
     overflow: hidden;
 }
 
+/* Slide entrance animations for page content */
+body.slide-down-entrance:not(.page-loaded) .elementor {
+    transform: scaleY(0);
+    transform-origin: bottom;
+}
+
+body.slide-down-entrance.page-loaded .elementor {
+    transform: scaleY(1);
+    transform-origin: bottom;
+    transition: transform 0.6s cubic-bezier(0.83, 0, 0.17, 1);
+}
+
+body.slide-up-entrance:not(.page-loaded) .elementor {
+    transform: scaleY(0);
+    transform-origin: top;
+}
+
+body.slide-up-entrance.page-loaded .elementor {
+    transform: scaleY(1);
+    transform-origin: top;
+    transition: transform 0.6s cubic-bezier(0.83, 0, 0.17, 1);
+}
+
 /* Fade entrance animation for page content */
 body.fade-entrance:not(.page-loaded) .elementor {
     opacity: 0;

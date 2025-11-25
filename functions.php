@@ -87,7 +87,7 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/css/page-transitions.css',
             array(),
-            '3.3'
+            '3.4'
         );
         
         // Add inline CSS for dynamic settings
@@ -174,12 +174,13 @@ function elementor_blank_scripts() {
 }
 
 /**
- * Add body class for fade entrance animation
+ * Add body class for entrance animations
  */
-add_filter('body_class', 'elementor_blank_fade_entrance_body_class');
-function elementor_blank_fade_entrance_body_class($classes) {
-    if (get_theme_mod('enable_page_transitions', false) && get_theme_mod('page_transitions_animation', 'slide-down') === 'fade') {
-        $classes[] = 'fade-entrance';
+add_filter('body_class', 'elementor_blank_entrance_body_class');
+function elementor_blank_entrance_body_class($classes) {
+    if (get_theme_mod('enable_page_transitions', false)) {
+        $animation_type = get_theme_mod('page_transitions_animation', 'slide-down');
+        $classes[] = $animation_type . '-entrance';
     }
     return $classes;
 }
