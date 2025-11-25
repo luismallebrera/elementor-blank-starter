@@ -87,7 +87,7 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/css/page-transitions.css',
             array(),
-            '3.6'
+            '3.7'
         );
         
         // Add inline CSS for dynamic settings
@@ -149,6 +149,9 @@ function elementor_blank_scripts() {
             ";
         } else {
             // Slide animations without opacity
+            // Inverted transform-origin for entrance
+            $entrance_origin = ($transition_animation === 'slide-down') ? 'bottom' : 'top';
+            
             $custom_css = "
                 .transition-pannel-bg {
                     background: {$transition_color};
@@ -159,6 +162,15 @@ function elementor_blank_scripts() {
                 }
                 .transition-pannel-bg.active {
                     transition-delay: 0s, 0s;
+                }
+                body.{$transition_animation}-entrance:not(.page-loaded) .transition-pannel-bg {
+                    visibility: visible;
+                    transform: scaleY(1);
+                    transform-origin: {$entrance_origin};
+                }
+                body.{$transition_animation}-entrance.page-loaded .transition-pannel-bg {
+                    transform: scaleY(0);
+                    transform-origin: {$entrance_origin};
                 }
                 {$borders_css}
             ";
