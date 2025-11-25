@@ -57,31 +57,54 @@
 
     // Remove transition classes on page load
     $(document).ready(function() {
-        $('.transition-pannel-bg').removeClass('active');
-        $('.transition-borders-bg').removeClass('active');
-        $('body').removeClass('close').removeClass('active');
-        
-        // Add page-loaded class after a brief delay for entrance animations
-        // Use dynamic duration for fade entrance timing
-        var entranceDelay = settings.animation === 'fade' ? parseInt(settings.duration) : 50;
-        setTimeout(function() {
+        // For fade animation, wait for panel to fade out before removing classes
+        if (settings.animation === 'fade') {
+            // Add page-loaded class immediately to trigger fade out
             $('body').addClass('page-loaded');
-        }, entranceDelay);
+            
+            // Remove active class after fade completes
+            setTimeout(function() {
+                $('.transition-pannel-bg').removeClass('active');
+                $('.transition-borders-bg').removeClass('active');
+                $('body').removeClass('close');
+            }, parseInt(settings.duration));
+        } else {
+            // For slide animations, remove immediately
+            $('.transition-pannel-bg').removeClass('active');
+            $('.transition-borders-bg').removeClass('active');
+            $('body').removeClass('close').removeClass('active');
+            
+            // Add page-loaded class after a brief delay for entrance animations
+            setTimeout(function() {
+                $('body').addClass('page-loaded');
+            }, 50);
+        }
     });
     
     // Also handle pageshow event (for back/forward navigation)
     $(window).on('pageshow', function(event) {
         if (event.originalEvent.persisted) {
             // Page was loaded from cache (back button)
-            $('.transition-pannel-bg').removeClass('active');
-            $('.transition-borders-bg').removeClass('active');
-            $('body').removeClass('close').removeClass('active');
             
-            // Add page-loaded class for entrance animations with dynamic duration
-            var entranceDelay = settings.animation === 'fade' ? parseInt(settings.duration) : 50;
-            setTimeout(function() {
+            if (settings.animation === 'fade') {
+                // For fade animation, trigger fade out
                 $('body').addClass('page-loaded');
-            }, entranceDelay);
+                
+                setTimeout(function() {
+                    $('.transition-pannel-bg').removeClass('active');
+                    $('.transition-borders-bg').removeClass('active');
+                    $('body').removeClass('close');
+                }, parseInt(settings.duration));
+            } else {
+                // For slide animations
+                $('.transition-pannel-bg').removeClass('active');
+                $('.transition-borders-bg').removeClass('active');
+                $('body').removeClass('close').removeClass('active');
+                
+                setTimeout(function() {
+                    $('body').addClass('page-loaded');
+                }, 50);
+            }
         }
     });
 
