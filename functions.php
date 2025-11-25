@@ -167,20 +167,6 @@ function elementor_blank_scripts() {
 }
 
 /**
- * Add page transition elements to footer (works with Elementor Canvas)
- */
-add_action('wp_footer', 'elementor_blank_page_transition_elements', 999);
-function elementor_blank_page_transition_elements() {
-    if (get_theme_mod('enable_page_transitions', false)) {
-        echo '<div aria-hidden="true" class="transition-borders-bg"></div>';
-        echo '<div aria-hidden="true" class="transition-pannel-bg"></div>';
-    }
-}
-
-// Remover la barra de administración del frontend si lo deseas
-// add_filter('show_admin_bar', '__return_false');
-
-/**
  * Incluir Animate on Scroll plugin
  */
 if (get_theme_mod('enable_animate_on_scroll', false)) {
