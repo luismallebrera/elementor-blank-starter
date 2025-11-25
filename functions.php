@@ -217,6 +217,9 @@ function elementor_blank_entrance_body_class($classes) {
 /**
  * Incluir Animate on Scroll plugin
  */
+/**
+ * Incluir Animate on Scroll plugin
+ */
 if (get_theme_mod('enable_animate_on_scroll', false)) {
     $aos_plugin = get_template_directory() . '/inc/animate-on-scroll/plugin.php';
     if (file_exists($aos_plugin)) {
@@ -239,10 +242,6 @@ if (get_theme_mod('enable_animate_on_scroll', false)) {
 $custom_post_types = get_template_directory() . '/inc/custom-post-types.php';
 if (file_exists($custom_post_types)) {
     include_once $custom_post_types;
-}
-    if (file_exists($elementor_custom_class)) {
-        include_once $elementor_custom_class;
-    }
 }
 
 /**
