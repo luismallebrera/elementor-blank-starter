@@ -50,53 +50,40 @@ function elementor_blank_scripts() {
 
 /**
  * Incluir Kirki Framework
- * https://github.com/themeum/kirki
+ * Incluimos Kirki directamente en el tema
+ * Descarga el plugin desde: https://wordpress.org/plugins/kirki/
+ * Copia la carpeta 'kirki' en inc/kirki-plugin/
  */
-$kirki_autoload = get_template_directory() . '/inc/kirki/autoload.php';
-if (file_exists($kirki_autoload)) {
-    require_once $kirki_autoload;
-    
-    // Verificar que la clase Kirki esté disponible
-    if (class_exists('Kirki')) {
-        /**
-         * Configuración de Kirki
-         */
-        add_action('after_setup_theme', 'elementor_blank_kirki_config');
-        function elementor_blank_kirki_config() {
-            Kirki::add_config('elementor_blank_config', array(
-                'capability'    => 'edit_theme_options',
-                'option_type'   => 'theme_mod',
-            ));
-        }
+$kirki_main_file = get_template_directory() . '/inc/kirki-plugin/kirki.php';
+if (file_exists($kirki_main_file)) {
+    include_once $kirki_main_file;
+}
 
-        /**
-         * Añadir paneles y opciones de Kirki
-         */
-        require_once get_template_directory() . '/inc/customizer.php';
-    } else {
-        /**
-         * Mostrar aviso si la clase Kirki no está disponible
-         */
-        add_action('admin_notices', 'elementor_blank_kirki_class_notice');
-        function elementor_blank_kirki_class_notice() {
-            ?>
-            <div class="notice notice-error">
-                <p><strong>Elementor Blank Starter:</strong> La clase Kirki no se pudo cargar. 
-                Verifica la instalación ejecutando <code>composer install</code> en la carpeta del tema.</p>
-            </div>
-            <?php
-        }
-    }
+// Verificar que Kirki esté disponible
+if (class_exists('Kirki')) {
+    /**
+     * Configuración de Kirki
+     */
+    Kirki::add_config('elementor_blank_config', array(
+        'capability'    => 'edit_theme_options',
+        'option_type'   => 'theme_mod',
+    ));
+
+    /**
+     * Añadir paneles y opciones de Kirki
+     */
+    require_once get_template_directory() . '/inc/customizer.php';
 } else {
     /**
-     * Mostrar aviso si Kirki no está instalado
+     * Mostrar aviso si Kirki no está disponible
      */
     add_action('admin_notices', 'elementor_blank_kirki_notice');
     function elementor_blank_kirki_notice() {
         ?>
-        <div class="notice notice-error">
-            <p><strong>Elementor Blank Starter:</strong> Kirki Framework no está instalado. 
-            Por favor ejecuta <code>composer install</code> en la carpeta del tema.</p>
+        <div class="notice notice-warning is-dismissible">
+            <p><strong>Elementor Blank Starter:</strong> Kirki Framework no está incluido en el tema. 
+            <br>Descarga el plugin desde <a href="https://wordpress.org/plugins/kirki/" target="_blank">WordPress.org</a> 
+            y copia la carpeta 'kirki' en <code>inc/kirki-plugin/</code></p>
         </div>
         <?php
     }

@@ -1,8 +1,9 @@
 {
   "require": {
-    "kirki-framework/kirki": "^4.0"
+    "kirki-framework/control-react-colorful": "^1.0",
+    "kirki-framework/url-getter": "^2.0"
   },
   "config": {
-    "vendor-dir": "inc/kirki"
+    "vendor-dir": "inc/vendor"
   }
 }

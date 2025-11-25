@@ -1,6 +1,8 @@
 # Ignorar dependencias de Composer
-/inc/kirki/
-/vendor/
+/inc/vendor/
+
+# NO ignorar Kirki plugin incluido en el tema
+!/inc/kirki-plugin/
 
 # Ignorar archivos de sistema
 .DS_Store
