@@ -42,15 +42,16 @@
         }
         
         e.preventDefault();
+        e.stopPropagation();
 
         // Trigger transition animation
-        $('body').removeClass('active').addClass('close');
+        $('body').addClass('close').removeClass('active');
         $('.transition-pannel-bg').addClass('active');
 
         // Navigate after animation completes
         setTimeout(function() {
             window.location.href = goTo;
-        }, settings.duration);
+        }, parseInt(settings.duration));
     });
 
     // Remove transition classes on page load
