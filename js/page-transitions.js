@@ -60,6 +60,11 @@
         $('.transition-pannel-bg').removeClass('active');
         $('.transition-borders-bg').removeClass('active');
         $('body').removeClass('close').removeClass('active');
+        
+        // Add page-loaded class after a brief delay for fade entrance
+        setTimeout(function() {
+            $('body').addClass('page-loaded');
+        }, 50);
     });
     
     // Also handle pageshow event (for back/forward navigation)
@@ -69,6 +74,11 @@
             $('.transition-pannel-bg').removeClass('active');
             $('.transition-borders-bg').removeClass('active');
             $('body').removeClass('close').removeClass('active');
+            
+            // Add page-loaded class for fade entrance
+            setTimeout(function() {
+                $('body').addClass('page-loaded');
+            }, 50);
         }
     });
 
