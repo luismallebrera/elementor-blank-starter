@@ -52,9 +52,9 @@ function elementor_blank_scripts() {
  * Incluir Kirki Framework
  * https://github.com/themeum/kirki
  */
-$kirki_path = get_template_directory() . '/inc/kirki/kirki.php';
-if (file_exists($kirki_path)) {
-    require_once $kirki_path;
+$kirki_autoload = get_template_directory() . '/inc/kirki/autoload.php';
+if (file_exists($kirki_autoload)) {
+    require_once $kirki_autoload;
     
     /**
      * Configuración de Kirki
