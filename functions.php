@@ -87,7 +87,7 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/css/page-transitions.css',
             array(),
-            '2.2'
+            '2.3'
         );
         
         // Add inline CSS for dynamic settings
@@ -125,7 +125,7 @@ function elementor_blank_scripts() {
                 }
                 .transition-borders-bg {
                     background-color: {$transition_borders_color};
-                    transition: clip-path {$duration_seconds}s cubic-bezier(0.57, 0, 0.42, 1);
+                    transition-duration: {$duration_seconds}s;
                 }
             ";
         } else {
@@ -143,7 +143,7 @@ function elementor_blank_scripts() {
                 }
                 .transition-borders-bg {
                     background-color: {$transition_borders_color};
-                    transition: clip-path {$duration_seconds}s cubic-bezier(0.57, 0, 0.42, 1);
+                    transition-duration: {$duration_seconds}s;
                 }
             ";
         }
