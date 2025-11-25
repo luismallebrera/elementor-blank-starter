@@ -62,6 +62,15 @@
             $('.transition-pannel-bg').removeClass('initial-load');
         }, 50);
         
+        // Check if entrance animation is enabled
+        if (!settings.enableEntrance) {
+            // No entrance animation, just remove classes immediately
+            $('.transition-pannel-bg').removeClass('active');
+            $('.transition-borders-bg').removeClass('active');
+            $('body').removeClass('close');
+            return;
+        }
+        
         // For fade animation, wait for panel to fade out before removing classes
         if (settings.animation === 'fade') {
             // Add page-loaded class immediately to trigger fade out
@@ -90,6 +99,14 @@
     $(window).on('pageshow', function(event) {
         if (event.originalEvent.persisted) {
             // Page was loaded from cache (back button)
+            
+            // Check if entrance animation is enabled
+            if (!settings.enableEntrance) {
+                $('.transition-pannel-bg').removeClass('active');
+                $('.transition-borders-bg').removeClass('active');
+                $('body').removeClass('close');
+                return;
+            }
             
             if (settings.animation === 'fade') {
                 // For fade animation, trigger fade out

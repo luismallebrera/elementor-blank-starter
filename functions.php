@@ -87,7 +87,7 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/css/page-transitions.css',
             array(),
-            '4.2'
+            '4.3'
         );
         
         // Add inline CSS for dynamic settings
@@ -187,7 +187,7 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/js/page-transitions.js',
             array('jquery'),
-            '1.5',
+            '1.6',
             true
         );
         
@@ -197,6 +197,7 @@ function elementor_blank_scripts() {
             'duration'  => $transition_duration,
             'selectors' => get_theme_mod('page_transitions_selectors', '.menu li a, .elementor-widget-image > a, .soda-post-nav-next a, .soda-post-nav-prev a'),
             'animation' => $transition_animation,
+            'enableEntrance' => get_theme_mod('enable_page_transitions_entrance', true),
         ));
     }
 }

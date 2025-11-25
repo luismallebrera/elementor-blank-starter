@@ -415,6 +415,23 @@ new \Kirki\Field\Checkbox_Switch(
 );
 
 /**
+ * Enable Entrance Animation
+ */
+new \Kirki\Field\Checkbox_Switch(
+    array(
+        'settings'    => 'enable_page_transitions_entrance',
+        'label'       => esc_html__('Enable Entrance Animation', 'elementor-blank-starter'),
+        'description' => esc_html__('Enable entrance animation on page load.', 'elementor-blank-starter'),
+        'section'     => 'page_transitions_section',
+        'default'     => true,
+        'choices'     => array(
+            'on'  => esc_html__('Enabled', 'elementor-blank-starter'),
+            'off' => esc_html__('Disabled', 'elementor-blank-starter'),
+        ),
+    )
+);
+
+/**
  * Transition Borders Color
  */
 new \Kirki\Field\Color(
