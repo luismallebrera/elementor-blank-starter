@@ -23,7 +23,7 @@ function aos_enqueue_scripts() {
         'aos-custom-animations',
         get_template_directory_uri() . '/inc/animate-on-scroll/custom-animations.css',
         array('aos-css'),
-        '1.0'
+        '1.1.0'
     );
     
     // AOS JS
