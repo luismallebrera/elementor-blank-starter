@@ -87,7 +87,7 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/css/page-transitions.css',
             array(),
-            '3.7'
+            '3.8'
         );
         
         // Add inline CSS for dynamic settings
@@ -136,12 +136,12 @@ function elementor_blank_scripts() {
                     visibility: visible;
                     transition-delay: 0s, 0s, 0s;
                 }
-                body.fade-entrance:not(.page-loaded) .transition-pannel-bg {
+                body.fade-entrance:not(.page-loaded) .transition-pannel-bg:not(.active) {
                     opacity: 1;
                     visibility: visible;
                     transform: scaleY(1);
                 }
-                body.fade-entrance.page-loaded .transition-pannel-bg {
+                body.fade-entrance.page-loaded .transition-pannel-bg:not(.active) {
                     opacity: 0;
                     visibility: hidden;
                 }
