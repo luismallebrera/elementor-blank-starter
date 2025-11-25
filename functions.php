@@ -125,7 +125,7 @@ function elementor_blank_scripts() {
                 }
                 .transition-borders-bg {
                     background-color: {$transition_borders_color};
-                    transition: clip-path {$duration_seconds}s cubic-bezier(.57,0,.42,1);
+                    transition: clip-path {$duration_seconds}s cubic-bezier(0.57, 0, 0.42, 1);
                 }
             ";
         } else {
@@ -143,7 +143,7 @@ function elementor_blank_scripts() {
                 }
                 .transition-borders-bg {
                     background-color: {$transition_borders_color};
-                    transition: clip-path {$duration_seconds}s cubic-bezier(.57,0,.42,1);
+                    transition: clip-path {$duration_seconds}s cubic-bezier(0.57, 0, 0.42, 1);
                 }
             ";
         }
