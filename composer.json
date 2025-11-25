@@ -1,6 +1,6 @@
 {
   "require": {
-    "kirki-framework/kirki": "^5.1"
+    "kirki-framework/kirki": "^4.0"
   },
   "config": {
     "vendor-dir": "inc/kirki"
