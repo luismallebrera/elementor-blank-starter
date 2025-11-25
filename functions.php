@@ -87,7 +87,7 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/css/page-transitions.css',
             array(),
-            '3.9'
+            '4.0'
         );
         
         // Add inline CSS for dynamic settings
@@ -137,8 +137,8 @@ function elementor_blank_scripts() {
                     transition-delay: 0s, 0s, 0s;
                 }
                 body.fade-entrance:not(.page-loaded) .transition-pannel-bg:not(.active) {
-                    opacity: 1;
-                    visibility: visible;
+                    opacity: 1 !important;
+                    visibility: visible !important;
                     transform: scaleY(1);
                     transition-property: transform, opacity, visibility;
                     transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1), ease-in-out, step-end;
