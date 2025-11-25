@@ -88,6 +88,116 @@ new \Kirki\Field\Checkbox_Switch(
 );
 
 /**
+ * AOS Duration
+ */
+new \Kirki\Field\Slider(
+    array(
+        'settings'    => 'aos_duration',
+        'label'       => esc_html__('Animation Duration (ms)', 'elementor-blank-starter'),
+        'description' => esc_html__('Duration of animations in milliseconds.', 'elementor-blank-starter'),
+        'section'     => 'animate_on_scroll_section',
+        'default'     => 800,
+        'choices'     => array(
+            'min'  => 100,
+            'max'  => 3000,
+            'step' => 50,
+        ),
+    )
+);
+
+/**
+ * AOS Easing
+ */
+new \Kirki\Field\Select(
+    array(
+        'settings'    => 'aos_easing',
+        'label'       => esc_html__('Animation Easing', 'elementor-blank-starter'),
+        'description' => esc_html__('Easing function for animations.', 'elementor-blank-starter'),
+        'section'     => 'animate_on_scroll_section',
+        'default'     => 'ease-in-out',
+        'choices'     => array(
+            'linear'        => esc_html__('Linear', 'elementor-blank-starter'),
+            'ease'          => esc_html__('Ease', 'elementor-blank-starter'),
+            'ease-in'       => esc_html__('Ease In', 'elementor-blank-starter'),
+            'ease-out'      => esc_html__('Ease Out', 'elementor-blank-starter'),
+            'ease-in-out'   => esc_html__('Ease In Out', 'elementor-blank-starter'),
+            'ease-in-back'  => esc_html__('Ease In Back', 'elementor-blank-starter'),
+            'ease-out-back' => esc_html__('Ease Out Back', 'elementor-blank-starter'),
+            'ease-in-out-back' => esc_html__('Ease In Out Back', 'elementor-blank-starter'),
+        ),
+    )
+);
+
+/**
+ * AOS Once
+ */
+new \Kirki\Field\Checkbox_Switch(
+    array(
+        'settings'    => 'aos_once',
+        'label'       => esc_html__('Animate Once', 'elementor-blank-starter'),
+        'description' => esc_html__('Animation occurs only once when scrolling down.', 'elementor-blank-starter'),
+        'section'     => 'animate_on_scroll_section',
+        'default'     => true,
+        'choices'     => array(
+            'on'  => esc_html__('Yes', 'elementor-blank-starter'),
+            'off' => esc_html__('No', 'elementor-blank-starter'),
+        ),
+    )
+);
+
+/**
+ * AOS Mirror
+ */
+new \Kirki\Field\Checkbox_Switch(
+    array(
+        'settings'    => 'aos_mirror',
+        'label'       => esc_html__('Mirror Animation', 'elementor-blank-starter'),
+        'description' => esc_html__('Whether elements should animate out while scrolling past them.', 'elementor-blank-starter'),
+        'section'     => 'animate_on_scroll_section',
+        'default'     => false,
+        'choices'     => array(
+            'on'  => esc_html__('Yes', 'elementor-blank-starter'),
+            'off' => esc_html__('No', 'elementor-blank-starter'),
+        ),
+    )
+);
+
+/**
+ * AOS Offset
+ */
+new \Kirki\Field\Slider(
+    array(
+        'settings'    => 'aos_offset',
+        'label'       => esc_html__('Animation Offset (px)', 'elementor-blank-starter'),
+        'description' => esc_html__('Offset (in px) from the original trigger point.', 'elementor-blank-starter'),
+        'section'     => 'animate_on_scroll_section',
+        'default'     => 120,
+        'choices'     => array(
+            'min'  => 0,
+            'max'  => 500,
+            'step' => 10,
+        ),
+    )
+);
+
+/**
+ * AOS Disable on Mobile
+ */
+new \Kirki\Field\Checkbox_Switch(
+    array(
+        'settings'    => 'aos_disable_mobile',
+        'label'       => esc_html__('Disable on Mobile', 'elementor-blank-starter'),
+        'description' => esc_html__('Disable animations on mobile devices for better performance.', 'elementor-blank-starter'),
+        'section'     => 'animate_on_scroll_section',
+        'default'     => false,
+        'choices'     => array(
+            'on'  => esc_html__('Yes', 'elementor-blank-starter'),
+            'off' => esc_html__('No', 'elementor-blank-starter'),
+        ),
+    )
+);
+
+/**
  * Enable Smooth Scrolling
  */
 new \Kirki\Field\Checkbox_Switch(

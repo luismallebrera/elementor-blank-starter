@@ -40,12 +40,12 @@ function aos_enqueue_scripts() {
         'aos-js',
         'document.addEventListener("DOMContentLoaded", function() {
             AOS.init({
-                duration: 800,
-                easing: "ease-in-out",
-                once: true,
-                mirror: false,
-                offset: 120,
-                disable: false,
+                duration: ' . (int) get_theme_mod('aos_duration', 800) . ',
+                easing: "' . esc_js( get_theme_mod('aos_easing', 'ease-in-out') ) . '",
+                once: ' . ( get_theme_mod('aos_once', true) ? 'true' : 'false' ) . ',
+                mirror: ' . ( get_theme_mod('aos_mirror', false) ? 'true' : 'false' ) . ',
+                offset: ' . (int) get_theme_mod('aos_offset', 120) . ',
+                disable: ' . ( get_theme_mod('aos_disable_mobile', false) ? '"mobile"' : 'false' ) . ',
                 startEvent: "DOMContentLoaded",
                 animatedClassName: "aos-animate",
                 initClassName: "aos-init"
