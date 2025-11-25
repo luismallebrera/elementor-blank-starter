@@ -82,9 +82,11 @@ function elementor_blank_scripts() {
 /**
  * Incluir Animate on Scroll plugin
  */
-$aos_plugin = get_template_directory() . '/inc/animate-on-scroll/plugin.php';
-if (file_exists($aos_plugin)) {
-    include_once $aos_plugin;
+if (get_theme_mod('enable_animate_on_scroll', false)) {
+    $aos_plugin = get_template_directory() . '/inc/animate-on-scroll/plugin.php';
+    if (file_exists($aos_plugin)) {
+        include_once $aos_plugin;
+    }
 }
 
 /**

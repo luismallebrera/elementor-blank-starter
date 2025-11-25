@@ -181,6 +181,34 @@ new \Kirki\Section(
 );
 
 /**
+ * Sección: Animate on Scroll
+ */
+new \Kirki\Section(
+    'animate_on_scroll_section',
+    array(
+        'title'    => esc_html__('Animate on Scroll', 'elementor-blank-starter'),
+        'priority' => 51,
+    )
+);
+
+/**
+ * Enable Animate on Scroll
+ */
+new \Kirki\Field\Checkbox_Switch(
+    array(
+        'settings'    => 'enable_animate_on_scroll',
+        'label'       => esc_html__('Enable Animate on Scroll', 'elementor-blank-starter'),
+        'description' => esc_html__('Enable the animate on scroll plugin functionality.', 'elementor-blank-starter'),
+        'section'     => 'animate_on_scroll_section',
+        'default'     => false,
+        'choices'     => array(
+            'on'  => esc_html__('Enabled', 'elementor-blank-starter'),
+            'off' => esc_html__('Disabled', 'elementor-blank-starter'),
+        ),
+    )
+);
+
+/**
  * Enable Smooth Scrolling
  */
 new \Kirki\Field\Checkbox_Switch(
