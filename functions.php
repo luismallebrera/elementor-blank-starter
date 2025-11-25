@@ -47,3 +47,25 @@ function elementor_blank_scripts() {
 
 // Remover la barra de administración del frontend si lo deseas
 // add_filter('show_admin_bar', '__return_false');
+
+/**
+ * Incluir Kirki Framework
+ * https://github.com/themeum/kirki
+ */
+require_once get_template_directory() . '/inc/kirki/kirki.php';
+
+/**
+ * Configuración de Kirki
+ */
+add_action('after_setup_theme', 'elementor_blank_kirki_config');
+function elementor_blank_kirki_config() {
+    Kirki::add_config('elementor_blank_config', array(
+        'capability'    => 'edit_theme_options',
+        'option_type'   => 'theme_mod',
+    ));
+}
+
+/**
+ * Añadir paneles y opciones de Kirki
+ */
+require_once get_template_directory() . '/inc/customizer.php';
