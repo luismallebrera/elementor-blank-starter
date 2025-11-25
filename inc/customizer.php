@@ -367,6 +367,37 @@ new \Kirki\Field\Slider(
 );
 
 /**
+ * Transition Animation Type
+ */
+new \Kirki\Field\Select(
+    array(
+        'settings'    => 'page_transitions_animation',
+        'label'       => esc_html__('Animation Type', 'elementor-blank-starter'),
+        'description' => esc_html__('Choose the animation style for page transitions.', 'elementor-blank-starter'),
+        'section'     => 'page_transitions_section',
+        'default'     => 'slide-down',
+        'choices'     => array(
+            'slide-down' => esc_html__('Slide Down (from top)', 'elementor-blank-starter'),
+            'slide-up'   => esc_html__('Slide Up (from bottom)', 'elementor-blank-starter'),
+            'fade'       => esc_html__('Fade', 'elementor-blank-starter'),
+        ),
+    )
+);
+
+/**
+ * Transition Panel Color
+ */
+new \Kirki\Field\Color(
+    array(
+        'settings'    => 'page_transitions_color',
+        'label'       => esc_html__('Panel Color', 'elementor-blank-starter'),
+        'description' => esc_html__('Background color of the transition panel.', 'elementor-blank-starter'),
+        'section'     => 'page_transitions_section',
+        'default'     => '#000000',
+    )
+);
+
+/**
  * Click Selectors
  */
 new \Kirki\Field\Textarea(

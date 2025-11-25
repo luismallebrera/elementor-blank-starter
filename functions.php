@@ -78,6 +78,8 @@ function elementor_blank_scripts() {
     // Page Transitions
     if (get_theme_mod('enable_page_transitions', false)) {
         $transition_duration = intval(get_theme_mod('page_transitions_duration', 900));
+        $transition_animation = get_theme_mod('page_transitions_animation', 'slide-down');
+        $transition_color = get_theme_mod('page_transitions_color', '#000000');
         
         // Page Transitions CSS
         wp_enqueue_style(
@@ -87,10 +89,21 @@ function elementor_blank_scripts() {
             '1.0'
         );
         
-        // Add inline CSS for dynamic duration
+        // Add inline CSS for dynamic settings
         $duration_seconds = ($transition_duration / 1000);
+        
+        // Define transform based on animation type
+        $transform_from = 'translateY(-100%)'; // Default slide-down
+        if ($transition_animation === 'slide-up') {
+            $transform_from = 'translateY(100%)';
+        } elseif ($transition_animation === 'fade') {
+            $transform_from = 'translateY(0)';
+        }
+        
         $custom_css = "
             .transition-pannel-bg {
+                background: {$transition_color};
+                transform: {$transform_from};
                 transition-duration: {$duration_seconds}s, {$duration_seconds}s, 0s;
                 transition-delay: 0s, 0s, {$duration_seconds}s;
             }
