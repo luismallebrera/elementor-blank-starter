@@ -19,7 +19,7 @@
     transform: scaleY(0);
     transform-origin: top;
     transition-property: transform, visibility;
-    transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1), step-end;
+    transition-timing-function: cubic-bezier(0.83, 0, 0.17, 1), step-end;
     transition-duration: 0.9s, 0s;
     transition-delay: 0s, 0.9s;
 }
