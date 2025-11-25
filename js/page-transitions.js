@@ -47,6 +47,7 @@
         // Trigger transition animation
         $('body').addClass('close').removeClass('active');
         $('.transition-pannel-bg').addClass('active');
+        $('.transition-borders-bg').addClass('active');
 
         // Navigate after animation completes
         setTimeout(function() {
@@ -57,6 +58,7 @@
     // Remove transition classes on page load
     $(document).ready(function() {
         $('.transition-pannel-bg').removeClass('active');
+        $('.transition-borders-bg').removeClass('active');
         $('body').removeClass('close').removeClass('active');
     });
     
@@ -65,6 +67,7 @@
         if (event.originalEvent.persisted) {
             // Page was loaded from cache (back button)
             $('.transition-pannel-bg').removeClass('active');
+            $('.transition-borders-bg').removeClass('active');
             $('body').removeClass('close').removeClass('active');
         }
     });
