@@ -16,3 +16,10 @@ body {
     margin: 0;
     padding: 0;
 }
+
+/* Desactivar scroll-behavior nativo para Lenis */
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: auto;
+    }
+}
