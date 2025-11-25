@@ -332,52 +332,45 @@ new \Kirki\Field\Dimension(
         'description' => esc_html__('Maximum width of the grid overlay.', 'elementor-blank-starter'),
         'section'     => 'grid_line_section',
         'default'     => '100%',
-        'output'      => array(
-            array(
-                'element'  => 'body',
-                'property' => '--grid-line-max-width',
-            ),
-        ),
     )
 );
 
 /**
- * Grid Width
+ * Grid Width Desktop
  */
-new \Kirki\Field\Dimensions(
+new \Kirki\Field\Dimension(
     array(
-        'settings'    => 'grid_line_the_width',
-        'label'       => esc_html__('Grid Width', 'elementor-blank-starter'),
-        'description' => esc_html__('Width of the grid container.', 'elementor-blank-starter'),
+        'settings'    => 'grid_line_width_desktop',
+        'label'       => esc_html__('Grid Width (Desktop)', 'elementor-blank-starter'),
+        'description' => esc_html__('Width of the grid container on desktop.', 'elementor-blank-starter'),
         'section'     => 'grid_line_section',
-        'responsive'  => true,
-        'default'     => array(
-            'desktop' => array(
-                'width' => '100%',
-            ),
-            'tablet'  => array(
-                'width' => '100%',
-            ),
-            'mobile'  => array(
-                'width' => '100%',
-            ),
-        ),
-        'choices'     => array(
-            'labels' => array(
-                'width' => esc_html__('Width', 'elementor-blank-starter'),
-            ),
-        ),
-        'output'      => array(
-            array(
-                'element'     => 'body',
-                'property'    => '--grid-line-width',
-                'media_query' => array(
-                    'desktop' => '@media (min-width: 1024px)',
-                    'tablet'  => '@media (min-width: 768px) and (max-width: 1023px)',
-                    'mobile'  => '@media (max-width: 767px)',
-                ),
-            ),
-        ),
+        'default'     => '100%',
+    )
+);
+
+/**
+ * Grid Width Tablet
+ */
+new \Kirki\Field\Dimension(
+    array(
+        'settings'    => 'grid_line_width_tablet',
+        'label'       => esc_html__('Grid Width (Tablet)', 'elementor-blank-starter'),
+        'description' => esc_html__('Width of the grid container on tablet.', 'elementor-blank-starter'),
+        'section'     => 'grid_line_section',
+        'default'     => '100%',
+    )
+);
+
+/**
+ * Grid Width Mobile
+ */
+new \Kirki\Field\Dimension(
+    array(
+        'settings'    => 'grid_line_width_mobile',
+        'label'       => esc_html__('Grid Width (Mobile)', 'elementor-blank-starter'),
+        'description' => esc_html__('Width of the grid container on mobile.', 'elementor-blank-starter'),
+        'section'     => 'grid_line_section',
+        'default'     => '100%',
     )
 );
 
