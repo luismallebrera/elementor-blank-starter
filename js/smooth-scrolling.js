@@ -17,14 +17,16 @@
 			const settings = window.elementorBlankSmoothScrollingParams || {
 				smoothWheel: 1,
 				anchorOffset: 0,
-				lerp: 0.1,
+				lerp: 0.07,
 				duration: 1.2,
 				anchorLinks: false,
 				gsapSync: false
 			};
 
 			let lenisSettings = {
-				smoothWheel: parseInt(settings.smoothWheel)
+				smoothWheel: parseInt(settings.smoothWheel),
+				smoothTouch: false,
+				normalizeWheel: true
 			};
 
 			if (settings.lerp > 0) {

@@ -68,7 +68,7 @@ function elementor_blank_scripts() {
         wp_localize_script('elementor-blank-smooth-scrolling', 'elementorBlankSmoothScrollingParams', array(
             'smoothWheel'   => get_theme_mod('smooth_scrolling_disable_wheel', false) ? 0 : 1,
             'anchorOffset'  => intval(get_theme_mod('smooth_scrolling_anchor_offset', 0)),
-            'lerp'          => floatval(get_theme_mod('smooth_scrolling_lerp', 0.1)),
+            'lerp'          => floatval(get_theme_mod('smooth_scrolling_lerp', 0.07)),
             'duration'      => floatval(get_theme_mod('smooth_scrolling_duration', 1.2)),
             'anchorLinks'   => get_theme_mod('smooth_scrolling_anchor_links', false),
             'gsapSync'      => get_theme_mod('smooth_scrolling_gsap', false),

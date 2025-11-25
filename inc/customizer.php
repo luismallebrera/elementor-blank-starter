@@ -273,9 +273,9 @@ new \Kirki\Field\Slider(
     array(
         'settings'    => 'smooth_scrolling_lerp',
         'label'       => esc_html__('Linear Interpolation (lerp) Intensity', 'elementor-blank-starter'),
-        'description' => esc_html__('Between 0 and 1. Set to 0 to use duration instead. Default: 0.1', 'elementor-blank-starter'),
+        'description' => esc_html__('Between 0 and 1. Lower = smoother. Set to 0 to use duration instead. Default: 0.07', 'elementor-blank-starter'),
         'section'     => 'smooth_scrolling_section',
-        'default'     => 0.1,
+        'default'     => 0.07,
         'choices'     => array(
             'min'  => 0,
             'max'  => 1,
