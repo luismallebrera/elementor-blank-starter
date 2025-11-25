@@ -18,8 +18,6 @@ body {
 }
 
 /* Desactivar scroll-behavior nativo para Lenis */
-@media (prefers-reduced-motion: no-preference) {
-    html {
-        scroll-behavior: auto;
-    }
+html {
+    scroll-behavior: auto;
 }
