@@ -1,25 +1,12 @@
 <?php
 /**
- * Plugin Name: Elementor Custom Class & Attributes Extension + AOS-prefixed Classes + Duration & Delay Sliders
- * Description: Adds select fields and sliders for AOS animation, anchor placements, easing functions, duration and delay (as classes) to images, headings, buttons, sections, columns, containers.
- * Version: 1.6
+ * Plugin Name: Elementor AOS Integration
+ * Description: Adds AOS (Animate On Scroll) controls to Elementor widgets using data attributes
+ * Version: 2.0
  * Author: Copilot + luismallebrera
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-
-// Helper to prefix value with aos-, if not empty
-function ecc_make_aos_class( $val ) {
-    return ( ! empty($val) ) ? 'aos-' . $val : '';
-}
-// Prefix for duration
-function ecc_make_aos_duration_class( $val ) {
-    return ( ! empty($val) ) ? 'aos-duration-' . $val : '';
-}
-// Prefix for delay
-function ecc_make_aos_delay_class( $val ) {
-    return ( ! empty($val) ) ? 'aos-delay-' . $val : '';
-}
 
 function ecc_add_controls_with_aos( $element, $args ) {
 
@@ -197,20 +184,38 @@ add_action( 'elementor/element/container/section_layout/before_section_end', 'ec
 
 // -- IMAGE OUTPUT --
 function ecc_add_image_custom_class_attributes( $html, $settings, $image_size_key, $image_key ) {
-    $classes = [];
-    if ( ! empty( $settings['ecc_animation_type'] ) )   $classes[] = ecc_make_aos_class( $settings['ecc_animation_type'] );
-    if ( ! empty( $settings['ecc_anchor_placement'] ) ) $classes[] = ecc_make_aos_class( $settings['ecc_anchor_placement'] );
-    if ( ! empty( $settings['ecc_easing_function'] ) )  $classes[] = ecc_make_aos_class( $settings['ecc_easing_function'] );
-    if ( isset( $settings['ecc_duration']['size'] ) && $settings['ecc_duration']['size'] > 0 ) $classes[] = ecc_make_aos_duration_class( $settings['ecc_duration']['size'] );
-    if ( isset( $settings['ecc_delay']['size'] ) && $settings['ecc_delay']['size'] > 0 ) $classes[] = ecc_make_aos_delay_class( $settings['ecc_delay']['size'] );
-    if ( ! empty( $settings['ecc_custom_class'] ) )     $classes[] = $settings['ecc_custom_class'];
-    $class_string = implode(' ', array_filter($classes));
-    if ( ! empty( $class_string ) ) {
+    $attributes = [];
+    
+    // Add AOS data attributes
+    if ( ! empty( $settings['ecc_animation_type'] ) ) {
+        $attributes[] = 'data-aos="' . esc_attr( $settings['ecc_animation_type'] ) . '"';
+    }
+    if ( ! empty( $settings['ecc_anchor_placement'] ) ) {
+        $attributes[] = 'data-aos-anchor-placement="' . esc_attr( $settings['ecc_anchor_placement'] ) . '"';
+    }
+    if ( ! empty( $settings['ecc_easing_function'] ) ) {
+        $attributes[] = 'data-aos-easing="' . esc_attr( $settings['ecc_easing_function'] ) . '"';
+    }
+    if ( isset( $settings['ecc_duration']['size'] ) && $settings['ecc_duration']['size'] > 0 ) {
+        $attributes[] = 'data-aos-duration="' . esc_attr( $settings['ecc_duration']['size'] ) . '"';
+    }
+    if ( isset( $settings['ecc_delay']['size'] ) && $settings['ecc_delay']['size'] > 0 ) {
+        $attributes[] = 'data-aos-delay="' . esc_attr( $settings['ecc_delay']['size'] ) . '"';
+    }
+    
+    // Add custom class if provided
+    if ( ! empty( $settings['ecc_custom_class'] ) ) {
         if ( strpos( $html, 'class=' ) ) {
-            $html = preg_replace( '/class="(.*)"/', 'class="' . esc_attr( $class_string ) . ' $1"', $html );
+            $html = preg_replace( '/class="(.*)"/', 'class="' . esc_attr( $settings['ecc_custom_class'] ) . ' $1"', $html );
         } else {
-            $html = preg_replace( '/src="(.*)"/', 'class="' . esc_attr( $class_string ) . '" src="$1"', $html );
+            $html = preg_replace( '/src="(.*)"/', 'class="' . esc_attr( $settings['ecc_custom_class'] ) . '" src="$1"', $html );
         }
+    }
+    
+    // Add AOS attributes to img tag
+    if ( ! empty( $attributes ) ) {
+        $attributes_string = implode( ' ', $attributes );
+        $html = preg_replace( '/<img(.*?)/', '<img ' . $attributes_string . '$1', $html, 1 );
     }
     // Add custom attributes LAST
     if ( ! empty( $settings['ecc_custom_attributes'] ) ) {
@@ -232,15 +237,7 @@ add_filter( 'elementor/image_size/get_attachment_image_html', 'ecc_add_image_cus
 // -- HEADING AND BUTTON OUTPUT --
 function ecc_add_heading_button_custom_class_attributes( $content, $widget ) {
     $settings = $widget->get_settings();
-    $custom_classes = [];
-    if ( ! empty( $settings['ecc_animation_type'] ) )   $custom_classes[] = ecc_make_aos_class( $settings['ecc_animation_type'] );
-    if ( ! empty( $settings['ecc_anchor_placement'] ) ) $custom_classes[] = ecc_make_aos_class( $settings['ecc_anchor_placement'] );
-    if ( ! empty( $settings['ecc_easing_function'] ) )  $custom_classes[] = ecc_make_aos_class( $settings['ecc_easing_function'] );
-    if ( isset( $settings['ecc_duration']['size'] ) && $settings['ecc_duration']['size'] > 0 ) $custom_classes[] = ecc_make_aos_duration_class( $settings['ecc_duration']['size'] );
-    if ( isset( $settings['ecc_delay']['size'] ) && $settings['ecc_delay']['size'] > 0 ) $custom_classes[] = ecc_make_aos_delay_class( $settings['ecc_delay']['size'] );
-    if ( ! empty( $settings['ecc_custom_class'] ) )     $custom_classes[] = $settings['ecc_custom_class'];
-    $class_string = implode(' ', array_filter($custom_classes));
-
+    
     if ( 'heading' === $widget->get_name() ) {
         $tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span'];
     } elseif ( 'button' === $widget->get_name() ) {
@@ -248,17 +245,38 @@ function ecc_add_heading_button_custom_class_attributes( $content, $widget ) {
     } else {
         return $content;
     }
+    
     $dom = new \DOMDocument();
     libxml_use_internal_errors(true);
     @$dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
+    
     foreach ( $tags as $tag ) {
         $elements = $dom->getElementsByTagName($tag);
         foreach ($elements as $el) {
-            if ( ! empty( $class_string ) ) {
+            // Add custom class if provided
+            if ( ! empty( $settings['ecc_custom_class'] ) ) {
                 $existing_class = $el->getAttribute('class');
-                $el->setAttribute('class', trim($existing_class . ' ' . $class_string));
+                $el->setAttribute('class', trim($existing_class . ' ' . $settings['ecc_custom_class']));
             }
-            // Set attributes LAST!
+            
+            // Add AOS data attributes
+            if ( ! empty( $settings['ecc_animation_type'] ) ) {
+                $el->setAttribute('data-aos', $settings['ecc_animation_type']);
+            }
+            if ( ! empty( $settings['ecc_anchor_placement'] ) ) {
+                $el->setAttribute('data-aos-anchor-placement', $settings['ecc_anchor_placement']);
+            }
+            if ( ! empty( $settings['ecc_easing_function'] ) ) {
+                $el->setAttribute('data-aos-easing', $settings['ecc_easing_function']);
+            }
+            if ( isset( $settings['ecc_duration']['size'] ) && $settings['ecc_duration']['size'] > 0 ) {
+                $el->setAttribute('data-aos-duration', $settings['ecc_duration']['size']);
+            }
+            if ( isset( $settings['ecc_delay']['size'] ) && $settings['ecc_delay']['size'] > 0 ) {
+                $el->setAttribute('data-aos-delay', $settings['ecc_delay']['size']);
+            }
+            
+            // Add custom attributes
             if ( ! empty( $settings['ecc_custom_attributes'] ) ) {
                 $attrs = explode( ' ', trim( $settings['ecc_custom_attributes'] ) );
                 foreach ( $attrs as $attr ) {
@@ -281,17 +299,30 @@ add_filter( 'elementor/widget/render_content', 'ecc_add_heading_button_custom_cl
 // -- SECTION/COLUMN/CONTAINER OUTPUT --
 function ecc_render_section_column_container_attributes( $element ) {
     $settings = $element->get_settings_for_display();
-    $classes = [];
-    if ( ! empty( $settings['ecc_animation_type'] ) )   $classes[] = ecc_make_aos_class( $settings['ecc_animation_type'] );
-    if ( ! empty( $settings['ecc_anchor_placement'] ) ) $classes[] = ecc_make_aos_class( $settings['ecc_anchor_placement'] );
-    if ( ! empty( $settings['ecc_easing_function'] ) )  $classes[] = ecc_make_aos_class( $settings['ecc_easing_function'] );
-    if ( isset( $settings['ecc_duration']['size'] ) && $settings['ecc_duration']['size'] > 0 ) $classes[] = ecc_make_aos_duration_class( $settings['ecc_duration']['size'] );
-    if ( isset( $settings['ecc_delay']['size'] ) && $settings['ecc_delay']['size'] > 0 ) $classes[] = ecc_make_aos_delay_class( $settings['ecc_delay']['size'] );
-    if ( ! empty( $settings['ecc_custom_class'] ) )     $classes[] = $settings['ecc_custom_class'];
-    $class_string = implode( ' ', array_filter( $classes ) );
-    if ( ! empty( $class_string ) ) {
-        $element->add_render_attribute( '_wrapper', 'class', esc_attr( $class_string ) );
+    
+    // Add custom class if provided
+    if ( ! empty( $settings['ecc_custom_class'] ) ) {
+        $element->add_render_attribute( '_wrapper', 'class', esc_attr( $settings['ecc_custom_class'] ) );
     }
+    
+    // Add AOS data attributes
+    if ( ! empty( $settings['ecc_animation_type'] ) ) {
+        $element->add_render_attribute( '_wrapper', 'data-aos', esc_attr( $settings['ecc_animation_type'] ) );
+    }
+    if ( ! empty( $settings['ecc_anchor_placement'] ) ) {
+        $element->add_render_attribute( '_wrapper', 'data-aos-anchor-placement', esc_attr( $settings['ecc_anchor_placement'] ) );
+    }
+    if ( ! empty( $settings['ecc_easing_function'] ) ) {
+        $element->add_render_attribute( '_wrapper', 'data-aos-easing', esc_attr( $settings['ecc_easing_function'] ) );
+    }
+    if ( isset( $settings['ecc_duration']['size'] ) && $settings['ecc_duration']['size'] > 0 ) {
+        $element->add_render_attribute( '_wrapper', 'data-aos-duration', esc_attr( $settings['ecc_duration']['size'] ) );
+    }
+    if ( isset( $settings['ecc_delay']['size'] ) && $settings['ecc_delay']['size'] > 0 ) {
+        $element->add_render_attribute( '_wrapper', 'data-aos-delay', esc_attr( $settings['ecc_delay']['size'] ) );
+    }
+    
+    // Add custom attributes
     if ( ! empty( $settings['ecc_custom_attributes'] ) ) {
         $attrs = explode( ' ', trim( $settings['ecc_custom_attributes'] ) );
         foreach ( $attrs as $attr ) {
