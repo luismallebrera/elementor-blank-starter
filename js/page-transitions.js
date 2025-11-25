@@ -61,10 +61,12 @@
         $('.transition-borders-bg').removeClass('active');
         $('body').removeClass('close').removeClass('active');
         
-        // Add page-loaded class after a brief delay for fade entrance
+        // Add page-loaded class after a brief delay for entrance animations
+        // Use dynamic duration for fade entrance timing
+        var entranceDelay = settings.animation === 'fade' ? parseInt(settings.duration) : 50;
         setTimeout(function() {
             $('body').addClass('page-loaded');
-        }, 50);
+        }, entranceDelay);
     });
     
     // Also handle pageshow event (for back/forward navigation)
@@ -75,10 +77,11 @@
             $('.transition-borders-bg').removeClass('active');
             $('body').removeClass('close').removeClass('active');
             
-            // Add page-loaded class for fade entrance
+            // Add page-loaded class for entrance animations with dynamic duration
+            var entranceDelay = settings.animation === 'fade' ? parseInt(settings.duration) : 50;
             setTimeout(function() {
                 $('body').addClass('page-loaded');
-            }, 50);
+            }, entranceDelay);
         }
     });
 

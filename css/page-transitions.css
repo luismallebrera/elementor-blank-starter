@@ -80,11 +80,13 @@ body.slide-up-entrance.page-loaded .elementor {
 }
 
 /* Fade entrance animation for page content */
-body.fade-entrance:not(.page-loaded) .elementor {
-    opacity: 0;
+body.fade-entrance:not(.page-loaded) .transition-pannel-bg {
+    opacity: 1;
+    visibility: visible;
+    transform: scaleY(1);
 }
 
-body.fade-entrance.page-loaded .elementor {
-    opacity: 1;
-    transition: opacity 0.6s ease-in-out;
+body.fade-entrance.page-loaded .transition-pannel-bg {
+    opacity: 0;
+    visibility: hidden;
 }
