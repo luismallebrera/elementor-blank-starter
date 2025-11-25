@@ -71,6 +71,18 @@ new \Kirki\Section(
 );
 
 /**
+ * Sección: Page Transitions
+ */
+new \Kirki\Section(
+    'page_transitions_section',
+    array(
+        'title'       => esc_html__('Page Transitions', 'elementor-blank-starter'),
+        'panel'       => 'theme_options',
+        'priority'    => 55,
+    )
+);
+
+/**
  * Enable Animate on Scroll
  */
 new \Kirki\Field\Checkbox_Switch(
@@ -316,6 +328,54 @@ new \Kirki\Field\Slider(
             'max'  => 5,
             'step' => 0.1,
         ),
+    )
+);
+
+/**
+ * Enable Page Transitions
+ */
+new \Kirki\Field\Checkbox_Switch(
+    array(
+        'settings'    => 'enable_page_transitions',
+        'label'       => esc_html__('Enable Page Transitions', 'elementor-blank-starter'),
+        'description' => esc_html__('Enable smooth transitions between page navigation.', 'elementor-blank-starter'),
+        'section'     => 'page_transitions_section',
+        'default'     => false,
+        'choices'     => array(
+            'on'  => esc_html__('Enabled', 'elementor-blank-starter'),
+            'off' => esc_html__('Disabled', 'elementor-blank-starter'),
+        ),
+    )
+);
+
+/**
+ * Transition Duration
+ */
+new \Kirki\Field\Slider(
+    array(
+        'settings'    => 'page_transitions_duration',
+        'label'       => esc_html__('Transition Duration (ms)', 'elementor-blank-starter'),
+        'description' => esc_html__('Duration of the transition animation in milliseconds.', 'elementor-blank-starter'),
+        'section'     => 'page_transitions_section',
+        'default'     => 900,
+        'choices'     => array(
+            'min'  => 100,
+            'max'  => 3000,
+            'step' => 50,
+        ),
+    )
+);
+
+/**
+ * Click Selectors
+ */
+new \Kirki\Field\Textarea(
+    array(
+        'settings'    => 'page_transitions_selectors',
+        'label'       => esc_html__('Click Selectors', 'elementor-blank-starter'),
+        'description' => esc_html__('CSS selectors for elements that trigger transitions (comma-separated).', 'elementor-blank-starter'),
+        'section'     => 'page_transitions_section',
+        'default'     => '.menu li a, .elementor-widget-image > a, .soda-post-nav-next a, .soda-post-nav-prev a',
     )
 );
 

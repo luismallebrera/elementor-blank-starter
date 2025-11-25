@@ -74,6 +74,32 @@ function elementor_blank_scripts() {
             'gsapSync'      => get_theme_mod('smooth_scrolling_gsap', false),
         ));
     }
+    
+    // Page Transitions
+    if (get_theme_mod('enable_page_transitions', false)) {
+        // Page Transitions CSS
+        wp_enqueue_style(
+            'elementor-blank-page-transitions',
+            get_template_directory_uri() . '/css/page-transitions.css',
+            array(),
+            '1.0'
+        );
+        
+        wp_enqueue_script(
+            'elementor-blank-page-transitions',
+            get_template_directory_uri() . '/js/page-transitions.js',
+            array('jquery'),
+            '1.0',
+            true
+        );
+        
+        // Pasar parámetros al JavaScript
+        wp_localize_script('elementor-blank-page-transitions', 'elementorBlankPageTransitions', array(
+            'enabled'   => true,
+            'duration'  => intval(get_theme_mod('page_transitions_duration', 900)),
+            'selectors' => get_theme_mod('page_transitions_selectors', '.menu li a, .elementor-widget-image > a, .soda-post-nav-next a, .soda-post-nav-prev a'),
+        ));
+    }
 }
 
 // Remover la barra de administración del frontend si lo deseas

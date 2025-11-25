@@ -1,0 +1,53 @@
+/**
+ * Page Transitions Styles
+ * Default styles for page transition elements
+ */
+
+/* Transition Panel Background */
+.transition-pannel-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 99999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.transition-pannel-bg.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Transition Borders Background (optional decoration) */
+.transition-borders-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 20px solid transparent;
+    z-index: 99998;
+    pointer-events: none;
+    transition: border-color 0.5s ease-in-out;
+}
+
+/* Body transition states */
+body.close {
+    overflow: hidden;
+}
+
+body.close .transition-borders-bg {
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Optional: Add fade effect to body content */
+body.close main,
+body.close header,
+body.close footer {
+    opacity: 0.5;
+    transition: opacity 0.3s ease-in-out;
+}
