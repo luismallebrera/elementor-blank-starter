@@ -14,14 +14,29 @@
 
     // Click handler for page transitions
     $(document).on('click', settings.selectors, function(e) {
+        // Get target URL
+        var goTo = this.getAttribute('href');
+        
+        // Validate URL before proceeding
+        if (!goTo || goTo === '' || goTo === '#' || goTo === 'javascript:void(0)' || goTo === 'javascript:;' || goTo.startsWith('#')) {
+            return; // Let default behavior handle it
+        }
+        
+        // Check if it's an external link
+        var currentDomain = window.location.hostname;
+        var linkElement = document.createElement('a');
+        linkElement.href = goTo;
+        
+        // Only apply transition to internal links
+        if (linkElement.hostname !== currentDomain && linkElement.hostname !== '') {
+            return; // Let external links open normally
+        }
+        
         e.preventDefault();
 
         // Trigger transition animation
         $('body').removeClass('active').addClass('close');
         $('.transition-pannel-bg').addClass('active');
-
-        // Get target URL
-        var goTo = this.getAttribute('href');
 
         // Navigate after animation completes
         setTimeout(function() {
