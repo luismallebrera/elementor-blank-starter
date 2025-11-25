@@ -80,13 +80,14 @@ function elementor_blank_scripts() {
         $transition_duration = intval(get_theme_mod('page_transitions_duration', 900));
         $transition_animation = get_theme_mod('page_transitions_animation', 'slide-down');
         $transition_color = get_theme_mod('page_transitions_color', '#000000');
+        $transition_borders_color = get_theme_mod('page_transitions_borders_color', '#121e50');
         
         // Page Transitions CSS
         wp_enqueue_style(
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/css/page-transitions.css',
             array(),
-            '1.7'
+            '1.8'
         );
         
         // Add inline CSS for dynamic settings
@@ -122,6 +123,10 @@ function elementor_blank_scripts() {
                     opacity: 1;
                     transition-delay: 0s, 0s, 0s;
                 }
+                .transition-borders-bg {
+                    background-color: {$transition_borders_color};
+                    transition: clip-path {$duration_seconds}s cubic-bezier(.57,0,.42,1);
+                }
             ";
         } else {
             // Slide animations without opacity
@@ -135,6 +140,10 @@ function elementor_blank_scripts() {
                 }
                 .transition-pannel-bg.active {
                     transition-delay: 0s, 0s;
+                }
+                .transition-borders-bg {
+                    background-color: {$transition_borders_color};
+                    transition: clip-path {$duration_seconds}s cubic-bezier(.57,0,.42,1);
                 }
             ";
         }

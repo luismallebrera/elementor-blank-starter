@@ -398,6 +398,19 @@ new \Kirki\Field\Color(
 );
 
 /**
+ * Transition Borders Color
+ */
+new \Kirki\Field\Color(
+    array(
+        'settings'    => 'page_transitions_borders_color',
+        'label'       => esc_html__('Borders Color', 'elementor-blank-starter'),
+        'description' => esc_html__('Background color of the transition borders.', 'elementor-blank-starter'),
+        'section'     => 'page_transitions_section',
+        'default'     => '#121e50',
+    )
+);
+
+/**
  * Click Selectors
  */
 new \Kirki\Field\Textarea(
