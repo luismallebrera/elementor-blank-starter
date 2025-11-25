@@ -87,7 +87,7 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/css/page-transitions.css',
             array(),
-            '4.3'
+            '4.4'
         );
         
         // Add inline CSS for dynamic settings
@@ -105,6 +105,11 @@ function elementor_blank_scripts() {
             $transform_origin = 'top';
         }
         
+        // Get transition position and set z-index accordingly
+        $transition_position = get_theme_mod('page_transitions_position', 'under');
+        $panel_z_index = ($transition_position === 'above') ? '99999' : '801';
+        $borders_z_index = ($transition_position === 'above') ? '99998' : '800';
+        
         // Build border CSS conditionally
         $enable_borders = get_theme_mod('enable_page_transitions_borders', true);
         $borders_css = '';
@@ -113,6 +118,7 @@ function elementor_blank_scripts() {
                 .transition-borders-bg {
                     background-color: {$transition_borders_color};
                     transition-duration: {$duration_seconds}s;
+                    z-index: {$borders_z_index};
                 }
             ";
         }
@@ -126,6 +132,7 @@ function elementor_blank_scripts() {
                     transform: {$transform_from};
                     transform-origin: {$transform_origin};
                     opacity: 0;
+                    z-index: {$panel_z_index};
                     transition-property: transform, opacity, visibility;
                     transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1), ease-in-out, step-end;
                     transition-duration: {$duration_seconds}s, {$duration_seconds}s, 0s;
@@ -163,6 +170,7 @@ function elementor_blank_scripts() {
                     background: {$transition_color};
                     transform: {$transform_from};
                     transform-origin: {$transform_origin};
+                    z-index: {$panel_z_index};
                     transition-duration: {$duration_seconds}s, 0s;
                     transition-delay: 0s, {$duration_seconds}s;
                 }

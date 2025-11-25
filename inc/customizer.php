@@ -432,6 +432,23 @@ new \Kirki\Field\Checkbox_Switch(
 );
 
 /**
+ * Transition Position
+ */
+new \Kirki\Field\Radio(
+    array(
+        'settings'    => 'page_transitions_position',
+        'label'       => esc_html__('Transition Position', 'elementor-blank-starter'),
+        'description' => esc_html__('Choose whether transitions appear above or under page content.', 'elementor-blank-starter'),
+        'section'     => 'page_transitions_section',
+        'default'     => 'under',
+        'choices'     => array(
+            'above' => esc_html__('Above Page Content', 'elementor-blank-starter'),
+            'under' => esc_html__('Under Page Content', 'elementor-blank-starter'),
+        ),
+    )
+);
+
+/**
  * Transition Borders Color
  */
 new \Kirki\Field\Color(
