@@ -18,18 +18,27 @@
         var goTo = this.getAttribute('href');
         
         // Validate URL before proceeding
-        if (!goTo || goTo === '' || goTo === '#' || goTo === 'javascript:void(0)' || goTo === 'javascript:;' || goTo.startsWith('#')) {
+        if (!goTo || goTo === '' || goTo === 'null') {
             return; // Let default behavior handle it
         }
         
-        // Check if it's an external link
-        var currentDomain = window.location.hostname;
-        var linkElement = document.createElement('a');
-        linkElement.href = goTo;
+        // Skip anchors
+        if (goTo.startsWith('#')) {
+            return;
+        }
         
-        // Only apply transition to internal links
-        if (linkElement.hostname !== currentDomain && linkElement.hostname !== '') {
-            return; // Let external links open normally
+        // Skip javascript: links
+        if (goTo.startsWith('javascript:')) {
+            return;
+        }
+        
+        // Check if it's an external link (has http/https and different domain)
+        if (goTo.match(/^https?:\/\//)) {
+            var currentDomain = window.location.hostname;
+            var linkDomain = goTo.split('/')[2];
+            if (linkDomain !== currentDomain) {
+                return; // External link, skip transition
+            }
         }
         
         e.preventDefault();
@@ -40,7 +49,7 @@
 
         // Navigate after animation completes
         setTimeout(function() {
-            window.location = goTo;
+            window.location.href = goTo;
         }, settings.duration);
     });
 
