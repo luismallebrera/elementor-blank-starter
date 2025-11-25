@@ -170,24 +170,26 @@ function elementor_blank_custom_css_output() {
 }
 
 /**
- * Sección: Smooth Scrolling
- */
-new \Kirki\Section(
-    'smooth_scrolling_section',
-    array(
-        'title'    => esc_html__('Smooth Scrolling (Lenis)', 'elementor-blank-starter'),
-        'priority' => 50,
-    )
-);
-
-/**
  * Sección: Animate on Scroll
  */
 new \Kirki\Section(
     'animate_on_scroll_section',
     array(
-        'title'    => esc_html__('Animate on Scroll', 'elementor-blank-starter'),
-        'priority' => 51,
+        'title'       => esc_html__('Animate on Scroll', 'elementor-blank-starter'),
+        'panel'       => 'theme_options',
+        'priority'    => 45,
+    )
+);
+
+/**
+ * Sección: Smooth Scrolling
+ */
+new \Kirki\Section(
+    'smooth_scrolling_section',
+    array(
+        'title'       => esc_html__('Smooth Scrolling (Lenis)', 'elementor-blank-starter'),
+        'panel'       => 'theme_options',
+        'priority'    => 50,
     )
 );
 
