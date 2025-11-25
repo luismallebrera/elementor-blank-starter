@@ -69,15 +69,15 @@
                 $('body').removeClass('close');
             }, parseInt(settings.duration));
         } else {
-            // For slide animations, remove immediately
-            $('.transition-pannel-bg').removeClass('active');
-            $('.transition-borders-bg').removeClass('active');
-            $('body').removeClass('close').removeClass('active');
+            // For slide animations, trigger entrance animation
+            $('body').addClass('page-loaded');
             
-            // Add page-loaded class after a brief delay for entrance animations
+            // Wait for entrance to complete before removing active class
             setTimeout(function() {
-                $('body').addClass('page-loaded');
-            }, 50);
+                $('.transition-pannel-bg').removeClass('active');
+                $('.transition-borders-bg').removeClass('active');
+                $('body').removeClass('close');
+            }, parseInt(settings.duration));
         }
     });
     
@@ -96,14 +96,14 @@
                     $('body').removeClass('close');
                 }, parseInt(settings.duration));
             } else {
-                // For slide animations
-                $('.transition-pannel-bg').removeClass('active');
-                $('.transition-borders-bg').removeClass('active');
-                $('body').removeClass('close').removeClass('active');
+                // For slide animations, trigger entrance
+                $('body').addClass('page-loaded');
                 
                 setTimeout(function() {
-                    $('body').addClass('page-loaded');
-                }, 50);
+                    $('.transition-pannel-bg').removeClass('active');
+                    $('.transition-borders-bg').removeClass('active');
+                    $('body').removeClass('close');
+                }, parseInt(settings.duration));
             }
         }
     });
