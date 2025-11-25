@@ -19,5 +19,5 @@ body {
 
 /* Desactivar scroll-behavior nativo para Lenis */
 html {
-    scroll-behavior: auto;
+    scroll-behavior: auto !important;
 }
