@@ -57,7 +57,16 @@
     // Remove transition classes on page load
     $(document).ready(function() {
         $('.transition-pannel-bg').removeClass('active');
-        $('body').removeClass('close');
+        $('body').removeClass('close').removeClass('active');
+    });
+    
+    // Also handle pageshow event (for back/forward navigation)
+    $(window).on('pageshow', function(event) {
+        if (event.originalEvent.persisted) {
+            // Page was loaded from cache (back button)
+            $('.transition-pannel-bg').removeClass('active');
+            $('body').removeClass('close').removeClass('active');
+        }
     });
 
 })(jQuery);
