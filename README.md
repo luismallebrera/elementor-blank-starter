@@ -13,34 +13,32 @@ Tema WordPress minimalista optimizado para Elementor con integración de Kirki F
 
 ## Instalación
 
-### Opción 1: Clonar desde GitHub
+### Opción 1: Instalación manual
 
-1. En tu Mac, abre Terminal y navega a la carpeta de temas:
+1. Clona o descarga este repositorio
+2. Copia la carpeta en `wp-content/themes/`
+3. Instala Kirki Framework:
    ```bash
-   cd '/Users/luis/Local Sites/blanc/app/public/wp-content/themes/'
-   git clone https://github.com/luismallebrera/elementor-blank-starter.git
+   cd wp-content/themes/elementor-blank-starter
+   composer install
    ```
+4. Activa el tema desde **Apariencia → Temas**
 
-2. Activa el tema desde **Apariencia → Temas**
+### Opción 2: Instalación con Git
 
-3. Instala el plugin Kirki:
-   - Ve a **Plugins → Añadir nuevo**
-   - Busca "Kirki Customizer Framework"
-   - Instala y activa
-
-### Opción 2: Descarga manual
-
-1. Descarga el repositorio como ZIP
-2. Descomprime en `wp-content/themes/`
-3. Activa el tema
-4. Instala el plugin Kirki desde **Plugins → Añadir nuevo**
+```bash
+cd wp-content/themes/
+git clone https://github.com/luismallebrera/elementor-blank-starter.git
+cd elementor-blank-starter
+composer install
+```
 
 ## Requisitos
 
 - WordPress 6.0 o superior
 - PHP 7.4 o superior
 - Elementor (gratuito o Pro)
-- Plugin: Kirki Customizer Framework
+- Composer (para instalar Kirki)
 
 ## Kirki Framework
 

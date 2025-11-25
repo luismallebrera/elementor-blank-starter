@@ -49,34 +49,23 @@ function elementor_blank_scripts() {
 // add_filter('show_admin_bar', '__return_false');
 
 /**
- * Verificar si Kirki está activo e incluir configuración del customizer
- * Instala el plugin "Kirki Customizer Framework" desde WordPress
+ * Incluir Kirki Framework
+ * https://github.com/themeum/kirki
  */
-add_action('after_setup_theme', 'elementor_blank_kirki_check');
-function elementor_blank_kirki_check() {
-    if (class_exists('Kirki')) {
-        // Kirki está activo, cargar configuración
-        Kirki::add_config('elementor_blank_config', array(
-            'capability'    => 'edit_theme_options',
-            'option_type'   => 'theme_mod',
-        ));
-        
-        // Cargar opciones del customizer
-        require_once get_template_directory() . '/inc/customizer.php';
-    }
+require_once get_template_directory() . '/inc/kirki/kirki.php';
+
+/**
+ * Configuración de Kirki
+ */
+add_action('after_setup_theme', 'elementor_blank_kirki_config');
+function elementor_blank_kirki_config() {
+    Kirki::add_config('elementor_blank_config', array(
+        'capability'    => 'edit_theme_options',
+        'option_type'   => 'theme_mod',
+    ));
 }
 
 /**
- * Mostrar aviso si Kirki no está instalado
+ * Añadir paneles y opciones de Kirki
  */
-add_action('admin_notices', 'elementor_blank_kirki_notice');
-function elementor_blank_kirki_notice() {
-    if (!class_exists('Kirki')) {
-        ?>
-        <div class="notice notice-warning is-dismissible">
-            <p><strong>Elementor Blank Starter:</strong> Este tema requiere el plugin <strong>Kirki Customizer Framework</strong>. 
-            <a href="<?php echo admin_url('plugin-install.php?s=kirki&tab=search&type=term'); ?>">Instalar ahora</a></p>
-        </div>
-        <?php
-    }
-}
+require_once get_template_directory() . '/inc/customizer.php';
