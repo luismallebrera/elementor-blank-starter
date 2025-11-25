@@ -86,7 +86,7 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/css/page-transitions.css',
             array(),
-            '1.6'
+            '1.7'
         );
         
         // Add inline CSS for dynamic settings
@@ -95,57 +95,49 @@ function elementor_blank_scripts() {
         // Define transform based on animation type
         $transform_from = 'scaleY(0)'; // Default slide-down
         $transform_origin = 'top';
-        $opacity_initial = '1';
-        $opacity_final = '1';
         
         if ($transition_animation === 'slide-up') {
             $transform_from = 'scaleY(0)';
             $transform_origin = 'bottom';
-            $opacity_initial = '1';
-            $opacity_final = '1';
         } elseif ($transition_animation === 'fade') {
             $transform_from = 'scaleY(1)';
             $transform_origin = 'top';
-            $opacity_initial = '0';
-            $opacity_final = '1';
         }
         
-        // Determine transition properties based on animation type
+        // Build dynamic CSS based on animation type
         if ($transition_animation === 'fade') {
-            $transition_property = 'transform, opacity, visibility';
-            $transition_timing = 'cubic-bezier(0.19, 1, 0.22, 1), ease-in-out, step-start';
-            $transition_duration = "{$duration_seconds}s, {$duration_seconds}s, 0s";
-            $transition_delay_initial = "0s, 0s, 0s";
-            $transition_delay_active = "0s, 0s, 0s";
+            // Fade needs opacity animation
+            $custom_css = "
+                .transition-pannel-bg {
+                    background: {$transition_color};
+                    transform: {$transform_from};
+                    transform-origin: {$transform_origin};
+                    opacity: 0;
+                    transition-property: transform, opacity, visibility;
+                    transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1), ease-in-out, step-end;
+                    transition-duration: {$duration_seconds}s, {$duration_seconds}s, 0s;
+                    transition-delay: 0s, 0s, {$duration_seconds}s;
+                }
+                .transition-pannel-bg.active {
+                    opacity: 1;
+                    transition-delay: 0s, 0s, 0s;
+                }
+            ";
         } else {
-            // slide-down and slide-up without opacity
-            $transition_property = 'transform, visibility';
-            $transition_timing = 'cubic-bezier(0.19, 1, 0.22, 1), step-start';
-            $transition_duration = "{$duration_seconds}s, 0s";
-            $transition_delay_initial = "0s, 0s";
-            $transition_delay_active = "0s, 0s";
+            // Slide animations without opacity
+            $custom_css = "
+                .transition-pannel-bg {
+                    background: {$transition_color};
+                    transform: {$transform_from};
+                    transform-origin: {$transform_origin};
+                    transition-duration: {$duration_seconds}s, 0s;
+                    transition-delay: 0s, {$duration_seconds}s;
+                }
+                .transition-pannel-bg.active {
+                    transition-delay: 0s, 0s;
+                }
+            ";
         }
-        
-        $custom_css = "
-            .transition-pannel-bg {
-                background: {$transition_color};
-                transform: {$transform_from};
-                transform-origin: {$transform_origin};
-                opacity: {$opacity_initial};
-                transition-property: {$transition_property};
-                transition-timing-function: {$transition_timing};
-                transition-duration: {$transition_duration};
-                transition-delay: {$transition_delay_initial};
-            }
-            .transition-pannel-bg.active {
-                opacity: {$opacity_final};
-                transform: scaleY(1);
-                transition-property: {$transition_property};
-                transition-timing-function: {$transition_timing};
-                transition-duration: {$transition_duration};
-                transition-delay: {$transition_delay_active};
-            }
-        ";
         wp_add_inline_style('elementor-blank-page-transitions', $custom_css);
         
         wp_enqueue_script(
