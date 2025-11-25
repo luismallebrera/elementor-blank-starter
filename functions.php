@@ -87,7 +87,7 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/css/page-transitions.css',
             array(),
-            '4.5'
+            '4.6'
         );
         
         // Add inline CSS for dynamic settings
@@ -129,7 +129,7 @@ function elementor_blank_scripts() {
             $custom_css = "
                 .transition-pannel-bg {
                     background: {$transition_color};
-                    transform: {$transform_from};
+                    transform: scaleY(1);
                     transform-origin: {$transform_origin};
                     opacity: 0;
                     z-index: {$panel_z_index};
