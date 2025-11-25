@@ -41,8 +41,39 @@ function elementor_blank_scripts() {
     // Estilo principal
     wp_enqueue_style('elementor-blank-style', get_stylesheet_uri(), array(), '1.0');
     
-    // Script personalizado (si lo necesitas)
+    // Script personalizado
     wp_enqueue_script('elementor-blank-script', get_template_directory_uri() . '/scripts.js', array(), '1.0', true);
+    
+    // Smooth Scrolling con Lenis
+    if (get_theme_mod('enable_smooth_scrolling', false)) {
+        // Cargar Lenis desde CDN
+        wp_enqueue_script('lenis', 'https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js', array(), '1.0.42', true);
+        
+        // Cargar GSAP y ScrollTrigger si está habilitado
+        if (get_theme_mod('smooth_scrolling_gsap', false)) {
+            wp_enqueue_script('gsap', 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js', array(), '3.12.5', true);
+            wp_enqueue_script('scrolltrigger', 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js', array('gsap'), '3.12.5', true);
+        }
+        
+        // Cargar nuestro script de smooth scrolling
+        wp_enqueue_script(
+            'elementor-blank-smooth-scrolling',
+            get_template_directory_uri() . '/js/smooth-scrolling.js',
+            array('lenis'),
+            '1.0',
+            true
+        );
+        
+        // Pasar parámetros al JavaScript
+        wp_localize_script('elementor-blank-smooth-scrolling', 'elementorBlankSmoothScrollingParams', array(
+            'smoothWheel'   => get_theme_mod('smooth_scrolling_disable_wheel', false) ? 0 : 1,
+            'anchorOffset'  => intval(get_theme_mod('smooth_scrolling_anchor_offset', 0)),
+            'lerp'          => floatval(get_theme_mod('smooth_scrolling_lerp', 0.1)),
+            'duration'      => floatval(get_theme_mod('smooth_scrolling_duration', 1.2)),
+            'anchorLinks'   => get_theme_mod('smooth_scrolling_anchor_links', false),
+            'gsapSync'      => get_theme_mod('smooth_scrolling_gsap', false),
+        ));
+    }
 }
 
 // Remover la barra de administración del frontend si lo deseas
