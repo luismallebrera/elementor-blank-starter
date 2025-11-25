@@ -194,7 +194,8 @@ function ecc_add_image_custom_class_attributes( $html, $settings, $image_size_ke
         $attributes[] = 'data-aos-anchor-placement="' . esc_attr( $settings['ecc_anchor_placement'] ) . '"';
     }
     if ( ! empty( $settings['ecc_easing_function'] ) ) {
-        $attributes[] = 'data-aos-easing="' . esc_attr( $settings['ecc_easing_function'] ) . '"';
+        $easing_value = str_replace('easing-', '', $settings['ecc_easing_function']);
+        $attributes[] = 'data-aos-easing="' . esc_attr( $easing_value ) . '"';
     }
     if ( isset( $settings['ecc_duration']['size'] ) && $settings['ecc_duration']['size'] > 0 ) {
         $attributes[] = 'data-aos-duration="' . esc_attr( $settings['ecc_duration']['size'] ) . '"';
@@ -267,7 +268,8 @@ function ecc_add_heading_button_custom_class_attributes( $content, $widget ) {
                 $el->setAttribute('data-aos-anchor-placement', $settings['ecc_anchor_placement']);
             }
             if ( ! empty( $settings['ecc_easing_function'] ) ) {
-                $el->setAttribute('data-aos-easing', $settings['ecc_easing_function']);
+                $easing_value = str_replace('easing-', '', $settings['ecc_easing_function']);
+                $el->setAttribute('data-aos-easing', $easing_value);
             }
             if ( isset( $settings['ecc_duration']['size'] ) && $settings['ecc_duration']['size'] > 0 ) {
                 $el->setAttribute('data-aos-duration', $settings['ecc_duration']['size']);
@@ -313,7 +315,8 @@ function ecc_render_section_column_container_attributes( $element ) {
         $element->add_render_attribute( '_wrapper', 'data-aos-anchor-placement', esc_attr( $settings['ecc_anchor_placement'] ) );
     }
     if ( ! empty( $settings['ecc_easing_function'] ) ) {
-        $element->add_render_attribute( '_wrapper', 'data-aos-easing', esc_attr( $settings['ecc_easing_function'] ) );
+        $easing_value = str_replace('easing-', '', $settings['ecc_easing_function']);
+        $element->add_render_attribute( '_wrapper', 'data-aos-easing', esc_attr( $easing_value ) );
     }
     if ( isset( $settings['ecc_duration']['size'] ) && $settings['ecc_duration']['size'] > 0 ) {
         $element->add_render_attribute( '_wrapper', 'data-aos-duration', esc_attr( $settings['ecc_duration']['size'] ) );
