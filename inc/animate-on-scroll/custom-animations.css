@@ -1,0 +1,79 @@
+/**
+ * Custom AOS Animations
+ * Add your custom animation classes here
+ * Use the format: [data-aos="your-animation-name"]
+ */
+
+/* Example: Custom Fade Entrance */
+[data-aos="fade-entrance"] {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    transition-property: transform, opacity;
+}
+
+[data-aos="fade-entrance"].aos-animate {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Example: Custom Entrance Cool */
+[data-aos="entrance-cool"] {
+    opacity: 0;
+    transform: translateY(50px) rotate(-5deg);
+    transition-property: transform, opacity;
+}
+
+[data-aos="entrance-cool"].aos-animate {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+}
+
+/* Example: Custom Clip Up */
+[data-aos="clip-up"] {
+    clip-path: inset(100% 0 0 0);
+    transition-property: clip-path;
+}
+
+[data-aos="clip-up"].aos-animate {
+    clip-path: inset(0 0 0 0);
+}
+
+/* Example: Custom Clip Up Fade */
+[data-aos="clip-up-fade"] {
+    opacity: 0;
+    clip-path: inset(100% 0 0 0);
+    transition-property: clip-path, opacity;
+}
+
+[data-aos="clip-up-fade"].aos-animate {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+}
+
+/* Example: Custom Clip Scale */
+[data-aos="clip-scale"] {
+    clip-path: inset(50% 50% 50% 50%);
+    transform: scale(0.8);
+    transition-property: clip-path, transform;
+}
+
+[data-aos="clip-scale"].aos-animate {
+    clip-path: inset(0 0 0 0);
+    transform: scale(1);
+}
+
+/* Add your custom animations below this line */
+/* ========================================== */
+
+/* Example Template:
+[data-aos="your-animation-name"] {
+    opacity: 0;
+    transform: translateY(20px);
+    transition-property: transform, opacity;
+}
+
+[data-aos="your-animation-name"].aos-animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+*/

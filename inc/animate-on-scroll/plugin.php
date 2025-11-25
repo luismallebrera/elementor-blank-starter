@@ -18,6 +18,14 @@ function aos_enqueue_scripts() {
         '2.3.4'
     );
     
+    // Custom AOS Animations CSS
+    wp_enqueue_style(
+        'aos-custom-animations',
+        get_template_directory_uri() . '/inc/animate-on-scroll/custom-animations.css',
+        array('aos-css'),
+        '1.0'
+    );
+    
     // AOS JS
     wp_enqueue_script(
         'aos-js',
