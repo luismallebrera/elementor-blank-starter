@@ -32,6 +32,12 @@
     transition-delay: 0s, 0s;
 }
 
+.transition-pannel-bg.initial-load {
+    opacity: 1;
+    visibility: visible;
+    transform: scaleY(1);
+}
+
 /* Transition Borders Background */
 .transition-borders-bg {
     width: 100%;

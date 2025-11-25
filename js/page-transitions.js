@@ -57,6 +57,11 @@
 
     // Remove transition classes on page load
     $(document).ready(function() {
+        // Remove initial-load class after brief delay
+        setTimeout(function() {
+            $('.transition-pannel-bg').removeClass('initial-load');
+        }, 50);
+        
         // For fade animation, wait for panel to fade out before removing classes
         if (settings.animation === 'fade') {
             // Add page-loaded class immediately to trigger fade out
