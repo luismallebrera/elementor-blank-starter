@@ -87,7 +87,7 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/css/page-transitions.css',
             array(),
-            '4.1'
+            '4.2'
         );
         
         // Add inline CSS for dynamic settings
@@ -169,12 +169,12 @@ function elementor_blank_scripts() {
                 .transition-pannel-bg.active {
                     transition-delay: 0s, 0s;
                 }
-                body.{$transition_animation}-entrance:not(.page-loaded) .transition-pannel-bg {
+                body.{$transition_animation}-entrance:not(.page-loaded) .transition-pannel-bg:not(.active) {
                     visibility: visible;
                     transform: scaleY(1);
                     transform-origin: {$entrance_origin};
                 }
-                body.{$transition_animation}-entrance.page-loaded .transition-pannel-bg {
+                body.{$transition_animation}-entrance.page-loaded .transition-pannel-bg:not(.active) {
                     transform: scaleY(0);
                     transform-origin: {$entrance_origin};
                 }
