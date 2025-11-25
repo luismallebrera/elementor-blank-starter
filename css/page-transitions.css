@@ -45,7 +45,7 @@
     clip-path: polygon(0% 0%, 0% 100%, 0 100%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%, 100% 100%, 100% 0%);
 }
 
-body.close .transition-borders-bg {
+.transition-borders-bg.active {
     clip-path: polygon(0 0, 0% 100%, 10% 100%, 10% 15%, 90% 15%, 90% 100%, 10% 100%, 10% 100%, 100% 100%, 100% 0%);
 }
 
