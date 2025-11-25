@@ -77,6 +77,8 @@ function elementor_blank_scripts() {
     
     // Page Transitions
     if (get_theme_mod('enable_page_transitions', false)) {
+        $transition_duration = intval(get_theme_mod('page_transitions_duration', 900));
+        
         // Page Transitions CSS
         wp_enqueue_style(
             'elementor-blank-page-transitions',
@@ -84,6 +86,14 @@ function elementor_blank_scripts() {
             array(),
             '1.0'
         );
+        
+        // Add inline CSS for dynamic duration
+        $custom_css = "
+            .transition-pannel-bg {
+                transition-duration: " . ($transition_duration / 1000) . "s;
+            }
+        ";
+        wp_add_inline_style('elementor-blank-page-transitions', $custom_css);
         
         wp_enqueue_script(
             'elementor-blank-page-transitions',
@@ -96,7 +106,7 @@ function elementor_blank_scripts() {
         // Pasar parámetros al JavaScript
         wp_localize_script('elementor-blank-page-transitions', 'elementorBlankPageTransitions', array(
             'enabled'   => true,
-            'duration'  => intval(get_theme_mod('page_transitions_duration', 900)),
+            'duration'  => $transition_duration,
             'selectors' => get_theme_mod('page_transitions_selectors', '.menu li a, .elementor-widget-image > a, .soda-post-nav-next a, .soda-post-nav-prev a'),
         ));
     }
