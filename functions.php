@@ -87,7 +87,7 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/css/page-transitions.css',
             array(),
-            '3.1'
+            '3.2'
         );
         
         // Add inline CSS for dynamic settings

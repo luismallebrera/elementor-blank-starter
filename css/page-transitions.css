@@ -55,11 +55,3 @@
 body.close {
     overflow: hidden;
 }
-
-/* Optional: Add fade effect to body content */
-body.close main,
-body.close header,
-body.close footer {
-    opacity: 0.5;
-    transition: opacity 0.3s ease-in-out;
-}
