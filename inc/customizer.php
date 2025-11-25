@@ -239,6 +239,82 @@ new \Kirki\Field\Checkbox_Switch(
 );
 
 /**
+ * Breakpoints Section Header
+ */
+new \Kirki\Field\Custom(
+    array(
+        'settings' => 'grid_line_breakpoints_title',
+        'section'  => 'grid_line_section',
+        'default'  => '<h3 style="margin-top: 20px; border-top: 1px solid #ddd; padding-top: 20px;">' . esc_html__('Breakpoints (px)', 'elementor-blank-starter') . '</h3>',
+    )
+);
+
+/**
+ * Desktop Breakpoint
+ */
+new \Kirki\Field\Number(
+    array(
+        'settings'    => 'grid_line_breakpoint_desktop',
+        'label'       => esc_html__('Desktop Min Width', 'elementor-blank-starter'),
+        'description' => esc_html__('Minimum width for desktop (default: 1024px)', 'elementor-blank-starter'),
+        'section'     => 'grid_line_section',
+        'default'     => 1024,
+        'choices'     => array(
+            'min'  => 0,
+            'max'  => 3000,
+            'step' => 1,
+        ),
+    )
+);
+
+/**
+ * Tablet Landscape Breakpoint
+ */
+new \Kirki\Field\Number(
+    array(
+        'settings'    => 'grid_line_breakpoint_tablet',
+        'label'       => esc_html__('Tablet Min Width', 'elementor-blank-starter'),
+        'description' => esc_html__('Minimum width for tablet (default: 768px)', 'elementor-blank-starter'),
+        'section'     => 'grid_line_section',
+        'default'     => 768,
+        'choices'     => array(
+            'min'  => 0,
+            'max'  => 3000,
+            'step' => 1,
+        ),
+    )
+);
+
+/**
+ * Mobile Landscape Breakpoint
+ */
+new \Kirki\Field\Number(
+    array(
+        'settings'    => 'grid_line_breakpoint_mobile_landscape',
+        'label'       => esc_html__('Mobile Landscape Min Width', 'elementor-blank-starter'),
+        'description' => esc_html__('Minimum width for mobile landscape (default: 420px)', 'elementor-blank-starter'),
+        'section'     => 'grid_line_section',
+        'default'     => 420,
+        'choices'     => array(
+            'min'  => 0,
+            'max'  => 3000,
+            'step' => 1,
+        ),
+    )
+);
+
+/**
+ * Grid Settings Section Header
+ */
+new \Kirki\Field\Custom(
+    array(
+        'settings' => 'grid_line_settings_title',
+        'section'  => 'grid_line_section',
+        'default'  => '<h3 style="margin-top: 20px; border-top: 1px solid #ddd; padding-top: 20px;">' . esc_html__('Grid Settings', 'elementor-blank-starter') . '</h3>',
+    )
+);
+
+/**
  * Line Color
  */
 new \Kirki\Field\Color(
@@ -323,6 +399,17 @@ new \Kirki\Field\Checkbox_Switch(
 );
 
 /**
+ * Grid Width Section Header
+ */
+new \Kirki\Field\Custom(
+    array(
+        'settings' => 'grid_line_width_title',
+        'section'  => 'grid_line_section',
+        'default'  => '<h3 style="margin-top: 20px; border-top: 1px solid #ddd; padding-top: 20px;">' . esc_html__('Grid Widths per Breakpoint', 'elementor-blank-starter') . '</h3>',
+    )
+);
+
+/**
  * Grid Max Width
  */
 new \Kirki\Field\Dimension(
@@ -356,6 +443,19 @@ new \Kirki\Field\Dimension(
         'settings'    => 'grid_line_width_tablet',
         'label'       => esc_html__('Grid Width (Tablet)', 'elementor-blank-starter'),
         'description' => esc_html__('Width of the grid container on tablet.', 'elementor-blank-starter'),
+        'section'     => 'grid_line_section',
+        'default'     => '100%',
+    )
+);
+
+/**
+ * Grid Width Mobile Landscape
+ */
+new \Kirki\Field\Dimension(
+    array(
+        'settings'    => 'grid_line_width_mobile_landscape',
+        'label'       => esc_html__('Grid Width (Mobile Landscape)', 'elementor-blank-starter'),
+        'description' => esc_html__('Width of the grid container on mobile landscape.', 'elementor-blank-starter'),
         'section'     => 'grid_line_section',
         'default'     => '100%',
     )

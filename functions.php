@@ -142,17 +142,23 @@ function elementor_blank_grid_line_styles() {
     }
 
     // Get all grid line settings
-    $line_color      = get_theme_mod('grid_line_line_color', '#eeeeee');
-    $column_color    = get_theme_mod('grid_line_column_color', 'transparent');
-    $columns         = get_theme_mod('grid_line_columns', 12);
-    $outline         = get_theme_mod('grid_line_outline', false);
-    $max_width       = get_theme_mod('grid_line_max_width', '100%');
-    $width_desktop   = get_theme_mod('grid_line_width_desktop', '100%');
-    $width_tablet    = get_theme_mod('grid_line_width_tablet', '100%');
-    $width_mobile    = get_theme_mod('grid_line_width_mobile', '100%');
-    $line_width      = get_theme_mod('grid_line_line_width', '1px');
-    $direction       = get_theme_mod('grid_line_direction', 90);
-    $z_index         = get_theme_mod('grid_line_z_index', 0);
+    $line_color                = get_theme_mod('grid_line_line_color', '#eeeeee');
+    $column_color              = get_theme_mod('grid_line_column_color', 'transparent');
+    $columns                   = get_theme_mod('grid_line_columns', 12);
+    $outline                   = get_theme_mod('grid_line_outline', false);
+    $max_width                 = get_theme_mod('grid_line_max_width', '100%');
+    $width_desktop             = get_theme_mod('grid_line_width_desktop', '100%');
+    $width_tablet              = get_theme_mod('grid_line_width_tablet', '100%');
+    $width_mobile_landscape    = get_theme_mod('grid_line_width_mobile_landscape', '100%');
+    $width_mobile              = get_theme_mod('grid_line_width_mobile', '100%');
+    $line_width                = get_theme_mod('grid_line_line_width', '1px');
+    $direction                 = get_theme_mod('grid_line_direction', 90);
+    $z_index                   = get_theme_mod('grid_line_z_index', 0);
+    
+    // Get breakpoints
+    $breakpoint_desktop         = get_theme_mod('grid_line_breakpoint_desktop', 1024);
+    $breakpoint_tablet          = get_theme_mod('grid_line_breakpoint_tablet', 768);
+    $breakpoint_mobile_landscape = get_theme_mod('grid_line_breakpoint_mobile_landscape', 420);
 
     // Build outline styles
     $outline_style = '';
@@ -172,19 +178,29 @@ function elementor_blank_grid_line_styles() {
             --grid-line-z-index: <?php echo (int) $z_index; ?>;
         }
         
-        @media (min-width: 1024px) {
+        /* Desktop */
+        @media (min-width: <?php echo (int) $breakpoint_desktop; ?>px) {
             :root {
                 --grid-line-width: <?php echo esc_attr($width_desktop); ?>;
             }
         }
         
-        @media (min-width: 768px) and (max-width: 1023px) {
+        /* Tablet */
+        @media (min-width: <?php echo (int) $breakpoint_tablet; ?>px) and (max-width: <?php echo ((int) $breakpoint_desktop - 1); ?>px) {
             :root {
                 --grid-line-width: <?php echo esc_attr($width_tablet); ?>;
             }
         }
         
-        @media (max-width: 767px) {
+        /* Mobile Landscape */
+        @media (min-width: <?php echo (int) $breakpoint_mobile_landscape; ?>px) and (max-width: <?php echo ((int) $breakpoint_tablet - 1); ?>px) {
+            :root {
+                --grid-line-width: <?php echo esc_attr($width_mobile_landscape); ?>;
+            }
+        }
+        
+        /* Mobile */
+        @media (max-width: <?php echo ((int) $breakpoint_mobile_landscape - 1); ?>px) {
             :root {
                 --grid-line-width: <?php echo esc_attr($width_mobile); ?>;
             }
