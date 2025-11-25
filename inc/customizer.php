@@ -209,3 +209,242 @@ new \Kirki\Field\Slider(
     )
 );
 
+/**
+ * Sección: Grid Line Overlay
+ */
+new \Kirki\Section(
+    'grid_line_section',
+    array(
+        'title'       => esc_html__('Grid Line Overlay', 'elementor-blank-starter'),
+        'panel'       => 'theme_options',
+        'priority'    => 60,
+    )
+);
+
+/**
+ * Enable Grid Line
+ */
+new \Kirki\Field\Checkbox_Switch(
+    array(
+        'settings'    => 'grid_line_enable',
+        'label'       => esc_html__('Enable Grid Line', 'elementor-blank-starter'),
+        'description' => esc_html__('Display a grid line overlay on the page.', 'elementor-blank-starter'),
+        'section'     => 'grid_line_section',
+        'default'     => false,
+        'choices'     => array(
+            'on'  => esc_html__('Enabled', 'elementor-blank-starter'),
+            'off' => esc_html__('Disabled', 'elementor-blank-starter'),
+        ),
+    )
+);
+
+/**
+ * Line Color
+ */
+new \Kirki\Field\Color(
+    array(
+        'settings'    => 'grid_line_line_color',
+        'label'       => esc_html__('Line Color', 'elementor-blank-starter'),
+        'description' => esc_html__('Color of the grid lines.', 'elementor-blank-starter'),
+        'section'     => 'grid_line_section',
+        'default'     => '#eeeeee',
+        'choices'     => array(
+            'alpha' => true,
+        ),
+        'output'      => array(
+            array(
+                'element'  => 'body',
+                'property' => '--grid-line-color',
+            ),
+        ),
+    )
+);
+
+/**
+ * Column Color
+ */
+new \Kirki\Field\Color(
+    array(
+        'settings'    => 'grid_line_column_color',
+        'label'       => esc_html__('Column Color', 'elementor-blank-starter'),
+        'description' => esc_html__('Background color between lines.', 'elementor-blank-starter'),
+        'section'     => 'grid_line_section',
+        'default'     => 'transparent',
+        'choices'     => array(
+            'alpha' => true,
+        ),
+        'output'      => array(
+            array(
+                'element'  => 'body',
+                'property' => '--grid-line-column-color',
+            ),
+        ),
+    )
+);
+
+/**
+ * Number of Columns
+ */
+new \Kirki\Field\Slider(
+    array(
+        'settings'    => 'grid_line_columns',
+        'label'       => esc_html__('Number of Columns', 'elementor-blank-starter'),
+        'description' => esc_html__('Number of grid columns to display.', 'elementor-blank-starter'),
+        'section'     => 'grid_line_section',
+        'default'     => 12,
+        'choices'     => array(
+            'min'  => 1,
+            'max'  => 24,
+            'step' => 1,
+        ),
+        'output'      => array(
+            array(
+                'element'  => 'body',
+                'property' => '--grid-line-columns',
+            ),
+        ),
+    )
+);
+
+/**
+ * Grid Outline
+ */
+new \Kirki\Field\Checkbox_Switch(
+    array(
+        'settings' => 'grid_line_outline',
+        'label'    => esc_html__('Grid Outline', 'elementor-blank-starter'),
+        'section'  => 'grid_line_section',
+        'default'  => false,
+        'choices'  => array(
+            'on'  => esc_html__('Yes', 'elementor-blank-starter'),
+            'off' => esc_html__('No', 'elementor-blank-starter'),
+        ),
+    )
+);
+
+/**
+ * Grid Max Width
+ */
+new \Kirki\Field\Dimension(
+    array(
+        'settings'    => 'grid_line_max_width',
+        'label'       => esc_html__('Grid Max Width', 'elementor-blank-starter'),
+        'description' => esc_html__('Maximum width of the grid overlay.', 'elementor-blank-starter'),
+        'section'     => 'grid_line_section',
+        'default'     => '100%',
+        'output'      => array(
+            array(
+                'element'  => 'body',
+                'property' => '--grid-line-max-width',
+            ),
+        ),
+    )
+);
+
+/**
+ * Grid Width
+ */
+new \Kirki\Field\Dimensions(
+    array(
+        'settings'    => 'grid_line_the_width',
+        'label'       => esc_html__('Grid Width', 'elementor-blank-starter'),
+        'description' => esc_html__('Width of the grid container.', 'elementor-blank-starter'),
+        'section'     => 'grid_line_section',
+        'responsive'  => true,
+        'default'     => array(
+            'desktop' => array(
+                'width' => '100%',
+            ),
+            'tablet'  => array(
+                'width' => '100%',
+            ),
+            'mobile'  => array(
+                'width' => '100%',
+            ),
+        ),
+        'choices'     => array(
+            'labels' => array(
+                'width' => esc_html__('Width', 'elementor-blank-starter'),
+            ),
+        ),
+        'output'      => array(
+            array(
+                'element'     => 'body',
+                'property'    => '--grid-line-width',
+                'media_query' => array(
+                    'desktop' => '@media (min-width: 1024px)',
+                    'tablet'  => '@media (min-width: 768px) and (max-width: 1023px)',
+                    'mobile'  => '@media (max-width: 767px)',
+                ),
+            ),
+        ),
+    )
+);
+
+/**
+ * Line Width
+ */
+new \Kirki\Field\Dimension(
+    array(
+        'settings'    => 'grid_line_line_width',
+        'label'       => esc_html__('Line Width', 'elementor-blank-starter'),
+        'description' => esc_html__('Thickness of each grid line.', 'elementor-blank-starter'),
+        'section'     => 'grid_line_section',
+        'default'     => '1px',
+        'output'      => array(
+            array(
+                'element'  => 'body',
+                'property' => '--grid-line-thickness',
+            ),
+        ),
+    )
+);
+
+/**
+ * Line Direction
+ */
+new \Kirki\Field\Slider(
+    array(
+        'settings'    => 'grid_line_direction',
+        'label'       => esc_html__('Line Direction (degrees)', 'elementor-blank-starter'),
+        'description' => esc_html__('Angle of the grid lines.', 'elementor-blank-starter'),
+        'section'     => 'grid_line_section',
+        'default'     => 90,
+        'choices'     => array(
+            'min'  => -360,
+            'max'  => 360,
+            'step' => 15,
+        ),
+        'output'      => array(
+            array(
+                'element'  => 'body',
+                'property' => '--grid-line-direction',
+                'suffix'   => 'deg',
+            ),
+        ),
+    )
+);
+
+/**
+ * Z-Index
+ */
+new \Kirki\Field\Slider(
+    array(
+        'settings'    => 'grid_line_z_index',
+        'label'       => esc_html__('Z-Index', 'elementor-blank-starter'),
+        'description' => esc_html__('Stacking order of the grid overlay.', 'elementor-blank-starter'),
+        'section'     => 'grid_line_section',
+        'default'     => 0,
+        'choices'     => array(
+            'min'  => -9999,
+            'max'  => 9999,
+            'step' => 1,
+        ),
+        'output'      => array(
+            array(
+                'element'  => 'body',
+                'property' => '--grid-line-z-index',
+            ),
+        ),
+    )
+);

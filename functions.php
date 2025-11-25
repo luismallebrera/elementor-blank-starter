@@ -129,3 +129,87 @@ if (class_exists('Kirki')) {
         <?php
     }
 }
+
+/**
+ * Output Grid Line CSS when enabled
+ */
+add_action('wp_head', 'elementor_blank_grid_line_styles');
+function elementor_blank_grid_line_styles() {
+    $grid_line_enable = get_theme_mod('grid_line_enable', false);
+    
+    if (!$grid_line_enable) {
+        return;
+    }
+
+    // Get all grid line settings
+    $line_color      = get_theme_mod('grid_line_line_color', '#eeeeee');
+    $column_color    = get_theme_mod('grid_line_column_color', 'transparent');
+    $columns         = get_theme_mod('grid_line_columns', 12);
+    $outline         = get_theme_mod('grid_line_outline', false);
+    $max_width       = get_theme_mod('grid_line_max_width', '100%');
+    $the_width       = get_theme_mod('grid_line_the_width', array(
+        'desktop' => array('width' => '100%'),
+        'tablet'  => array('width' => '100%'),
+        'mobile'  => array('width' => '100%'),
+    ));
+    $line_width      = get_theme_mod('grid_line_line_width', '1px');
+    $direction       = get_theme_mod('grid_line_direction', 90);
+    $z_index         = get_theme_mod('grid_line_z_index', 0);
+
+    // Build outline styles
+    $outline_style = '';
+    if ($outline) {
+        $outline_style = 'outline: ' . $line_width . ' solid ' . $line_color . ';';
+    }
+
+    ?>
+    <style type="text/css">
+        :root {
+            --grid-line-color: <?php echo esc_attr($line_color); ?>;
+            --grid-line-column-color: <?php echo esc_attr($column_color); ?>;
+            --grid-line-columns: <?php echo (int) $columns; ?>;
+            --grid-line-max-width: <?php echo esc_attr($max_width); ?>;
+            --grid-line-thickness: <?php echo esc_attr($line_width); ?>;
+            --grid-line-direction: <?php echo (int) $direction; ?>deg;
+            --grid-line-z-index: <?php echo (int) $z_index; ?>;
+        }
+        
+        @media (min-width: 1024px) {
+            :root {
+                --grid-line-width: <?php echo isset($the_width['desktop']['width']) ? esc_attr($the_width['desktop']['width']) : '100%'; ?>;
+            }
+        }
+        
+        @media (min-width: 768px) and (max-width: 1023px) {
+            :root {
+                --grid-line-width: <?php echo isset($the_width['tablet']['width']) ? esc_attr($the_width['tablet']['width']) : '100%'; ?>;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            :root {
+                --grid-line-width: <?php echo isset($the_width['mobile']['width']) ? esc_attr($the_width['mobile']['width']) : '100%'; ?>;
+            }
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            margin-right: auto;
+            margin-left: auto;
+            pointer-events: none;
+            z-index: var(--grid-line-z-index, 0);
+            min-height: 100vh;
+            width: calc(var(--grid-line-width) - (2 * 0px));
+            max-width: var(--grid-line-max-width, 100%);
+            background-size: calc(100% + var(--grid-line-thickness, 1px)) 100%;
+            background-image: repeating-linear-gradient(var(--grid-line-direction, 90deg), var(--grid-line-column-color, transparent), var(--grid-line-column-color, transparent) calc((100% / var(--grid-line-columns, 12)) - var(--grid-line-thickness, 1px)), var(--grid-line-color, #eee) calc((100% / var(--grid-line-columns, 12)) - var(--grid-line-thickness, 1px)), var(--grid-line-color, #eee) calc(100% / var(--grid-line-columns, 12)));
+            <?php echo $outline_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+        }
+    </style>
+    <?php
+}
