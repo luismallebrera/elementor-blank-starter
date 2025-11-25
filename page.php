@@ -2,15 +2,6 @@
 /**
  * Template para páginas
  */
-
-// Page transition elements at the beginning
-if (get_theme_mod('enable_page_transitions', false)) : ?>
-    <?php if (get_theme_mod('enable_page_transitions_borders', true)) : ?>
-        <div aria-hidden="true" class="transition-borders-bg"></div>
-    <?php endif; ?>
-    <div aria-hidden="true" class="transition-pannel-bg initial-load"></div>
-<?php endif;
-
 get_header();
 
 if (have_posts()) :
@@ -20,3 +11,11 @@ if (have_posts()) :
 endif;
 
 get_footer();
+
+// Page transition elements
+if (get_theme_mod('enable_page_transitions', false)) : ?>
+    <?php if (get_theme_mod('enable_page_transitions_borders', true)) : ?>
+        <div aria-hidden="true" class="transition-borders-bg"></div>
+    <?php endif; ?>
+    <div aria-hidden="true" class="transition-pannel-bg initial-load"></div>
+<?php endif;
