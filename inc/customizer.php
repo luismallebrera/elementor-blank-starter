@@ -377,9 +377,9 @@ new \Kirki\Field\Select(
         'section'     => 'page_transitions_section',
         'default'     => 'slide-down',
         'choices'     => array(
-            'slide-down' => esc_html__('Slide Down (from top)', 'elementor-blank-starter'),
-            'slide-up'   => esc_html__('Slide Up (from bottom)', 'elementor-blank-starter'),
-            'fade'       => esc_html__('Fade', 'elementor-blank-starter'),
+            'slide-down'        => esc_html__('Slide Down (from top)', 'elementor-blank-starter'),
+            'slide-up'          => esc_html__('Slide Up (from bottom)', 'elementor-blank-starter'),
+            'fade'              => esc_html__('Fade', 'elementor-blank-starter'),
         ),
     )
 );

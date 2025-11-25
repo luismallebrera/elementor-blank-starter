@@ -93,21 +93,35 @@ function elementor_blank_scripts() {
         $duration_seconds = ($transition_duration / 1000);
         
         // Define transform based on animation type
-        $transform_from = 'translateY(-100%)'; // Default slide-down
+        $transform_from = 'scaleY(0)'; // Default slide-down
+        $transform_origin = 'top';
+        $opacity_initial = '1';
+        $opacity_final = '1';
+        
         if ($transition_animation === 'slide-up') {
-            $transform_from = 'translateY(100%)';
+            $transform_from = 'scaleY(0)';
+            $transform_origin = 'bottom';
+            $opacity_initial = '1';
+            $opacity_final = '1';
         } elseif ($transition_animation === 'fade') {
-            $transform_from = 'translateY(0)';
+            $transform_from = 'scaleY(1)';
+            $transform_origin = 'top';
+            $opacity_initial = '0';
+            $opacity_final = '1';
         }
         
         $custom_css = "
             .transition-pannel-bg {
                 background: {$transition_color};
                 transform: {$transform_from};
+                transform-origin: {$transform_origin};
+                opacity: {$opacity_initial};
                 transition-duration: {$duration_seconds}s, {$duration_seconds}s, 0s;
                 transition-delay: 0s, 0s, {$duration_seconds}s;
             }
             .transition-pannel-bg.active {
+                opacity: {$opacity_final};
+                transform: scaleY(1);
                 transition-duration: {$duration_seconds}s, {$duration_seconds}s, 0s;
                 transition-delay: 0s, 0s, 0s;
             }
