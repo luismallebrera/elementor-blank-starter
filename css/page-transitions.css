@@ -78,15 +78,3 @@ body.slide-up-entrance.page-loaded .elementor {
     transform-origin: top;
     transition: transform 0.6s cubic-bezier(0.83, 0, 0.17, 1);
 }
-
-/* Fade entrance animation for page content */
-body.fade-entrance:not(.page-loaded) .transition-pannel-bg {
-    opacity: 1;
-    visibility: visible;
-    transform: scaleY(1);
-}
-
-body.fade-entrance.page-loaded .transition-pannel-bg {
-    opacity: 0;
-    visibility: hidden;
-}
