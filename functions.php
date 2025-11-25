@@ -80,6 +80,14 @@ function elementor_blank_scripts() {
 // add_filter('show_admin_bar', '__return_false');
 
 /**
+ * Incluir Animate on Scroll plugin
+ */
+$aos_plugin = get_template_directory() . '/inc/animate-on-scroll/plugin.php';
+if (file_exists($aos_plugin)) {
+    include_once $aos_plugin;
+}
+
+/**
  * Incluir Kirki Framework
  * Incluimos Kirki directamente en el tema
  * Descarga el plugin desde: https://wordpress.org/plugins/kirki/
