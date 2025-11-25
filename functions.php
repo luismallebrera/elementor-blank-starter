@@ -88,9 +88,15 @@ function elementor_blank_scripts() {
         );
         
         // Add inline CSS for dynamic duration
+        $duration_seconds = ($transition_duration / 1000);
         $custom_css = "
             .transition-pannel-bg {
-                transition-duration: " . ($transition_duration / 1000) . "s;
+                transition-duration: {$duration_seconds}s, {$duration_seconds}s, 0s;
+                transition-delay: 0s, 0s, {$duration_seconds}s;
+            }
+            .transition-pannel-bg.active {
+                transition-duration: {$duration_seconds}s, {$duration_seconds}s, 0s;
+                transition-delay: 0s, 0s, 0s;
             }
         ";
         wp_add_inline_style('elementor-blank-page-transitions', $custom_css);
