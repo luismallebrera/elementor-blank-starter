@@ -76,7 +76,7 @@ function elementor_blank_scripts() {
     }
     
     // Page Transitions
-    if (get_theme_mod('enable_page_transitions', false)) {
+    if (false && get_theme_mod('enable_page_transitions', false)) {
         $transition_duration = intval(get_theme_mod('page_transitions_duration', 900));
         $transition_animation = get_theme_mod('page_transitions_animation', 'slide-down');
         $transition_color = get_theme_mod('page_transitions_color', '#000000');
