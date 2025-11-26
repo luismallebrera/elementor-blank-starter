@@ -19,6 +19,14 @@ function elementor_blank_setup() {
     // Soporte para editor de bloques
     add_theme_support('align-wide');
     add_theme_support('wp-block-styles');
+    
+    // Soporte para logo personalizado
+    add_theme_support('custom-logo', array(
+        'height'      => 100,
+        'width'       => 400,
+        'flex-height' => true,
+        'flex-width'  => true,
+    ));
 }
 
 // Registrar áreas de widgets para Elementor
