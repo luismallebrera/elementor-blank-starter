@@ -29,9 +29,9 @@ body.close .transition-pannel-bg {
 }
 
 .transition-pannel-bg.enter {
-    transform: scaleY(1);
+    transform: scaleY(1) !important;
     pointer-events: auto;
-    transition: none;
+    transition: none !important;
 }
 
 /* Transition Borders Background */
