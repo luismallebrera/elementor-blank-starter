@@ -84,14 +84,14 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/css/page-transitions.css',
             array(),
-            '6.0'
+            '6.2'
         );
         
         wp_enqueue_script(
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/js/page-transitions.js',
             array('jquery'),
-            '2.4',
+            '2.5',
             true
         );
     }
