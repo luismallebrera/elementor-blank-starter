@@ -211,6 +211,8 @@ function elementor_blank_scripts() {
                     transform-origin: {$transform_origin};
                     z-index: {$panel_z_index};
                     transition-duration: {$duration_seconds}s;
+                    transition-property: transform;
+                    transition-timing-function: cubic-bezier(0.83, 0, 0.17, 1);
                 }
                 .transition-pannel-bg.active {
                     transform: scaleY(1);
@@ -223,7 +225,7 @@ function elementor_blank_scripts() {
                     transition: none !important;
                 }
                 body.{$transition_animation}-entrance.page-loaded .transition-pannel-bg {
-                    transform-origin: {$entrance_origin};
+                    transform-origin: {$entrance_origin} !important;
                 }
                 {$borders_css}
             ";
