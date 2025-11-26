@@ -33,9 +33,10 @@
 }
 
 .transition-pannel-bg.initial-load {
-    opacity: 1;
-    visibility: visible;
-    transform: scaleY(1);
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: scaleY(1) !important;
+    transition: none !important;
 }
 
 /* Transition Borders Background */
