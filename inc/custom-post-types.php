@@ -229,6 +229,52 @@ function elementor_blank_register_proyectos_cpt() {
 add_action('init', 'elementor_blank_register_proyectos_cpt', 0);
 
 /**
+ * Add Provincia custom field to Proyectos
+ */
+function elementor_blank_add_proyectos_provincia_meta_box() {
+    if (!get_theme_mod('enable_proyectos_cpt', false)) {
+        return;
+    }
+    
+    add_meta_box(
+        'proyectos_provincia',
+        __('Provincia', 'elementor-blank-starter'),
+        'elementor_blank_proyectos_provincia_callback',
+        'proyectos',
+        'side',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'elementor_blank_add_proyectos_provincia_meta_box');
+
+function elementor_blank_proyectos_provincia_callback($post) {
+    wp_nonce_field('proyectos_provincia_nonce', 'proyectos_provincia_nonce_field');
+    $value = get_post_meta($post->ID, '_proyectos_provincia', true);
+    echo '<label for="proyectos_provincia_field">' . __('Provincia:', 'elementor-blank-starter') . '</label>';
+    echo '<input type="text" id="proyectos_provincia_field" name="proyectos_provincia_field" value="' . esc_attr($value) . '" class="widefat">';
+}
+
+function elementor_blank_save_proyectos_provincia($post_id) {
+    if (!isset($_POST['proyectos_provincia_nonce_field']) || 
+        !wp_verify_nonce($_POST['proyectos_provincia_nonce_field'], 'proyectos_provincia_nonce')) {
+        return;
+    }
+    
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+    
+    if (isset($_POST['proyectos_provincia_field'])) {
+        update_post_meta($post_id, '_proyectos_provincia', sanitize_text_field($_POST['proyectos_provincia_field']));
+    }
+}
+add_action('save_post_proyectos', 'elementor_blank_save_proyectos_provincia');
+
+/**
  * Register Proyectos Category Taxonomy
  */
 function elementor_blank_register_proyectos_category() {
