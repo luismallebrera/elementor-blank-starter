@@ -1,19 +1,11 @@
 /**
- * Page Transitions
- * Smooth transitions between page navigation
+ * Page Transitions - HARDCODED
  */
 (function($) {
     'use strict';
 
-    // Get settings from PHP
-    var settings = window.elementorBlankPageTransitions || {};
-    
-    if (!settings.enabled) {
-        return; // Exit if transitions are disabled
-    }
-
     // Click handler for page transitions
-    $(document).on('click', settings.selectors, function(e) {
+    $(document).on('click', '.menu li a, .elementor-widget-image > a, .soda-post-nav-next a, .soda-post-nav-prev a', function(e) {
         // Get target URL
         var goTo = this.getAttribute('href');
         
@@ -52,7 +44,7 @@
         // Navigate after animation completes
         setTimeout(function() {
             window.location.href = goTo;
-        }, parseInt(settings.duration));
+        }, 1100);
     });
 
     // Remove transition classes on page load

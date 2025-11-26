@@ -91,16 +91,9 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/js/page-transitions.js',
             array('jquery'),
-            '2.1',
+            '2.3',
             true
         );
-        
-        // Pasar parámetros al JavaScript - HARDCODED
-        wp_localize_script('elementor-blank-page-transitions', 'elementorBlankPageTransitions', array(
-            'enabled'   => true,
-            'duration'  => 1100,
-            'selectors' => '.menu li a, .elementor-widget-image > a, .soda-post-nav-next a, .soda-post-nav-prev a',
-        ));
     }
 }
 
