@@ -7,3 +7,5 @@
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
+
+<div style="background: red; color: white; padding: 10px;">HEADER CARGADO - TEXTO DE PRUEBA</div>
