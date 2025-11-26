@@ -137,13 +137,11 @@ function elementor_blank_scripts() {
         $duration_seconds = ($transition_duration / 1000);
         
         // Define transform based on animation type
-        $transform_from = 'scaleY(0)'; // Default slide-down
-        $transform_origin = 'top';
+        // slide-up = exit from bottom (origin bottom), enter from top (origin top)
+        $transform_from = 'scaleY(0)';
+        $transform_origin = 'bottom'; // Default for slide
         
-        if ($transition_animation === 'slide-up') {
-            $transform_from = 'scaleY(0)';
-            $transform_origin = 'bottom';
-        } elseif ($transition_animation === 'fade') {
+        if ($transition_animation === 'fade') {
             $transform_from = 'scaleY(1)';
             $transform_origin = 'top';
         }
@@ -203,9 +201,9 @@ function elementor_blank_scripts() {
                 {$borders_css}
             ";
         } else {
-            // Slide animations - entrance uses opposite origin
-            // If exit is top, entrance is bottom and vice versa
-            $entrance_origin = ($transform_origin === 'top') ? 'bottom' : 'top';
+            // Slide animation - exit from bottom, enter from top
+            // Exit uses bottom origin, entrance uses top origin
+            $entrance_origin = 'top';
             
             $custom_css = "
                 .transition-pannel-bg {
