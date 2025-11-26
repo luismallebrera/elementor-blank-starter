@@ -57,31 +57,33 @@
 
     // Remove transition classes on page load
     $(document).ready(function() {
-        // Remove initial-load class after brief delay
-        setTimeout(function() {
-            $('.transition-pannel-bg').removeClass('initial-load');
-            
-            // Immediately add page-loaded to start entrance animation
-            if (settings.enableEntrance) {
-                $('body').addClass('page-loaded');
-            }
-        }, 50);
-        
         // Check if entrance animation is enabled
         if (!settings.enableEntrance) {
             // No entrance animation, just remove classes immediately
-            $('.transition-pannel-bg').removeClass('active');
-            $('.transition-borders-bg').removeClass('active');
-            $('body').removeClass('close');
+            setTimeout(function() {
+                $('.transition-pannel-bg').removeClass('initial-load active');
+                $('.transition-borders-bg').removeClass('active');
+                $('body').removeClass('close');
+            }, 50);
             return;
         }
+        
+        // Remove initial-load class after brief delay
+        setTimeout(function() {
+            $('.transition-pannel-bg').removeClass('initial-load');
+        }, 50);
+        
+        // Add page-loaded after a small gap to trigger entrance animation
+        setTimeout(function() {
+            $('body').addClass('page-loaded');
+        }, 100);
         
         // Wait for entrance to complete before removing active class
         setTimeout(function() {
             $('.transition-pannel-bg').removeClass('active');
             $('.transition-borders-bg').removeClass('active');
             $('body').removeClass('close');
-        }, parseInt(settings.duration) + 50);
+        }, parseInt(settings.duration) + 100);
     });
     
     // Also handle pageshow event (for back/forward navigation)
