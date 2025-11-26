@@ -148,8 +148,8 @@ function elementor_blank_scripts() {
         
         // Get transition position and set z-index accordingly
         $transition_position = get_theme_mod('page_transitions_position', 'under');
-        $panel_z_index = ($transition_position === 'above') ? '99999' : '801';
-        $borders_z_index = ($transition_position === 'above') ? '99998' : '800';
+        $panel_z_index = ($transition_position === 'above') ? '99998' : '801';
+        $borders_z_index = ($transition_position === 'above') ? '99997' : '800';
         
         // Build border CSS conditionally
         $enable_borders = get_theme_mod('enable_page_transitions_borders', true);
