@@ -78,100 +78,28 @@ function elementor_blank_scripts() {
     // Page Transitions
     if (get_theme_mod('enable_page_transitions', false)) {
         $transition_duration = intval(get_theme_mod('page_transitions_duration', 900));
-        $transition_animation = get_theme_mod('page_transitions_animation', 'slide-down');
-        $transition_color = get_theme_mod('page_transitions_color', '#000000');
-        $transition_borders_color = get_theme_mod('page_transitions_borders_color', '#121e50');
         
-        // Page Transitions CSS
+        // Page Transitions CSS - HARDCODED
         wp_enqueue_style(
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/css/page-transitions.css',
             array(),
-            '5.5'
+            '6.0'
         );
-        
-        // Add inline CSS for dynamic settings
-        $duration_seconds = ($transition_duration / 1000);
-        
-        // Define transform based on animation type
-        $transform_from = 'scaleY(0)'; // Default slide-down
-        $transform_origin = 'top';
-        
-        if ($transition_animation === 'slide-up') {
-            $transform_from = 'scaleY(0)';
-            $transform_origin = 'bottom';
-        } elseif ($transition_animation === 'fade') {
-            $transform_from = 'scaleY(1)';
-            $transform_origin = 'top';
-        }
-        
-        // Get transition position and set z-index accordingly
-        $transition_position = get_theme_mod('page_transitions_position', 'under');
-        $panel_z_index = ($transition_position === 'above') ? '99999' : '801';
-        $borders_z_index = ($transition_position === 'above') ? '99998' : '800';
-        
-        // Check if entrance animation is enabled
-        $enable_entrance = get_theme_mod('enable_page_transitions_entrance', false);
-        
-        // Build border CSS conditionally
-        $enable_borders = get_theme_mod('enable_page_transitions_borders', true);
-        $borders_css = '';
-        if ($enable_borders) {
-            $borders_css = "
-                .transition-borders-bg {
-                    background-color: {$transition_borders_color};
-                    transition-duration: {$duration_seconds}s;
-                    z-index: {$borders_z_index};
-                }
-            ";
-        }
-        
-        // Build entrance animation CSS if enabled
-        $entrance_css = '';
-        if ($enable_entrance) {
-            // Inverted transform-origin for entrance
-            $entrance_origin = ($transition_animation === 'slide-down') ? 'bottom' : 'top';
-            
-            $entrance_css = "
-                .transition-pannel-bg.enter {
-                    transition: transform {$duration_seconds}s cubic-bezier(0.83, 0, 0.17, 1) !important;
-                    transform-origin: {$entrance_origin} !important;
-                }
-            ";
-        }
-        
-        // Simple dynamic CSS for colors, timing, and z-index
-        $custom_css = "
-            .transition-pannel-bg {
-                background-color: {$transition_color};
-                z-index: {$panel_z_index};
-                transition-duration: {$duration_seconds}s;
-                transform-origin: {$transform_origin};
-            }
-            .transition-pannel-bg.close {
-                transform-origin: {$transform_origin};
-            }
-            {$entrance_css}
-            {$borders_css}
-        ";
-        
-        wp_add_inline_style('elementor-blank-page-transitions', $custom_css);
         
         wp_enqueue_script(
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/js/page-transitions.js',
             array('jquery'),
-            '2.0',
+            '2.1',
             true
         );
         
-        // Pasar parámetros al JavaScript
+        // Pasar parámetros al JavaScript - HARDCODED
         wp_localize_script('elementor-blank-page-transitions', 'elementorBlankPageTransitions', array(
             'enabled'   => true,
-            'duration'  => $transition_duration,
-            'selectors' => get_theme_mod('page_transitions_selectors', '.menu li a, .elementor-widget-image > a, .soda-post-nav-next a, .soda-post-nav-prev a'),
-            'animation' => $transition_animation,
-            'enableEntrance' => get_theme_mod('enable_page_transitions_entrance', true),
+            'duration'  => 1100,
+            'selectors' => '.menu li a, .elementor-widget-image > a, .soda-post-nav-next a, .soda-post-nav-prev a',
         ));
     }
 }

@@ -1,7 +1,5 @@
 /**
- * Page Transitions Styles
- * Default styles for page transition elements
- * Note: Duration is set dynamically via inline CSS in functions.php
+ * Page Transitions Styles - HARDCODED
  */
 
 /* Transition Panel Background */
@@ -15,9 +13,9 @@
     top: 0;
     left: 0;
     z-index: 801;
-    background-color: #fff;
+    background-color: #000;
     transform: scaleY(0);
-    transform-origin: bottom center;
+    transform-origin: bottom;
     pointer-events: none;
     transition: transform 1.1s cubic-bezier(0.83, 0, 0.17, 1);
 }
@@ -28,9 +26,9 @@
 }
 
 .transition-pannel-bg.enter {
-    transform: scaleY(1) !important;
+    transform: scaleY(1);
     pointer-events: auto;
-    transition: none !important;
+    transition: none;
 }
 
 /* Transition Borders Background */
@@ -44,12 +42,15 @@
     z-index: 800;
     pointer-events: none;
     clip-path: polygon(0% 0%, 0% 100%, 0 100%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%, 100% 100%, 100% 0%);
-    transition-property: clip-path;
-    transition-timing-function: cubic-bezier(0.57, 0, 0.42, 1);
+    transition: clip-path 1.1s cubic-bezier(0.57, 0, 0.42, 1);
 }
 
-.transition-borders-bg.active {
+.transition-borders-bg.close {
     clip-path: polygon(0 0, 0% 100%, 6% 100%, 6% 15%, 94% 15%, 94% 85%, 6% 85%, 6% 100%, 100% 100%, 100% 0%);
+}
+
+.transition-borders-bg.enter {
+    transition: none;
 }
 
 /* Body transition states */
