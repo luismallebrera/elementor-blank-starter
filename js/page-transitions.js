@@ -45,9 +45,9 @@
         e.stopPropagation();
 
         // Trigger transition animation
-        $('body').addClass('close').removeClass('active');
-        $('.transition-pannel-bg').addClass('active');
-        $('.transition-borders-bg').addClass('active');
+        $('body').addClass('close');
+        $('.transition-pannel-bg').addClass('close');
+        $('.transition-borders-bg').addClass('close');
 
         // Navigate after animation completes
         setTimeout(function() {
@@ -57,76 +57,20 @@
 
     // Remove transition classes on page load
     $(document).ready(function() {
-        // Remove initial-load class after brief delay
+        // Remove enter class after brief delay
         setTimeout(function() {
-            $('.transition-pannel-bg').removeClass('initial-load');
-        }, 50);
-        
-        // Check if entrance animation is enabled
-        if (!settings.enableEntrance) {
-            // No entrance animation, just remove classes immediately
-            $('.transition-pannel-bg').removeClass('active');
-            $('.transition-borders-bg').removeClass('active');
-            $('body').removeClass('close');
-            return;
-        }
-        
-        // For fade animation, wait for panel to fade out before removing classes
-        if (settings.animation === 'fade') {
-            // Add page-loaded class immediately to trigger fade out
-            $('body').addClass('page-loaded');
-            
-            // Remove active class after fade completes
-            setTimeout(function() {
-                $('.transition-pannel-bg').removeClass('active');
-                $('.transition-borders-bg').removeClass('active');
-                $('body').removeClass('close');
-            }, parseInt(settings.duration));
-        } else {
-            // For slide animations, trigger entrance animation
-            $('body').addClass('page-loaded');
-            
-            // Wait for entrance to complete before removing active class
-            setTimeout(function() {
-                $('.transition-pannel-bg').removeClass('active');
-                $('.transition-borders-bg').removeClass('active');
-                $('body').removeClass('close');
-            }, parseInt(settings.duration));
-        }
+            $('.transition-pannel-bg').removeClass('enter');
+            $('.transition-borders-bg').removeClass('enter');
+        }, 100);
     });
     
     // Also handle pageshow event (for back/forward navigation)
     $(window).on('pageshow', function(event) {
         if (event.originalEvent.persisted) {
             // Page was loaded from cache (back button)
-            
-            // Check if entrance animation is enabled
-            if (!settings.enableEntrance) {
-                $('.transition-pannel-bg').removeClass('active');
-                $('.transition-borders-bg').removeClass('active');
-                $('body').removeClass('close');
-                return;
-            }
-            
-            if (settings.animation === 'fade') {
-                // For fade animation, trigger fade out
-                $('body').addClass('page-loaded');
-                
-                setTimeout(function() {
-                    $('.transition-pannel-bg').removeClass('active');
-                    $('.transition-borders-bg').removeClass('active');
-                    $('body').removeClass('close');
-                }, parseInt(settings.duration));
-            } else {
-                // For slide animations, trigger entrance
-                $('body').addClass('page-loaded');
-                
-                setTimeout(function() {
-                    $('.transition-pannel-bg').removeClass('active');
-                    $('.transition-borders-bg').removeClass('active');
-                    $('body').removeClass('close');
-                }, parseInt(settings.duration));
-            }
+            $('.transition-pannel-bg').removeClass('enter close');
+            $('.transition-borders-bg').removeClass('enter close');
+            $('body').removeClass('close');
         }
     });
 
