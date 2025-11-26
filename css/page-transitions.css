@@ -14,7 +14,7 @@
     background: #000;
     z-index: 801;
     transform: scaleY(0);
-    transform-origin: top;
+    transform-origin: top !important;
     transition-property: transform;
     transition-timing-function: cubic-bezier(0.83, 0, 0.17, 1);
     transition-duration: 0.9s;
