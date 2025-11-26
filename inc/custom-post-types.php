@@ -276,20 +276,25 @@ add_action('save_post_proyectos', 'elementor_blank_save_proyectos_provincia');
 
 /**
  * Register Provincia custom field for Elementor
+ * Make it available in REST API and Elementor
  */
-function elementor_blank_register_provincia_for_elementor($controls) {
+function elementor_blank_register_provincia_meta() {
     if (!get_theme_mod('enable_proyectos_cpt', false)) {
-        return $controls;
+        return;
     }
     
-    $controls['_proyectos_provincia'] = [
-        'label' => __('Provincia', 'elementor-blank-starter'),
-        'type' => 'text',
-    ];
-    
-    return $controls;
+    register_post_meta('proyectos', '_proyectos_provincia', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'string',
+        'description' => __('Provincia del proyecto', 'elementor-blank-starter'),
+        'sanitize_callback' => 'sanitize_text_field',
+        'auth_callback' => function() {
+            return current_user_can('edit_posts');
+        }
+    ));
 }
-add_filter('elementor/controls/dynamic_tags/custom_keys', 'elementor_blank_register_provincia_for_elementor');
+add_action('init', 'elementor_blank_register_provincia_meta');
 
 /**
  * Register Proyectos Category Taxonomy
