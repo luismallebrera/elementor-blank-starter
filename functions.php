@@ -87,7 +87,7 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/css/page-transitions.css',
             array(),
-            '5.3'
+            '5.4'
         );
         
         // Add inline CSS for dynamic settings
@@ -134,8 +134,8 @@ function elementor_blank_scripts() {
             
             $entrance_css = "
                 .transition-pannel-bg.enter {
-                    transition: transform {$duration_seconds}s cubic-bezier(0.83, 0, 0.17, 1);
-                    transform-origin: {$entrance_origin};
+                    transition: transform {$duration_seconds}s cubic-bezier(0.83, 0, 0.17, 1) !important;
+                    transform-origin: {$entrance_origin} !important;
                 }
             ";
         }
