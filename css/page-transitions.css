@@ -23,10 +23,12 @@
 
 .transition-pannel-bg.active {
     transform: scaleY(1);
+    
 }
 
 .transition-pannel-bg.initial-load {
     transform: scaleY(1) !important;
+    transition-duration: 0.9s;
 }
 
 /* Transition Borders Background */
