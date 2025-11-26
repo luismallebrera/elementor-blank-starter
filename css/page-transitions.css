@@ -18,7 +18,7 @@
     transition-property: transform;
     transition-timing-function: cubic-bezier(0.83, 0, 0.17, 1);
     transition-duration: 0.9s;
-    transition-delay: 0.2s;
+    transition-delay: 0s;
 }
 body.close .transition-pannel-bg {
     transform-origin: bottom;
