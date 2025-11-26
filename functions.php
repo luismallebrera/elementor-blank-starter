@@ -223,13 +223,11 @@ function elementor_blank_entrance_body_class($classes) {
 }
 
 /**
- * Add footer content via wp_footer hook
- * This ensures it loads even when Elementor handles the template
+ * Add transition elements after all scripts via wp_footer hook
+ * Priority 9999 ensures it loads after all other scripts
  */
-add_action('wp_footer', 'elementor_blank_footer_content', 999);
+add_action('wp_footer', 'elementor_blank_footer_content', 9999);
 function elementor_blank_footer_content() {
-    echo '<!-- FOOTER HOOK CARGADO -->';
-    
     // Page transition elements
     if (get_theme_mod('enable_page_transitions', false)) : ?>
         <div aria-hidden="true" class="transition-pannel-bg initial-load"></div>
