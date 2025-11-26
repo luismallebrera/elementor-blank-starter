@@ -116,8 +116,7 @@ add_action('wp_footer', 'elementor_blank_page_transition_elements', 999);
 add_filter('body_class', 'elementor_blank_entrance_body_class');
 function elementor_blank_entrance_body_class($classes) {
     if (get_theme_mod('enable_page_transitions', false)) {
-        $animation_type = get_theme_mod('page_transitions_animation', 'slide-down');
-        $classes[] = $animation_type . '-entrance';
+        $classes[] = 'enter';
     }
     return $classes;
 }
