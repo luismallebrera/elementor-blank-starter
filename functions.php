@@ -225,10 +225,8 @@ function elementor_blank_scripts() {
                     pointer-events: auto !important;
                     transition: none !important;
                 }
-                body.{$transition_animation}-entrance.page-loaded .transition-pannel-bg:not(.active) {
-                    transform: scaleY(0);
+                body.{$transition_animation}-entrance.page-loaded .transition-pannel-bg {
                     transform-origin: {$entrance_origin};
-                }
                 }
                 {$borders_css}
             ";
