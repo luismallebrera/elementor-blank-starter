@@ -17,6 +17,11 @@ body {
     padding: 0;
 }
 
+/* Header positioning for z-index */
+header {
+    position: relative;
+}
+
 /* Desactivar scroll-behavior nativo para Lenis */
 html {
     scroll-behavior: auto !important;
