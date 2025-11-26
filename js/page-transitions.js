@@ -47,9 +47,9 @@
 
     // Remove transition classes on page load
     $(document).ready(function() {
-        // Remove enter class after brief delay
+        // Remove initial-load class after brief delay
         setTimeout(function() {
-            $('body').removeClass('enter');
+            $('.transition-pannel-bg').removeClass('initial-load');
         }, 50);
     });
     
@@ -57,7 +57,8 @@
     $(window).on('pageshow', function(event) {
         if (event.originalEvent.persisted) {
             // Page was loaded from cache (back button)
-            $('body').removeClass('enter close');
+            $('body').removeClass('close');
+            $('.transition-pannel-bg').removeClass('initial-load');
         }
     });
 

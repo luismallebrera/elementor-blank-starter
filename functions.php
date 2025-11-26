@@ -84,14 +84,14 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/css/page-transitions.css',
             array(),
-            '6.2'
+            '6.3'
         );
         
         wp_enqueue_script(
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/js/page-transitions.js',
             array('jquery'),
-            '2.6',
+            '2.7',
             true
         );
     }
@@ -102,24 +102,13 @@ function elementor_blank_scripts() {
  */
 function elementor_blank_page_transition_elements() {
     if (get_theme_mod('enable_page_transitions', false)) : ?>
-        <div aria-hidden="true" class="transition-pannel-bg"></div>
+        <div aria-hidden="true" class="transition-pannel-bg initial-load"></div>
         <?php if (get_theme_mod('enable_page_transitions_borders', true)) : ?>
             <div aria-hidden="true" class="transition-borders-bg"></div>
         <?php endif; ?>
     <?php endif;
 }
 add_action('wp_footer', 'elementor_blank_page_transition_elements', 999);
-
-/**
- * Add body class for entrance animations
- */
-add_filter('body_class', 'elementor_blank_entrance_body_class');
-function elementor_blank_entrance_body_class($classes) {
-    if (get_theme_mod('enable_page_transitions', false)) {
-        $classes[] = 'enter';
-    }
-    return $classes;
-}
 
 /**
  * Incluir Animate on Scroll plugin

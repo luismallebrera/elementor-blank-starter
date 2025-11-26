@@ -25,9 +25,10 @@ body.close .transition-pannel-bg {
     pointer-events: auto;
 }
 
-body.enter .transition-pannel-bg {
+.transition-pannel-bg.initial-load {
     transform: scaleY(1);
     pointer-events: auto;
+    transition: none;
 }
 
 /* Transition Borders Background */
