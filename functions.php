@@ -29,6 +29,29 @@ function elementor_blank_setup() {
     ));
 }
 
+/**
+ * Allow SVG uploads
+ */
+add_filter('upload_mimes', 'elementor_blank_allow_svg_upload');
+function elementor_blank_allow_svg_upload($mimes) {
+    $mimes['svg'] = 'image/svg+xml';
+    $mimes['svgz'] = 'image/svg+xml';
+    return $mimes;
+}
+
+/**
+ * Fix SVG display in media library
+ */
+add_filter('wp_check_filetype_and_ext', 'elementor_blank_fix_svg_mime_type', 10, 4);
+function elementor_blank_fix_svg_mime_type($data, $file, $filename, $mimes) {
+    $filetype = wp_check_filetype($filename, $mimes);
+    return [
+        'ext'             => $filetype['ext'],
+        'type'            => $filetype['type'],
+        'proper_filename' => $data['proper_filename']
+    ];
+}
+
 // Registrar áreas de widgets para Elementor
 add_action('widgets_init', 'elementor_blank_widgets_init');
 function elementor_blank_widgets_init() {
