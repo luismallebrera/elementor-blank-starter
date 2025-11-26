@@ -38,7 +38,7 @@
     max-width: var(--grid-line-max-width, 100%);
     background-size: calc(100% + var(--grid-line-thickness, 1px)) 100%;
     background-image: repeating-linear-gradient(var(--grid-line-direction, 90deg), var(--grid-line-column-color, transparent), var(--grid-line-column-color, transparent) calc((100% / var(--grid-line-columns, 12)) - var(--grid-line-thickness, 1px)), var(--grid-line-color, #eee) calc((100% / var(--grid-line-columns, 12)) - var(--grid-line-thickness, 1px)), var(--grid-line-color, #eee) calc(100% / var(--grid-line-columns, 12)));
-    outline: 1px solid #8224e3;
+    outline: 1px solid var(--grid-line-color, #eee);
 }
 
 body.close .transition-pannel-bg {
