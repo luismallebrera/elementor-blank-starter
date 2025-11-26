@@ -14,29 +14,23 @@
     background: #000;
     z-index: 801;
     opacity: 1;
-    visibility: hidden;
     pointer-events: none;
     transform: scaleY(0);
     transform-origin: top;
-    transition-property: transform, visibility;
-    transition-timing-function: cubic-bezier(0.83, 0, 0.17, 1), step-end;
-    transition-duration: 0.9s, 0s;
-    transition-delay: 0s, 0.9s;
+    transition-property: transform;
+    transition-timing-function: cubic-bezier(0.83, 0, 0.17, 1);
+    transition-duration: 0.9s;
 }
 
 .transition-pannel-bg.active {
     opacity: 1;
-    visibility: visible;
     pointer-events: auto;
     transform: scaleY(1);
-    transition-delay: 0s, 0s;
 }
 
 .transition-pannel-bg.initial-load {
     opacity: 1 !important;
-    visibility: visible !important;
     transform: scaleY(1) !important;
-    transition: none !important;
 }
 
 /* Transition Borders Background */
