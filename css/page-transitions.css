@@ -14,11 +14,14 @@
     background: #000;
     z-index: 801;
     transform: scaleY(0);
-    transform-origin: top !important;
+    transform-origin: top;
     transition-property: transform;
     transition-timing-function: cubic-bezier(0.83, 0, 0.17, 1);
     transition-duration: 0.9s;
     transition-delay: 0.2s;
+}
+body.close .transition-pannel-bg {
+    transform-origin: bottom;
 }
 
 .transition-pannel-bg.active {
