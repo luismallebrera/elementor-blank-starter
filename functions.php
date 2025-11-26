@@ -87,7 +87,7 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/css/page-transitions.css',
             array(),
-            '4.6'
+            '4.7'
         );
         
         // Add inline CSS for dynamic settings
@@ -147,6 +147,7 @@ function elementor_blank_scripts() {
                     opacity: 1 !important;
                     visibility: visible !important;
                     transform: scaleY(1) !important;
+                    transition: none !important;
                 }
                 body.fade-entrance:not(.page-loaded) .transition-pannel-bg:not(.active) {
                     opacity: 1 !important;
@@ -185,6 +186,7 @@ function elementor_blank_scripts() {
                 .transition-pannel-bg.initial-load {
                     visibility: visible !important;
                     transform: scaleY(1) !important;
+                    transition: none !important;
                 }
                 body.{$transition_animation}-entrance:not(.page-loaded) .transition-pannel-bg:not(.active) {
                     visibility: visible;
