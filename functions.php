@@ -87,7 +87,7 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/css/page-transitions.css',
             array(),
-            '5.1'
+            '5.2'
         );
         
         // Add inline CSS for dynamic settings
@@ -170,8 +170,7 @@ function elementor_blank_scripts() {
                     transform: {$transform_from};
                     transform-origin: {$transform_origin};
                     z-index: {$panel_z_index};
-                    transition-duration: {$duration_seconds}s, 0s;
-                    transition-delay: 0s, {$duration_seconds}s;
+                    transition-duration: {$duration_seconds}s;
                 }
                 .transition-pannel-bg.active {
                     transition-delay: 0s, 0s;
