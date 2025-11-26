@@ -137,13 +137,13 @@ function elementor_blank_scripts() {
         $duration_seconds = ($transition_duration / 1000);
         
         // Define transform based on animation type
-        // slide-up = exit from bottom (origin bottom), enter from top (origin top)
+        // slide = exit from bottom (origin bottom), enter from top (origin top)
         $transform_from = 'scaleY(0)';
         $transform_origin = 'bottom'; // Default for slide
         
         if ($transition_animation === 'fade') {
+            // Fade doesn't use transform, only opacity
             $transform_from = 'scaleY(1)';
-            $transform_origin = 'top';
         }
         
         // Get transition position and set z-index accordingly
@@ -166,18 +166,17 @@ function elementor_blank_scripts() {
         
         // Build dynamic CSS based on animation type
         if ($transition_animation === 'fade') {
-            // Fade needs opacity animation
+            // Fade uses only opacity, no transform
             $custom_css = "
                 .transition-pannel-bg {
                     background: {$transition_color};
                     transform: scaleY(1);
-                    transform-origin: {$transform_origin};
                     opacity: 0;
                     z-index: {$panel_z_index};
-                    transition-property: transform, opacity, visibility;
-                    transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1), ease-in-out, step-end;
-                    transition-duration: {$duration_seconds}s, {$duration_seconds}s, 0s;
-                    transition-delay: 0s, 0s, {$duration_seconds}s;
+                    transition-property: opacity, visibility;
+                    transition-timing-function: ease-in-out, step-end;
+                    transition-duration: {$duration_seconds}s, 0s;
+                    transition-delay: 0s, {$duration_seconds}s;
                 }
                 .transition-pannel-bg.active {
                     opacity: 1;
@@ -194,9 +193,9 @@ function elementor_blank_scripts() {
                 body.fade-entrance.page-loaded .transition-pannel-bg:not(.active) {
                     opacity: 0;
                     visibility: hidden;
-                    transition-property: transform, opacity, visibility;
-                    transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1), ease-in-out, step-end;
-                    transition-duration: {$duration_seconds}s, {$duration_seconds}s, 0s;
+                    transition-property: opacity, visibility;
+                    transition-timing-function: ease-in-out, step-end;
+                    transition-duration: {$duration_seconds}s, 0s;
                 }
                 {$borders_css}
             ";
