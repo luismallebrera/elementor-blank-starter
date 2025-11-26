@@ -47,6 +47,30 @@ function elementor_blank_custom_css_output() {
 }
 
 /**
+ * Añadir CSS del header según posición
+ */
+add_action('wp_head', 'elementor_blank_header_position_css');
+function elementor_blank_header_position_css() {
+    $header_position = get_theme_mod('header_position', 'fixed');
+    
+    if ($header_position === 'relative') {
+        echo '<style type="text/css">
+            header {
+                position: relative !important;
+            }
+        </style>';
+    } else {
+        echo '<style type="text/css">
+            header {
+                position: fixed;
+                z-index: 999;
+                width: 100%;
+            }
+        </style>';
+    }
+}
+
+/**
  * Sección: Animate on Scroll
  */
 new \Kirki\Section(
@@ -55,6 +79,77 @@ new \Kirki\Section(
         'title'       => esc_html__('Animate on Scroll', 'elementor-blank-starter'),
         'panel'       => 'theme_options',
         'priority'    => 45,
+    )
+);
+
+/**
+ * Sección: Header Settings
+ */
+new \Kirki\Section(
+    'header_settings_section',
+    array(
+        'title'       => esc_html__('Header Settings', 'elementor-blank-starter'),
+        'panel'       => 'theme_options',
+        'priority'    => 47,
+    )
+);
+
+/**
+ * Header Position
+ */
+new \Kirki\Field\Radio(
+    array(
+        'settings'    => 'header_position',
+        'label'       => esc_html__('Header Position', 'elementor-blank-starter'),
+        'description' => esc_html__('Choose whether the header should be fixed or relative.', 'elementor-blank-starter'),
+        'section'     => 'header_settings_section',
+        'default'     => 'fixed',
+        'choices'     => array(
+            'fixed'    => esc_html__('Fixed', 'elementor-blank-starter'),
+            'relative' => esc_html__('Relative', 'elementor-blank-starter'),
+        ),
+    )
+);
+
+/**
+ * Enable Scroll Class
+ */
+new \Kirki\Field\Checkbox_Switch(
+    array(
+        'settings'    => 'enable_scroll_class',
+        'label'       => esc_html__('Enable Scroll Class', 'elementor-blank-starter'),
+        'description' => esc_html__('Add a "scroll" class to body after scrolling past threshold.', 'elementor-blank-starter'),
+        'section'     => 'header_settings_section',
+        'default'     => false,
+        'choices'     => array(
+            'on'  => esc_html__('Enabled', 'elementor-blank-starter'),
+            'off' => esc_html__('Disabled', 'elementor-blank-starter'),
+        ),
+    )
+);
+
+/**
+ * Scroll Class Threshold
+ */
+new \Kirki\Field\Number(
+    array(
+        'settings'    => 'scroll_class_threshold',
+        'label'       => esc_html__('Scroll Threshold (px)', 'elementor-blank-starter'),
+        'description' => esc_html__('Amount of pixels to scroll before adding the scroll class.', 'elementor-blank-starter'),
+        'section'     => 'header_settings_section',
+        'default'     => 100,
+        'choices'     => array(
+            'min'  => 0,
+            'max'  => 1000,
+            'step' => 10,
+        ),
+        'active_callback' => array(
+            array(
+                'setting'  => 'enable_scroll_class',
+                'operator' => '==',
+                'value'    => true,
+            ),
+        ),
     )
 );
 

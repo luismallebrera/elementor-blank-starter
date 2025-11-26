@@ -87,6 +87,21 @@ function elementor_blank_scripts() {
     // Script personalizado
     wp_enqueue_script('elementor-blank-script', get_template_directory_uri() . '/scripts.js', array(), '1.0', true);
     
+    // Scroll Class Script
+    if (get_theme_mod('enable_scroll_class', false)) {
+        wp_enqueue_script(
+            'elementor-blank-scroll-class',
+            get_template_directory_uri() . '/js/scroll-class.js',
+            array('jquery'),
+            '1.0',
+            true
+        );
+        
+        wp_localize_script('elementor-blank-scroll-class', 'elementorBlankScrollClass', array(
+            'threshold' => intval(get_theme_mod('scroll_class_threshold', 100)),
+        ));
+    }
+    
     // Smooth Scrolling con Lenis
     if (get_theme_mod('enable_smooth_scrolling', false)) {
         // Cargar Lenis desde CDN
