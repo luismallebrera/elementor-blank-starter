@@ -223,10 +223,10 @@ function elementor_blank_entrance_body_class($classes) {
 }
 
 /**
- * Add transition elements after all scripts via wp_footer hook
- * Priority 9999 ensures it loads after all other scripts
+ * Add transition elements before scripts via wp_footer hook
+ * Priority 1 ensures it loads before all scripts
  */
-add_action('wp_footer', 'elementor_blank_footer_content', 9999);
+add_action('wp_footer', 'elementor_blank_footer_content', 1);
 function elementor_blank_footer_content() {
     // Page transition elements
     if (get_theme_mod('enable_page_transitions', false)) : ?>
