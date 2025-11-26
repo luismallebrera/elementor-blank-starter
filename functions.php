@@ -172,16 +172,17 @@ function elementor_blank_scripts() {
                     background: {$transition_color};
                     transform: scaleY(1);
                     opacity: 0;
+                    visibility: hidden;
                     z-index: {$panel_z_index};
                     transition-property: opacity, visibility;
-                    transition-timing-function: ease-in-out, step-end;
-                    transition-duration: {$duration_seconds}s, 0s;
+                    transition-timing-function: ease-in-out;
+                    transition-duration: {$duration_seconds}s;
                     transition-delay: 0s, {$duration_seconds}s;
                 }
                 .transition-pannel-bg.active {
                     opacity: 1;
                     visibility: visible;
-                    transition-delay: 0s, 0s, 0s;
+                    transition-delay: 0s, 0s;
                 }
                 .transition-pannel-bg.initial-load {
                     opacity: 1 !important;
