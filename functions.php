@@ -188,7 +188,6 @@ function elementor_blank_scripts() {
                     opacity: 1 !important;
                     visibility: visible !important;
                     transform: scaleY(1) !important;
-                    pointer-events: auto !important;
                     transition: none !important;
                 }
                 body:not(.fade-entrance) .transition-pannel-bg.initial-load {
@@ -220,7 +219,6 @@ function elementor_blank_scripts() {
                     opacity: 1 !important;
                     visibility: visible !important;
                     transform: scaleY(1) !important;
-                    pointer-events: auto !important;
                     transition: none !important;
                 }
                 body:not(.slide-up-entrance) .transition-pannel-bg.initial-load {
