@@ -209,7 +209,7 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/js/page-transitions.js',
             array('jquery'),
-            '1.6',
+            '1.7',
             true
         );
         
