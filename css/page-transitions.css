@@ -17,22 +17,21 @@
     z-index: 801;
     background-color: #fff;
     transform: scaleY(0);
+    transform-origin: bottom center;
     pointer-events: none;
+    transition: transform 1.1s cubic-bezier(0.83, 0, 0.17, 1);
 }
 
-.close .transition-pannel-bg,
+.transition-pannel-bg.close,
 body.close .transition-pannel-bg {
-    transition: transform 1.1s cubic-bezier(0.83, 0, 0.17, 1);
     transform: scaleY(1);
-    transform-origin: bottom center;
     pointer-events: auto;
 }
 
-.enter .transition-pannel-bg,
-body.enter .transition-pannel-bg,
 .transition-pannel-bg.enter {
     transform: scaleY(1);
     pointer-events: auto;
+    transition: none;
 }
 
 /* Transition Borders Background */
