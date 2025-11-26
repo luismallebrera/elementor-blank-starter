@@ -42,7 +42,7 @@
         // Navigate after animation completes
         setTimeout(function() {
             window.location.href = goTo;
-        }, 1100);
+        }, 1200);
     });
 
     // Remove transition classes on page load
