@@ -60,11 +60,9 @@
         // Check if entrance animation is enabled
         if (!settings.enableEntrance) {
             // No entrance animation, just remove classes immediately
-            setTimeout(function() {
-                $('.transition-pannel-bg').removeClass('initial-load active');
-                $('.transition-borders-bg').removeClass('active');
-                $('body').removeClass('close');
-            }, 50);
+            $('.transition-pannel-bg').removeClass('initial-load active');
+            $('.transition-borders-bg').removeClass('active');
+            $('body').removeClass('close');
             return;
         }
         
