@@ -22,8 +22,7 @@
     transition: transform 1.1s cubic-bezier(0.83, 0, 0.17, 1);
 }
 
-.transition-pannel-bg.close,
-body.close .transition-pannel-bg {
+.transition-pannel-bg.close {
     transform: scaleY(1);
     pointer-events: auto;
 }
