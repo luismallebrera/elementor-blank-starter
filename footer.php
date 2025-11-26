@@ -1,3 +1,4 @@
+<!-- FOOTER CARGADO -->
 <?php
 // Page transition elements
 if (get_theme_mod('enable_page_transitions', false)) : ?>
