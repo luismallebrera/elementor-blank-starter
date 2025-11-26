@@ -1,34 +1,42 @@
 /**
- * Page Transitions Styles - HARDCODED
+ * Page Transitions Styles
+ * Default styles for page transition elements
+ * Note: Duration is set dynamically via inline CSS in functions.php
  */
 
 /* Transition Panel Background */
 .transition-pannel-bg {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
     z-index: 801;
-    background-color: #000;
-    transform: scaleY(0);
-    transform-origin: bottom;
+    opacity: 1;
+    visibility: hidden;
     pointer-events: none;
-    transition: transform 1.1s cubic-bezier(0.83, 0, 0.17, 1);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition-property: transform, visibility;
+    transition-timing-function: cubic-bezier(0.83, 0, 0.17, 1), step-end;
+    transition-duration: 0.9s, 0s;
+    transition-delay: 0s, 0.9s;
 }
 
-body.close .transition-pannel-bg {
-    transform: scaleY(1);
+.transition-pannel-bg.active {
+    opacity: 1;
+    visibility: visible;
     pointer-events: auto;
+    transform: scaleY(1);
+    transition-delay: 0s, 0s;
 }
 
 .transition-pannel-bg.initial-load {
-    transform: scaleY(1);
-    pointer-events: auto;
-    transition: none;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: scaleY(1) !important;
+    transition: none !important;
 }
 
 /* Transition Borders Background */
@@ -42,10 +50,11 @@ body.close .transition-pannel-bg {
     z-index: 800;
     pointer-events: none;
     clip-path: polygon(0% 0%, 0% 100%, 0 100%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%, 100% 100%, 100% 0%);
-    transition: clip-path 1.1s cubic-bezier(0.57, 0, 0.42, 1);
+    transition-property: clip-path;
+    transition-timing-function: cubic-bezier(0.57, 0, 0.42, 1);
 }
 
-body.close .transition-borders-bg {
+.transition-borders-bg.active {
     clip-path: polygon(0 0, 0% 100%, 6% 100%, 6% 15%, 94% 15%, 94% 85%, 6% 85%, 6% 100%, 100% 100%, 100% 0%);
 }
 

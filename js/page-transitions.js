@@ -1,11 +1,19 @@
 /**
- * Page Transitions - HARDCODED
+ * Page Transitions
+ * Smooth transitions between page navigation
  */
 (function($) {
     'use strict';
 
+    // Get settings from PHP
+    var settings = window.elementorBlankPageTransitions || {};
+    
+    if (!settings.enabled) {
+        return; // Exit if transitions are disabled
+    }
+
     // Click handler for page transitions
-    $(document).on('click', '.menu-item a, .elementor-widget-image > a, .soda-post-nav-next a, .soda-post-nav-prev a', function(e) {
+    $(document).on('click', settings.selectors, function(e) {
         // Get target URL
         var goTo = this.getAttribute('href');
         
@@ -37,12 +45,14 @@
         e.stopPropagation();
 
         // Trigger transition animation
-        $('body').addClass('close');
+        $('body').addClass('close').removeClass('active');
+        $('.transition-pannel-bg').addClass('active');
+        $('.transition-borders-bg').addClass('active');
 
         // Navigate after animation completes
         setTimeout(function() {
             window.location.href = goTo;
-        }, 1200);
+        }, parseInt(settings.duration));
     });
 
     // Remove transition classes on page load
@@ -51,14 +61,72 @@
         setTimeout(function() {
             $('.transition-pannel-bg').removeClass('initial-load');
         }, 50);
+        
+        // Check if entrance animation is enabled
+        if (!settings.enableEntrance) {
+            // No entrance animation, just remove classes immediately
+            $('.transition-pannel-bg').removeClass('active');
+            $('.transition-borders-bg').removeClass('active');
+            $('body').removeClass('close');
+            return;
+        }
+        
+        // For fade animation, wait for panel to fade out before removing classes
+        if (settings.animation === 'fade') {
+            // Add page-loaded class immediately to trigger fade out
+            $('body').addClass('page-loaded');
+            
+            // Remove active class after fade completes
+            setTimeout(function() {
+                $('.transition-pannel-bg').removeClass('active');
+                $('.transition-borders-bg').removeClass('active');
+                $('body').removeClass('close');
+            }, parseInt(settings.duration));
+        } else {
+            // For slide animations, trigger entrance animation
+            $('body').addClass('page-loaded');
+            
+            // Wait for entrance to complete before removing active class
+            setTimeout(function() {
+                $('.transition-pannel-bg').removeClass('active');
+                $('.transition-borders-bg').removeClass('active');
+                $('body').removeClass('close');
+            }, parseInt(settings.duration));
+        }
     });
     
     // Also handle pageshow event (for back/forward navigation)
     $(window).on('pageshow', function(event) {
         if (event.originalEvent.persisted) {
             // Page was loaded from cache (back button)
-            $('body').removeClass('close');
-            $('.transition-pannel-bg').removeClass('initial-load');
+            
+            // Check if entrance animation is enabled
+            if (!settings.enableEntrance) {
+                $('.transition-pannel-bg').removeClass('active');
+                $('.transition-borders-bg').removeClass('active');
+                $('body').removeClass('close');
+                return;
+            }
+            
+            if (settings.animation === 'fade') {
+                // For fade animation, trigger fade out
+                $('body').addClass('page-loaded');
+                
+                setTimeout(function() {
+                    $('.transition-pannel-bg').removeClass('active');
+                    $('.transition-borders-bg').removeClass('active');
+                    $('body').removeClass('close');
+                }, parseInt(settings.duration));
+            } else {
+                // For slide animations, trigger entrance
+                $('body').addClass('page-loaded');
+                
+                setTimeout(function() {
+                    $('.transition-pannel-bg').removeClass('active');
+                    $('.transition-borders-bg').removeClass('active');
+                    $('body').removeClass('close');
+                }, parseInt(settings.duration));
+            }
         }
     });
 
