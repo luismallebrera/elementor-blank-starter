@@ -200,19 +200,13 @@ function elementor_blank_scripts() {
                 {$borders_css}
             ";
         } else {
-            // Slide animation - exit from bottom, enter from top
-            // Exit uses bottom origin, entrance uses top origin
-            $entrance_origin = 'top';
-            
+            // Slide animation
             $custom_css = "
                 .transition-pannel-bg {
                     background: {$transition_color};
                     transform: {$transform_from};
-                    transform-origin: {$transform_origin};
                     z-index: {$panel_z_index};
                     transition-duration: {$duration_seconds}s;
-                    transition-property: transform;
-                    transition-timing-function: cubic-bezier(0.83, 0, 0.17, 1);
                 }
                 .transition-pannel-bg.active {
                     transform: scaleY(1);
@@ -223,9 +217,6 @@ function elementor_blank_scripts() {
                     transform: scaleY(1) !important;
                     pointer-events: auto !important;
                     transition: none !important;
-                }
-                body.{$transition_animation}-entrance.page-loaded .transition-pannel-bg {
-                    transform-origin: {$entrance_origin} !important;
                 }
                 {$borders_css}
             ";
