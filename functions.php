@@ -203,9 +203,9 @@ function elementor_blank_scripts() {
                 {$borders_css}
             ";
         } else {
-            // Slide animations without opacity
-            // Same transform-origin for entrance as exit
-            $entrance_origin = $transform_origin;
+            // Slide animations - entrance uses opposite origin
+            // If exit is top, entrance is bottom and vice versa
+            $entrance_origin = ($transform_origin === 'top') ? 'bottom' : 'top';
             
             $custom_css = "
                 .transition-pannel-bg {
@@ -216,7 +216,7 @@ function elementor_blank_scripts() {
                     transition-duration: {$duration_seconds}s;
                 }
                 .transition-pannel-bg.active {
-                    transition-delay: 0s, 0s;
+                    transform: scaleY(1);
                 }
                 .transition-pannel-bg.initial-load {
                     opacity: 1 !important;
@@ -228,6 +228,7 @@ function elementor_blank_scripts() {
                 body.{$transition_animation}-entrance.page-loaded .transition-pannel-bg:not(.active) {
                     transform: scaleY(0);
                     transform-origin: {$entrance_origin};
+                }
                 }
                 {$borders_css}
             ";
