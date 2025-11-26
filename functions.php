@@ -87,7 +87,7 @@ function elementor_blank_scripts() {
             'elementor-blank-page-transitions',
             get_template_directory_uri() . '/css/page-transitions.css',
             array(),
-            '5.1'
+            '5.2'
         );
         
         // Add inline CSS for dynamic settings
@@ -110,6 +110,9 @@ function elementor_blank_scripts() {
         $panel_z_index = ($transition_position === 'above') ? '99999' : '801';
         $borders_z_index = ($transition_position === 'above') ? '99998' : '800';
         
+        // Check if entrance animation is enabled
+        $enable_entrance = get_theme_mod('enable_page_transitions_entrance', false);
+        
         // Build border CSS conditionally
         $enable_borders = get_theme_mod('enable_page_transitions_borders', true);
         $borders_css = '';
@@ -123,83 +126,36 @@ function elementor_blank_scripts() {
             ";
         }
         
-        // Build dynamic CSS based on animation type
-        if ($transition_animation === 'fade') {
-            // Fade needs opacity animation
-            $custom_css = "
-                .transition-pannel-bg {
-                    background: {$transition_color};
-                    transform: scaleY(1);
-                    transform-origin: {$transform_origin};
-                    opacity: 0;
-                    z-index: {$panel_z_index};
-                    transition-property: transform, opacity, visibility;
-                    transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1), ease-in-out, step-end;
-                    transition-duration: {$duration_seconds}s, {$duration_seconds}s, 0s;
-                    transition-delay: 0s, 0s, {$duration_seconds}s;
-                }
-                .transition-pannel-bg.active {
-                    opacity: 1;
-                    visibility: visible;
-                    transition-delay: 0s, 0s, 0s;
-                }
-                .transition-pannel-bg.initial-load {
-                    opacity: 1 !important;
-                    visibility: visible !important;
-                    transform: scaleY(1) !important;
-                    transition: none !important;
-                }
-                body.fade-entrance:not(.page-loaded) .transition-pannel-bg:not(.active) {
-                    opacity: 1 !important;
-                    visibility: visible !important;
-                    transform: scaleY(1);
-                    transition-property: transform, opacity, visibility;
-                    transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1), ease-in-out, step-end;
-                    transition-duration: {$duration_seconds}s, {$duration_seconds}s, 0s;
-                }
-                body.fade-entrance.page-loaded .transition-pannel-bg:not(.active) {
-                    opacity: 0;
-                    visibility: hidden;
-                    transition-property: transform, opacity, visibility;
-                    transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1), ease-in-out, step-end;
-                    transition-duration: {$duration_seconds}s, {$duration_seconds}s, 0s;
-                }
-                {$borders_css}
-            ";
-        } else {
-            // Slide animations without opacity
+        // Build entrance animation CSS if enabled
+        $entrance_css = '';
+        if ($enable_entrance) {
             // Inverted transform-origin for entrance
             $entrance_origin = ($transition_animation === 'slide-down') ? 'bottom' : 'top';
             
-            $custom_css = "
-                .transition-pannel-bg {
-                    background: {$transition_color};
-                    transform: {$transform_from};
-                    transform-origin: {$transform_origin};
-                    z-index: {$panel_z_index};
-                    transition-duration: {$duration_seconds}s, 0s;
-                    transition-delay: 0s, {$duration_seconds}s;
-                }
-                .transition-pannel-bg.active {
-                    transition-delay: 0s, 0s;
-                }
-                .transition-pannel-bg.initial-load {
-                    visibility: visible !important;
-                    transform: scaleY(1) !important;
-                    transition: none !important;
-                }
-                body.{$transition_animation}-entrance:not(.page-loaded) .transition-pannel-bg:not(.active) {
-                    visibility: visible;
-                    transform: scaleY(1);
+            $entrance_css = "
+                .transition-pannel-bg.enter {
+                    transition: transform {$duration_seconds}s cubic-bezier(0.83, 0, 0.17, 1);
                     transform-origin: {$entrance_origin};
                 }
-                body.{$transition_animation}-entrance.page-loaded .transition-pannel-bg:not(.active) {
-                    transform: scaleY(0);
-                    transform-origin: {$entrance_origin};
-                }
-                {$borders_css}
             ";
         }
+        
+        // Simple dynamic CSS for colors, timing, and z-index
+        $custom_css = "
+            .transition-pannel-bg {
+                background-color: {$transition_color};
+                z-index: {$panel_z_index};
+                transition-duration: {$duration_seconds}s;
+                transform-origin: {$transform_origin};
+            }
+            .transition-pannel-bg.close,
+            body.close .transition-pannel-bg {
+                transform-origin: {$transform_origin};
+            }
+            {$entrance_css}
+            {$borders_css}
+        ";
+        
         wp_add_inline_style('elementor-blank-page-transitions', $custom_css);
         
         wp_enqueue_script(
