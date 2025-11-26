@@ -24,6 +24,7 @@ if (is_singular()) {
                 the_content();
             endwhile;
         endif;
+        get_footer();
     }
 } elseif (is_archive() || is_home()) {
     if (!$is_elementor_theme_exist || !elementor_theme_do_location('archive')) {
@@ -33,6 +34,7 @@ if (is_singular()) {
                 the_content();
             endwhile;
         endif;
+        get_footer();
     }
 } elseif (is_search()) {
     if (!$is_elementor_theme_exist || !elementor_theme_do_location('archive')) {
@@ -44,12 +46,12 @@ if (is_singular()) {
         else :
             echo '<p>No se encontraron resultados.</p>';
         endif;
+        get_footer();
     }
 } else {
     if (!$is_elementor_theme_exist || !elementor_theme_do_location('single')) {
         // Fallback for 404
         echo '<h1>404 - Página no encontrada</h1>';
+        get_footer();
     }
 }
-
-get_footer();
