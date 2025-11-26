@@ -275,6 +275,23 @@ function elementor_blank_save_proyectos_provincia($post_id) {
 add_action('save_post_proyectos', 'elementor_blank_save_proyectos_provincia');
 
 /**
+ * Register Provincia custom field for Elementor
+ */
+function elementor_blank_register_provincia_for_elementor($controls) {
+    if (!get_theme_mod('enable_proyectos_cpt', false)) {
+        return $controls;
+    }
+    
+    $controls['_proyectos_provincia'] = [
+        'label' => __('Provincia', 'elementor-blank-starter'),
+        'type' => 'text',
+    ];
+    
+    return $controls;
+}
+add_filter('elementor/controls/dynamic_tags/custom_keys', 'elementor_blank_register_provincia_for_elementor');
+
+/**
  * Register Proyectos Category Taxonomy
  */
 function elementor_blank_register_proyectos_category() {
