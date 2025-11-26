@@ -52,6 +52,18 @@ function elementor_blank_fix_svg_mime_type($data, $file, $filename, $mimes) {
     ];
 }
 
+/**
+ * Register navigation menus
+ */
+add_action('after_setup_theme', 'elementor_blank_register_menus');
+function elementor_blank_register_menus() {
+    register_nav_menus(array(
+        'primary' => __('Primary Menu', 'elementor-blank-starter'),
+        'mobile'  => __('Mobile Menu', 'elementor-blank-starter'),
+        'topbar'  => __('Topbar Menu', 'elementor-blank-starter'),
+    ));
+}
+
 // Registrar áreas de widgets para Elementor
 add_action('widgets_init', 'elementor_blank_widgets_init');
 function elementor_blank_widgets_init() {
