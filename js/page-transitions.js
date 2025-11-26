@@ -5,7 +5,7 @@
     'use strict';
 
     // Click handler for page transitions
-    $(document).on('click', '.menu li a, .elementor-widget-image > a, .soda-post-nav-next a, .soda-post-nav-prev a', function(e) {
+    $(document).on('click', '.menu-item a, .elementor-widget-image > a, .soda-post-nav-next a, .soda-post-nav-prev a', function(e) {
         // Get target URL
         var goTo = this.getAttribute('href');
         
@@ -53,7 +53,7 @@
         setTimeout(function() {
             $('.transition-pannel-bg').removeClass('enter');
             $('.transition-borders-bg').removeClass('enter');
-        }, 100);
+        }, 50);
     });
     
     // Also handle pageshow event (for back/forward navigation)
