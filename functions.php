@@ -223,6 +223,15 @@ function elementor_blank_entrance_body_class($classes) {
 }
 
 /**
+ * Add header content via wp_body_open hook
+ * This ensures it loads even when Elementor handles the template
+ */
+add_action('wp_body_open', 'elementor_blank_header_content', 1);
+function elementor_blank_header_content() {
+    echo '<div style="background: red; color: white; padding: 10px;">HEADER HOOK CARGADO - TEXTO DE PRUEBA</div>';
+}
+
+/**
  * Add transition elements before scripts via wp_footer hook
  * Priority 1 ensures it loads before all scripts
  */
