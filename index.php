@@ -1,37 +1,55 @@
 <?php
 /**
- * Template principal
- * Elementor manejará todo el contenido
+ * The site's entry point.
+ * 
+ * Loads the relevant template part,
+ * the loop is executed (when needed) by the relevant template part.
+ *
+ * @package Elementor Blank Starter
  */
-?>
-<!DOCTYPE html>
-<html <?php language_attributes(); ?>>
-<head>
-    <meta charset="<?php bloginfo('charset'); ?>">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?php wp_head(); ?>
-</head>
-<body <?php body_class(); ?>>
-<?php wp_body_open(); ?>
 
-<?php
-// Mostrar el contenido de la página/post
-if (have_posts()) :
-    while (have_posts()) : the_post();
-        the_content();
-    endwhile;
-endif;
-?>
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
 
-<?php
-// Page transition elements
-if (get_theme_mod('enable_page_transitions', false)) : ?>
-    <div aria-hidden="true" class="transition-pannel-bg initial-load"></div>
-    <?php if (get_theme_mod('enable_page_transitions_borders', true)) : ?>
-        <div aria-hidden="true" class="transition-borders-bg"></div>
-    <?php endif; ?>
-<?php endif; ?>
+get_header();
 
-<?php wp_footer(); ?>
-</body>
-</html>
+$is_elementor_theme_exist = function_exists('elementor_theme_do_location');
+
+if (is_singular()) {
+    if (!$is_elementor_theme_exist || !elementor_theme_do_location('single')) {
+        // Fallback for single posts/pages
+        if (have_posts()) :
+            while (have_posts()) : the_post();
+                the_content();
+            endwhile;
+        endif;
+    }
+} elseif (is_archive() || is_home()) {
+    if (!$is_elementor_theme_exist || !elementor_theme_do_location('archive')) {
+        // Fallback for archive/blog
+        if (have_posts()) :
+            while (have_posts()) : the_post();
+                the_content();
+            endwhile;
+        endif;
+    }
+} elseif (is_search()) {
+    if (!$is_elementor_theme_exist || !elementor_theme_do_location('archive')) {
+        // Fallback for search
+        if (have_posts()) :
+            while (have_posts()) : the_post();
+                the_content();
+            endwhile;
+        else :
+            echo '<p>No se encontraron resultados.</p>';
+        endif;
+    }
+} else {
+    if (!$is_elementor_theme_exist || !elementor_theme_do_location('single')) {
+        // Fallback for 404
+        echo '<h1>404 - Página no encontrada</h1>';
+    }
+}
+
+get_footer();
