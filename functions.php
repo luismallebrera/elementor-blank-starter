@@ -228,7 +228,7 @@ function elementor_blank_entrance_body_class($classes) {
  */
 add_action('wp_body_open', 'elementor_blank_header_content', 1);
 function elementor_blank_header_content() {
-    echo '<div style="background: red; color: white; padding: 10px;">HEADER HOOK CARGADO - TEXTO DE PRUEBA</div>';
+    // Header content can be added here if needed
 }
 
 /**
