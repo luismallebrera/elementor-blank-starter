@@ -190,6 +190,10 @@ function elementor_blank_scripts() {
                     pointer-events: auto !important;
                     transition: none !important;
                 }
+                body:not(.fade-entrance) .transition-pannel-bg.initial-load {
+                    opacity: 0 !important;
+                    visibility: hidden !important;
+                }
                 body.fade-entrance.page-loaded .transition-pannel-bg:not(.active) {
                     opacity: 0;
                     visibility: hidden;
@@ -217,6 +221,11 @@ function elementor_blank_scripts() {
                     transform: scaleY(1) !important;
                     pointer-events: auto !important;
                     transition: none !important;
+                }
+                body:not(.slide-up-entrance) .transition-pannel-bg.initial-load {
+                    transform: scaleY(0) !important;
+                    opacity: 0 !important;
+                    visibility: hidden !important;
                 }
                 {$borders_css}
             ";
