@@ -356,6 +356,11 @@ if (class_exists('Kirki')) {
      * Añadir paneles y opciones de Kirki
      */
     require_once get_template_directory() . '/inc/customizer.php';
+    
+    /**
+     * Scrollbar Customizer con Kirki
+     */
+    require_once get_template_directory() . '/inc/scrollbar-customizer.php';
 } else {
     /**
      * Mostrar aviso si Kirki no está disponible
