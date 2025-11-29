@@ -111,6 +111,31 @@ new \Kirki\Field\Slider(
 );
 
 /**
+ * Horizontal Separator Rotation
+ */
+new \Kirki\Field\Slider(
+	array(
+		'settings'        => 'horizontal_separator_rotation',
+		'label'           => esc_html__( 'Horizontal Separator Rotation (degrees)', 'elementor-blank-starter' ),
+		'description'     => esc_html__( 'Rotate the separator line', 'elementor-blank-starter' ),
+		'section'         => 'menu_separator_section',
+		'default'         => 0,
+		'choices'         => array(
+			'min'  => -45,
+			'max'  => 45,
+			'step' => 1,
+		),
+		'active_callback' => array(
+			array(
+				'setting'  => 'enable_horizontal_separator',
+				'operator' => '==',
+				'value'    => true,
+			),
+		),
+	)
+);
+
+/**
  * Divider
  */
 new \Kirki\Field\Custom(
@@ -195,9 +220,15 @@ function elementor_blank_menu_separator_styles() {
 
 	// Horizontal menu separator (vertical line)
 	if ( $enable_horizontal ) {
-		$h_color  = get_theme_mod( 'horizontal_separator_color', '#dddddd' );
-		$h_width  = get_theme_mod( 'horizontal_separator_width', 1 );
-		$h_height = get_theme_mod( 'horizontal_separator_height', 60 );
+		$h_color    = get_theme_mod( 'horizontal_separator_color', '#dddddd' );
+		$h_width    = get_theme_mod( 'horizontal_separator_width', 1 );
+		$h_height   = get_theme_mod( 'horizontal_separator_height', 60 );
+		$h_rotation = get_theme_mod( 'horizontal_separator_rotation', 0 );
+
+		$transform = 'translateY(-50%)';
+		if ( $h_rotation != 0 ) {
+			$transform = 'translateY(-50%) rotate(' . esc_attr( $h_rotation ) . 'deg)';
+		}
 
 		$css .= '
 		/* Horizontal Menu Separator */
@@ -208,7 +239,7 @@ function elementor_blank_menu_separator_styles() {
 			position: absolute;
 			right: 0;
 			top: 50%;
-			transform: translateY(-50%);
+			transform: ' . $transform . ';
 			height: ' . esc_attr( $h_height ) . '%;
 			width: ' . esc_attr( $h_width ) . 'px;
 			background-color: ' . esc_attr( $h_color ) . ';
