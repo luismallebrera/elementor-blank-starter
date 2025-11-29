@@ -361,6 +361,11 @@ if (class_exists('Kirki')) {
      * Scrollbar Customizer con Kirki
      */
     require_once get_template_directory() . '/inc/scrollbar-customizer.php';
+    
+    /**
+     * Custom Fonts Manager con Kirki
+     */
+    require_once get_template_directory() . '/inc/custom-fonts-manager.php';
 } else {
     /**
      * Mostrar aviso si Kirki no está disponible
