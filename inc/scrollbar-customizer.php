@@ -15,12 +15,13 @@ if ( ! class_exists( 'Kirki' ) ) {
 }
 
 /**
- * Add Scrollbar Section
+ * Add Scrollbar Section inside Theme Options Panel
  */
 new \Kirki\Section(
 	'elementor_blank_scrollbar',
 	array(
 		'title'    => esc_html__( 'Scrollbar', 'elementor-blank-starter' ),
+		'panel'    => 'theme_options',
 		'priority' => 160,
 	)
 );
