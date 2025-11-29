@@ -358,6 +358,11 @@ if (class_exists('Kirki')) {
     require_once get_template_directory() . '/inc/customizer.php';
     
     /**
+     * Typography Settings con Kirki
+     */
+    require_once get_template_directory() . '/inc/typography-settings.php';
+    
+    /**
      * Scrollbar Customizer con Kirki
      */
     require_once get_template_directory() . '/inc/scrollbar-customizer.php';
