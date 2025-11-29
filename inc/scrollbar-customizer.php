@@ -48,17 +48,16 @@ class Kirki_Scrollbar_Customizer {
 
 		// Scrollbar Width
 		Kirki::add_field( 'scrollbar_customizer', array(
-			'type'        => 'slider',
+			'type'        => 'number',
 			'settings'    => 'scrollbar_width',
-			'label'       => esc_html__( 'Scrollbar Width', 'elementor-blank-starter' ),
+			'label'       => esc_html__( 'Scrollbar Width (px)', 'elementor-blank-starter' ),
 			'section'     => 'scrollbar_section',
 			'default'     => 4,
 			'transport'   => 'postMessage',
 			'choices'     => array(
-				'min'    => 1,
-				'max'    => 64,
-				'step'   => 1,
-				'suffix' => 'px',
+				'min'  => 1,
+				'max'  => 64,
+				'step' => 1,
 			),
 			'js_vars'     => array(
 				array(
