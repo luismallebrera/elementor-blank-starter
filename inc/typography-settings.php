@@ -224,3 +224,30 @@ new \Kirki\Field\Typography(
 		),
 	)
 );
+
+/**
+ * Menu Items Typography
+ */
+new \Kirki\Field\Typography(
+	array(
+		'settings'    => 'menu_typography',
+		'label'       => esc_html__( 'Menu Items', 'elementor-blank-starter' ),
+		'description' => esc_html__( 'Typography for navigation menu items', 'elementor-blank-starter' ),
+		'section'     => 'typography_section',
+		'default'     => array(
+			'font-family'    => 'inherit',
+			'variant'        => 'regular',
+			'font-size'      => '16px',
+			'line-height'    => '1.5',
+			'letter-spacing' => '0',
+			'color'          => '#333333',
+			'text-transform' => 'none',
+		),
+		'transport'   => 'auto',
+		'output'      => array(
+			array(
+				'element' => '.menu-item, .menu-item a, nav a, .nav-menu a',
+			),
+		),
+	)
+);
