@@ -381,6 +381,11 @@ if (class_exists('Kirki')) {
      * Custom Fonts Manager con Kirki
      */
     require_once get_template_directory() . '/inc/custom-fonts-manager.php';
+    
+    /**
+     * Scroll Indicator con Kirki
+     */
+    require_once get_template_directory() . '/inc/scroll-indicator.php';
 } else {
     /**
      * Mostrar aviso si Kirki no está disponible

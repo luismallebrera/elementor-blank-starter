@@ -73,6 +73,84 @@ function elementor_blank_register_portfolio_cpt() {
 add_action('init', 'elementor_blank_register_portfolio_cpt', 0);
 
 /**
+ * Replace excerpt with WYSIWYG Description field for Portfolio
+ */
+function elementor_blank_add_portfolio_description_meta_box() {
+    if (!get_theme_mod('enable_portfolio_cpt', false)) {
+        return;
+    }
+    
+    remove_meta_box('postexcerpt', 'portfolio', 'normal');
+    add_meta_box(
+        'portfolio_description',
+        __('Description', 'elementor-blank-starter'),
+        'elementor_blank_portfolio_description_callback',
+        'portfolio',
+        'normal',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'elementor_blank_add_portfolio_description_meta_box');
+
+function elementor_blank_portfolio_description_callback($post) {
+    wp_nonce_field('portfolio_description_nonce', 'portfolio_description_nonce_field');
+    $description = get_post_meta($post->ID, '_portfolio_description', true);
+    
+    wp_editor($description, 'portfolio_description_editor', array(
+        'textarea_name' => 'portfolio_description',
+        'textarea_rows' => 10,
+        'media_buttons' => true,
+        'teeny' => false,
+        'tinymce' => array(
+            'toolbar1' => 'formatselect,bold,italic,underline,bullist,numlist,blockquote,alignleft,aligncenter,alignright,link,unlink',
+            'toolbar2' => 'forecolor,backcolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help'
+        )
+    ));
+}
+
+function elementor_blank_save_portfolio_description($post_id) {
+    if (!isset($_POST['portfolio_description_nonce_field']) || 
+        !wp_verify_nonce($_POST['portfolio_description_nonce_field'], 'portfolio_description_nonce')) {
+        return;
+    }
+    
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+    
+    if (isset($_POST['portfolio_description'])) {
+        update_post_meta($post_id, '_portfolio_description', wp_kses_post($_POST['portfolio_description']));
+    }
+}
+add_action('save_post_portfolio', 'elementor_blank_save_portfolio_description');
+
+/**
+ * Register Description custom field for Elementor
+ * Make it available in REST API and Elementor
+ */
+function elementor_blank_register_portfolio_description_meta() {
+    if (!get_theme_mod('enable_portfolio_cpt', false)) {
+        return;
+    }
+    
+    register_post_meta('portfolio', '_portfolio_description', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'string',
+        'description' => __('Portfolio Description', 'elementor-blank-starter'),
+        'sanitize_callback' => 'wp_kses_post',
+        'auth_callback' => function() {
+            return current_user_can('edit_posts');
+        }
+    ));
+}
+add_action('init', 'elementor_blank_register_portfolio_description_meta');
+
+/**
  * Register Portfolio Category Taxonomy
  */
 function elementor_blank_register_portfolio_category() {
@@ -163,6 +241,57 @@ function elementor_blank_register_portfolio_tag() {
     register_taxonomy('portfolio_tag', array('portfolio'), $args);
 }
 add_action('init', 'elementor_blank_register_portfolio_tag', 0);
+
+/**
+ * Add thumbnail column to Portfolio admin list
+ */
+function elementor_blank_portfolio_columns($columns) {
+    $new_columns = array();
+    foreach ($columns as $key => $value) {
+        if ($key == 'title') {
+            $new_columns['thumbnail'] = __('Thumbnail', 'elementor-blank-starter');
+        }
+        $new_columns[$key] = $value;
+    }
+    return $new_columns;
+}
+add_filter('manage_portfolio_posts_columns', 'elementor_blank_portfolio_columns');
+
+/**
+ * Display thumbnail in Portfolio admin list
+ */
+function elementor_blank_portfolio_column_content($column_name, $post_id) {
+    if ($column_name == 'thumbnail') {
+        $thumbnail = get_the_post_thumbnail($post_id, array(60, 60));
+        echo $thumbnail ? $thumbnail : '—';
+    }
+}
+add_action('manage_portfolio_posts_custom_column', 'elementor_blank_portfolio_column_content', 10, 2);
+
+/**
+ * Make thumbnail column sortable (optional)
+ */
+function elementor_blank_portfolio_sortable_columns($columns) {
+    $columns['thumbnail'] = 'thumbnail';
+    return $columns;
+}
+add_filter('manage_edit-portfolio_sortable_columns', 'elementor_blank_portfolio_sortable_columns');
+
+/**
+ * Set custom width for thumbnail column
+ */
+function elementor_blank_portfolio_admin_css() {
+    echo '<style>
+        .column-thumbnail {
+            width: 80px !important;
+        }
+        .column-thumbnail img {
+            max-width: 60px;
+            height: auto;
+        }
+    </style>';
+}
+add_action('admin_head-edit.php', 'elementor_blank_portfolio_admin_css');
 
 /**
  * Register Proyectos Post Type
@@ -295,6 +424,528 @@ function elementor_blank_register_provincia_meta() {
     ));
 }
 add_action('init', 'elementor_blank_register_provincia_meta');
+
+/**
+ * Add Large Image custom field to Portfolio
+ */
+function elementor_blank_add_portfolio_large_image_meta_box() {
+    if (!get_theme_mod('enable_portfolio_cpt', false)) {
+        return;
+    }
+    
+    add_meta_box(
+        'portfolio_large_image',
+        __('Large Image', 'elementor-blank-starter'),
+        'elementor_blank_portfolio_large_image_callback',
+        'portfolio',
+        'side',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'elementor_blank_add_portfolio_large_image_meta_box');
+
+function elementor_blank_portfolio_large_image_callback($post) {
+    wp_nonce_field('portfolio_large_image_nonce', 'portfolio_large_image_nonce_field');
+    $image_id = get_post_meta($post->ID, '_portfolio_large_image', true);
+    $image_url = $image_id ? wp_get_attachment_image_url($image_id, 'full') : '';
+    ?>
+    <div class="portfolio-large-image-wrapper">
+        <input type="hidden" id="portfolio_large_image_id" name="portfolio_large_image_id" value="<?php echo esc_attr($image_id); ?>">
+        <div class="portfolio-large-image-preview" style="margin-bottom: 10px;">
+            <?php if ($image_url): ?>
+                <img src="<?php echo esc_url($image_url); ?>" style="max-width: 100%; height: auto; display: block;">
+            <?php endif; ?>
+        </div>
+        <button type="button" class="button portfolio-upload-image-button"><?php _e('Set Large Image', 'elementor-blank-starter'); ?></button>
+        <?php if ($image_id): ?>
+            <button type="button" class="button portfolio-remove-image-button" style="margin-left: 5px;"><?php _e('Remove', 'elementor-blank-starter'); ?></button>
+        <?php endif; ?>
+    </div>
+    <script>
+    jQuery(document).ready(function($) {
+        var frame;
+        $('.portfolio-upload-image-button').on('click', function(e) {
+            e.preventDefault();
+            if (frame) {
+                frame.open();
+                return;
+            }
+            frame = wp.media({
+                title: '<?php _e('Select Large Image', 'elementor-blank-starter'); ?>',
+                button: {
+                    text: '<?php _e('Use this image', 'elementor-blank-starter'); ?>'
+                },
+                multiple: false
+            });
+            frame.on('select', function() {
+                var attachment = frame.state().get('selection').first().toJSON();
+                $('#portfolio_large_image_id').val(attachment.id);
+                $('.portfolio-large-image-preview').html('<img src="' + attachment.url + '" style="max-width: 100%; height: auto; display: block;">');
+                if (!$('.portfolio-remove-image-button').length) {
+                    $('.portfolio-upload-image-button').after('<button type="button" class="button portfolio-remove-image-button" style="margin-left: 5px;"><?php _e('Remove', 'elementor-blank-starter'); ?></button>');
+                }
+            });
+            frame.open();
+        });
+        
+        $(document).on('click', '.portfolio-remove-image-button', function(e) {
+            e.preventDefault();
+            $('#portfolio_large_image_id').val('');
+            $('.portfolio-large-image-preview').html('');
+            $(this).remove();
+        });
+    });
+    </script>
+    <?php
+}
+
+function elementor_blank_save_portfolio_large_image($post_id) {
+    if (!isset($_POST['portfolio_large_image_nonce_field']) || 
+        !wp_verify_nonce($_POST['portfolio_large_image_nonce_field'], 'portfolio_large_image_nonce')) {
+        return;
+    }
+    
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+    
+    if (isset($_POST['portfolio_large_image_id'])) {
+        update_post_meta($post_id, '_portfolio_large_image', absint($_POST['portfolio_large_image_id']));
+    }
+}
+add_action('save_post_portfolio', 'elementor_blank_save_portfolio_large_image');
+
+/**
+ * Register Large Image custom field for Elementor
+ * Make it available in REST API and Elementor
+ */
+function elementor_blank_register_portfolio_large_image_meta() {
+    if (!get_theme_mod('enable_portfolio_cpt', false)) {
+        return;
+    }
+    
+    register_post_meta('portfolio', '_portfolio_large_image', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'integer',
+        'description' => __('Large Image ID', 'elementor-blank-starter'),
+        'sanitize_callback' => 'absint',
+        'auth_callback' => function() {
+            return current_user_can('edit_posts');
+        }
+    ));
+}
+add_action('init', 'elementor_blank_register_portfolio_large_image_meta');
+
+/**
+ * Add Medium Image custom field to Portfolio
+ */
+function elementor_blank_add_portfolio_medium_image_meta_box() {
+    if (!get_theme_mod('enable_portfolio_cpt', false)) {
+        return;
+    }
+    
+    add_meta_box(
+        'portfolio_medium_image',
+        __('Medium Image', 'elementor-blank-starter'),
+        'elementor_blank_portfolio_medium_image_callback',
+        'portfolio',
+        'side',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'elementor_blank_add_portfolio_medium_image_meta_box');
+
+function elementor_blank_portfolio_medium_image_callback($post) {
+    wp_nonce_field('portfolio_medium_image_nonce', 'portfolio_medium_image_nonce_field');
+    $image_id = get_post_meta($post->ID, '_portfolio_medium_image', true);
+    $image_url = $image_id ? wp_get_attachment_image_url($image_id, 'full') : '';
+    ?>
+    <div class="portfolio-medium-image-wrapper">
+        <input type="hidden" id="portfolio_medium_image_id" name="portfolio_medium_image_id" value="<?php echo esc_attr($image_id); ?>">
+        <div class="portfolio-medium-image-preview" style="margin-bottom: 10px;">
+            <?php if ($image_url): ?>
+                <img src="<?php echo esc_url($image_url); ?>" style="max-width: 100%; height: auto; display: block;">
+            <?php endif; ?>
+        </div>
+        <button type="button" class="button portfolio-upload-medium-image-button"><?php _e('Set Medium Image', 'elementor-blank-starter'); ?></button>
+        <?php if ($image_id): ?>
+            <button type="button" class="button portfolio-remove-medium-image-button" style="margin-left: 5px;"><?php _e('Remove', 'elementor-blank-starter'); ?></button>
+        <?php endif; ?>
+    </div>
+    <script>
+    jQuery(document).ready(function($) {
+        var mediumFrame;
+        $('.portfolio-upload-medium-image-button').on('click', function(e) {
+            e.preventDefault();
+            if (mediumFrame) {
+                mediumFrame.open();
+                return;
+            }
+            mediumFrame = wp.media({
+                title: '<?php _e('Select Medium Image', 'elementor-blank-starter'); ?>',
+                button: {
+                    text: '<?php _e('Use this image', 'elementor-blank-starter'); ?>'
+                },
+                multiple: false
+            });
+            mediumFrame.on('select', function() {
+                var attachment = mediumFrame.state().get('selection').first().toJSON();
+                $('#portfolio_medium_image_id').val(attachment.id);
+                $('.portfolio-medium-image-preview').html('<img src="' + attachment.url + '" style="max-width: 100%; height: auto; display: block;">');
+                if (!$('.portfolio-remove-medium-image-button').length) {
+                    $('.portfolio-upload-medium-image-button').after('<button type="button" class="button portfolio-remove-medium-image-button" style="margin-left: 5px;"><?php _e('Remove', 'elementor-blank-starter'); ?></button>');
+                }
+            });
+            mediumFrame.open();
+        });
+        
+        $(document).on('click', '.portfolio-remove-medium-image-button', function(e) {
+            e.preventDefault();
+            $('#portfolio_medium_image_id').val('');
+            $('.portfolio-medium-image-preview').html('');
+            $(this).remove();
+        });
+    });
+    </script>
+    <?php
+}
+
+function elementor_blank_save_portfolio_medium_image($post_id) {
+    if (!isset($_POST['portfolio_medium_image_nonce_field']) || 
+        !wp_verify_nonce($_POST['portfolio_medium_image_nonce_field'], 'portfolio_medium_image_nonce')) {
+        return;
+    }
+    
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+    
+    if (isset($_POST['portfolio_medium_image_id'])) {
+        update_post_meta($post_id, '_portfolio_medium_image', absint($_POST['portfolio_medium_image_id']));
+    }
+}
+add_action('save_post_portfolio', 'elementor_blank_save_portfolio_medium_image');
+
+/**
+ * Register Medium Image custom field for Elementor
+ * Make it available in REST API and Elementor
+ */
+function elementor_blank_register_portfolio_medium_image_meta() {
+    if (!get_theme_mod('enable_portfolio_cpt', false)) {
+        return;
+    }
+    
+    register_post_meta('portfolio', '_portfolio_medium_image', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'integer',
+        'description' => __('Medium Image ID', 'elementor-blank-starter'),
+        'sanitize_callback' => 'absint',
+        'auth_callback' => function() {
+            return current_user_can('edit_posts');
+        }
+    ));
+}
+add_action('init', 'elementor_blank_register_portfolio_medium_image_meta');
+
+/**
+ * Add Small Image custom field to Portfolio
+ */
+function elementor_blank_add_portfolio_small_image_meta_box() {
+    if (!get_theme_mod('enable_portfolio_cpt', false)) {
+        return;
+    }
+    
+    add_meta_box(
+        'portfolio_small_image',
+        __('Small Image', 'elementor-blank-starter'),
+        'elementor_blank_portfolio_small_image_callback',
+        'portfolio',
+        'side',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'elementor_blank_add_portfolio_small_image_meta_box');
+
+function elementor_blank_portfolio_small_image_callback($post) {
+    wp_nonce_field('portfolio_small_image_nonce', 'portfolio_small_image_nonce_field');
+    $image_id = get_post_meta($post->ID, '_portfolio_small_image', true);
+    $image_url = $image_id ? wp_get_attachment_image_url($image_id, 'full') : '';
+    ?>
+    <div class="portfolio-small-image-wrapper">
+        <input type="hidden" id="portfolio_small_image_id" name="portfolio_small_image_id" value="<?php echo esc_attr($image_id); ?>">
+        <div class="portfolio-small-image-preview" style="margin-bottom: 10px;">
+            <?php if ($image_url): ?>
+                <img src="<?php echo esc_url($image_url); ?>" style="max-width: 100%; height: auto; display: block;">
+            <?php endif; ?>
+        </div>
+        <button type="button" class="button portfolio-upload-small-image-button"><?php _e('Set Small Image', 'elementor-blank-starter'); ?></button>
+        <?php if ($image_id): ?>
+            <button type="button" class="button portfolio-remove-small-image-button" style="margin-left: 5px;"><?php _e('Remove', 'elementor-blank-starter'); ?></button>
+        <?php endif; ?>
+    </div>
+    <script>
+    jQuery(document).ready(function($) {
+        var smallFrame;
+        $('.portfolio-upload-small-image-button').on('click', function(e) {
+            e.preventDefault();
+            if (smallFrame) {
+                smallFrame.open();
+                return;
+            }
+            smallFrame = wp.media({
+                title: '<?php _e('Select Small Image', 'elementor-blank-starter'); ?>',
+                button: {
+                    text: '<?php _e('Use this image', 'elementor-blank-starter'); ?>'
+                },
+                multiple: false
+            });
+            smallFrame.on('select', function() {
+                var attachment = smallFrame.state().get('selection').first().toJSON();
+                $('#portfolio_small_image_id').val(attachment.id);
+                $('.portfolio-small-image-preview').html('<img src="' + attachment.url + '" style="max-width: 100%; height: auto; display: block;">');
+                if (!$('.portfolio-remove-small-image-button').length) {
+                    $('.portfolio-upload-small-image-button').after('<button type="button" class="button portfolio-remove-small-image-button" style="margin-left: 5px;"><?php _e('Remove', 'elementor-blank-starter'); ?></button>');
+                }
+            });
+            smallFrame.open();
+        });
+        
+        $(document).on('click', '.portfolio-remove-small-image-button', function(e) {
+            e.preventDefault();
+            $('#portfolio_small_image_id').val('');
+            $('.portfolio-small-image-preview').html('');
+            $(this).remove();
+        });
+    });
+    </script>
+    <?php
+}
+
+function elementor_blank_save_portfolio_small_image($post_id) {
+    if (!isset($_POST['portfolio_small_image_nonce_field']) || 
+        !wp_verify_nonce($_POST['portfolio_small_image_nonce_field'], 'portfolio_small_image_nonce')) {
+        return;
+    }
+    
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+    
+    if (isset($_POST['portfolio_small_image_id'])) {
+        update_post_meta($post_id, '_portfolio_small_image', absint($_POST['portfolio_small_image_id']));
+    }
+}
+add_action('save_post_portfolio', 'elementor_blank_save_portfolio_small_image');
+
+/**
+ * Register Small Image custom field for Elementor
+ * Make it available in REST API and Elementor
+ */
+function elementor_blank_register_portfolio_small_image_meta() {
+    if (!get_theme_mod('enable_portfolio_cpt', false)) {
+        return;
+    }
+    
+    register_post_meta('portfolio', '_portfolio_small_image', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'integer',
+        'description' => __('Small Image ID', 'elementor-blank-starter'),
+        'sanitize_callback' => 'absint',
+        'auth_callback' => function() {
+            return current_user_can('edit_posts');
+        }
+    ));
+}
+add_action('init', 'elementor_blank_register_portfolio_small_image_meta');
+
+/**
+ * Add Title Color custom field to Portfolio
+ */
+function elementor_blank_add_portfolio_title_color_meta_box() {
+    if (!get_theme_mod('enable_portfolio_cpt', false)) {
+        return;
+    }
+    
+    add_meta_box(
+        'portfolio_title_color',
+        __('Title Color', 'elementor-blank-starter'),
+        'elementor_blank_portfolio_title_color_callback',
+        'portfolio',
+        'side',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'elementor_blank_add_portfolio_title_color_meta_box');
+
+function elementor_blank_portfolio_title_color_callback($post) {
+    wp_nonce_field('portfolio_title_color_nonce', 'portfolio_title_color_nonce_field');
+    $value = get_post_meta($post->ID, '_portfolio_title_color', true);
+    $value = $value ? $value : '#313C59';
+    ?>
+    <div class="portfolio-title-color-wrapper">
+        <label>
+            <input type="radio" name="portfolio_title_color" value="#313C59" <?php checked($value, '#313C59'); ?>>
+            <span style="display: inline-block; width: 20px; height: 20px; background-color: #313C59; vertical-align: middle; margin-right: 5px; border: 1px solid #ccc;"></span>
+            <?php _e('DARK', 'elementor-blank-starter'); ?>
+        </label>
+        <br><br>
+        <label>
+            <input type="radio" name="portfolio_title_color" value="#ffffff" <?php checked($value, '#ffffff'); ?>>
+            <span style="display: inline-block; width: 20px; height: 20px; background-color: #ffffff; vertical-align: middle; margin-right: 5px; border: 1px solid #ccc;"></span>
+            <?php _e('LIGHT', 'elementor-blank-starter'); ?>
+        </label>
+    </div>
+    <?php
+}
+
+function elementor_blank_save_portfolio_title_color($post_id) {
+    if (!isset($_POST['portfolio_title_color_nonce_field']) || 
+        !wp_verify_nonce($_POST['portfolio_title_color_nonce_field'], 'portfolio_title_color_nonce')) {
+        return;
+    }
+    
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+    
+    if (isset($_POST['portfolio_title_color'])) {
+        update_post_meta($post_id, '_portfolio_title_color', sanitize_hex_color($_POST['portfolio_title_color']));
+    }
+}
+add_action('save_post_portfolio', 'elementor_blank_save_portfolio_title_color');
+
+/**
+ * Register Title Color custom field for Elementor
+ * Make it available in REST API and Elementor
+ */
+function elementor_blank_register_portfolio_title_color_meta() {
+    if (!get_theme_mod('enable_portfolio_cpt', false)) {
+        return;
+    }
+    
+    register_post_meta('portfolio', '_portfolio_title_color', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'string',
+        'description' => __('Title Color', 'elementor-blank-starter'),
+        'sanitize_callback' => 'sanitize_hex_color',
+        'auth_callback' => function() {
+            return current_user_can('edit_posts');
+        }
+    ));
+}
+add_action('init', 'elementor_blank_register_portfolio_title_color_meta');
+
+/**
+ * Add Button Text and Button Link custom fields to Portfolio
+ */
+function elementor_blank_add_portfolio_button_meta_box() {
+    if (!get_theme_mod('enable_portfolio_cpt', false)) {
+        return;
+    }
+    
+    add_meta_box(
+        'portfolio_button_fields',
+        __('Button Settings', 'elementor-blank-starter'),
+        'elementor_blank_portfolio_button_callback',
+        'portfolio',
+        'side',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'elementor_blank_add_portfolio_button_meta_box');
+
+function elementor_blank_portfolio_button_callback($post) {
+    wp_nonce_field('portfolio_button_nonce', 'portfolio_button_nonce_field');
+    $button_text = get_post_meta($post->ID, '_portfolio_button_text', true);
+    $button_link = get_post_meta($post->ID, '_portfolio_button_link', true);
+    ?>
+    <p>
+        <label for="portfolio_button_text"><strong><?php _e('Button Text', 'elementor-blank-starter'); ?></strong></label><br>
+        <input type="text" id="portfolio_button_text" name="portfolio_button_text" value="<?php echo esc_attr($button_text); ?>" class="widefat">
+    </p>
+    <p>
+        <label for="portfolio_button_link"><strong><?php _e('Button Link', 'elementor-blank-starter'); ?></strong></label><br>
+        <input type="url" id="portfolio_button_link" name="portfolio_button_link" value="<?php echo esc_url($button_link); ?>" class="widefat" placeholder="https://">
+    </p>
+    <?php
+}
+
+function elementor_blank_save_portfolio_button($post_id) {
+    if (!isset($_POST['portfolio_button_nonce_field']) || 
+        !wp_verify_nonce($_POST['portfolio_button_nonce_field'], 'portfolio_button_nonce')) {
+        return;
+    }
+    
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+    
+    if (isset($_POST['portfolio_button_text'])) {
+        update_post_meta($post_id, '_portfolio_button_text', sanitize_text_field($_POST['portfolio_button_text']));
+    }
+    
+    if (isset($_POST['portfolio_button_link'])) {
+        update_post_meta($post_id, '_portfolio_button_link', esc_url_raw($_POST['portfolio_button_link']));
+    }
+}
+add_action('save_post_portfolio', 'elementor_blank_save_portfolio_button');
+
+/**
+ * Register Button Text and Button Link custom fields for Elementor
+ * Make them available in REST API and Elementor
+ */
+function elementor_blank_register_portfolio_button_meta() {
+    if (!get_theme_mod('enable_portfolio_cpt', false)) {
+        return;
+    }
+    
+    register_post_meta('portfolio', '_portfolio_button_text', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'string',
+        'description' => __('Button Text', 'elementor-blank-starter'),
+        'sanitize_callback' => 'sanitize_text_field',
+        'auth_callback' => function() {
+            return current_user_can('edit_posts');
+        }
+    ));
+    
+    register_post_meta('portfolio', '_portfolio_button_link', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'string',
+        'description' => __('Button Link', 'elementor-blank-starter'),
+        'sanitize_callback' => 'esc_url_raw',
+        'auth_callback' => function() {
+            return current_user_can('edit_posts');
+        }
+    ));
+}
+add_action('init', 'elementor_blank_register_portfolio_button_meta');
 
 /**
  * Register Proyectos Category Taxonomy
