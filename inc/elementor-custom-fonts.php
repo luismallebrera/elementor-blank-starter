@@ -54,11 +54,13 @@ class Elementor_Blank_Custom_Fonts_Elementor {
 	}
 
 	/**
-	 * Get custom fonts from Kirki settings
+	 * Get custom fonts from Kirki settings or default fonts
 	 */
 	private function get_custom_fonts() {
 		$fonts = array();
+		$has_custom_fonts = false;
 
+		// Check for custom fonts from Customizer
 		for ( $i = 1; $i <= 5; $i++ ) {
 			$font_name = get_theme_mod( "custom_font_{$i}_name", '' );
 			$woff2_url = get_theme_mod( "custom_font_{$i}_woff2", '' );
@@ -68,6 +70,42 @@ class Elementor_Blank_Custom_Fonts_Elementor {
 			// Only add if font name exists and at least one font file is uploaded
 			if ( ! empty( $font_name ) && ( ! empty( $woff2_url ) || ! empty( $woff_url ) || ! empty( $ttf_url ) ) ) {
 				$fonts[] = $font_name;
+				$has_custom_fonts = true;
+			}
+		}
+
+		// If no custom fonts, scan assets/fonts directory for default fonts
+		if ( ! $has_custom_fonts ) {
+			$fonts_dir = get_template_directory() . '/assets/fonts';
+			
+			if ( is_dir( $fonts_dir ) ) {
+				$scanned = scandir( $fonts_dir );
+
+				foreach ( $scanned as $item ) {
+					if ( $item === '.' || $item === '..' ) {
+						continue;
+					}
+
+					$item_path = $fonts_dir . '/' . $item;
+
+					// If it's a directory with font files, add it
+					if ( is_dir( $item_path ) ) {
+						$font_files = scandir( $item_path );
+						$has_font_file = false;
+
+						foreach ( $font_files as $file ) {
+							$ext = strtolower( pathinfo( $file, PATHINFO_EXTENSION ) );
+							if ( in_array( $ext, array( 'woff2', 'woff', 'ttf' ) ) ) {
+								$has_font_file = true;
+								break;
+							}
+						}
+
+						if ( $has_font_file ) {
+							$fonts[] = $item;
+						}
+					}
+				}
 			}
 		}
 

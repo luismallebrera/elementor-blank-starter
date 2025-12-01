@@ -170,17 +170,41 @@ new \Kirki\Field\Radio_Buttonset(
 /**
  * Horizontal Offset
  */
-new \Kirki\Field\Slider(
+new \Kirki\Field\Number(
     [
         'settings'    => 'scroll_to_top_horizontal_offset',
         'label'       => esc_html__('Horizontal Offset', 'elementor-blank-starter'),
-        'description' => esc_html__('Distance from edge in pixels', 'elementor-blank-starter'),
+        'description' => esc_html__('Distance from edge', 'elementor-blank-starter'),
         'section'     => 'scroll_to_top_section',
         'default'     => 30,
         'choices'     => [
             'min'  => 0,
-            'max'  => 200,
-            'step' => 5,
+            'max'  => 1000,
+            'step' => 1,
+        ],
+        'active_callback' => [
+            [
+                'setting'  => 'enable_scroll_to_top',
+                'operator' => '==',
+                'value'    => true,
+            ],
+        ],
+    ]
+);
+
+/**
+ * Horizontal Offset Unit
+ */
+new \Kirki\Field\Radio_Buttonset(
+    [
+        'settings'    => 'scroll_to_top_horizontal_unit',
+        'label'       => esc_html__('Horizontal Unit', 'elementor-blank-starter'),
+        'section'     => 'scroll_to_top_section',
+        'default'     => 'px',
+        'choices'     => [
+            'px'  => 'px',
+            '%'   => '%',
+            'vw'  => 'vw',
         ],
         'active_callback' => [
             [
@@ -195,21 +219,129 @@ new \Kirki\Field\Slider(
 /**
  * Vertical Offset
  */
-new \Kirki\Field\Slider(
+new \Kirki\Field\Number(
     [
         'settings'    => 'scroll_to_top_vertical_offset',
-        'label'       => esc_html__('Vertical Offset', 'elementor-blank-starter'),
-        'description' => esc_html__('Distance from bottom in pixels', 'elementor-blank-starter'),
+        'label'       => esc_html__('Vertical Position', 'elementor-blank-starter'),
+        'description' => esc_html__('Distance from bottom', 'elementor-blank-starter'),
         'section'     => 'scroll_to_top_section',
         'default'     => 30,
         'choices'     => [
             'min'  => 0,
-            'max'  => 200,
-            'step' => 5,
+            'max'  => 1000,
+            'step' => 1,
         ],
         'active_callback' => [
             [
                 'setting'  => 'enable_scroll_to_top',
+                'operator' => '==',
+                'value'    => true,
+            ],
+        ],
+    ]
+);
+
+/**
+ * Vertical Offset Unit
+ */
+new \Kirki\Field\Radio_Buttonset(
+    [
+        'settings'    => 'scroll_to_top_vertical_unit',
+        'label'       => esc_html__('Vertical Unit', 'elementor-blank-starter'),
+        'section'     => 'scroll_to_top_section',
+        'default'     => 'px',
+        'choices'     => [
+            'px'  => 'px',
+            '%'   => '%',
+            'vh'  => 'vh',
+        ],
+        'active_callback' => [
+            [
+                'setting'  => 'enable_scroll_to_top',
+                'operator' => '==',
+                'value'    => true,
+            ],
+        ],
+    ]
+);
+
+/**
+ * Custom Horizontal Position
+ */
+new \Kirki\Field\Checkbox_Switch(
+    [
+        'settings'    => 'scroll_to_top_horizontal_custom',
+        'label'       => esc_html__('Use Custom Horizontal Value', 'elementor-blank-starter'),
+        'description' => esc_html__('Enable to use calc() or custom CSS values', 'elementor-blank-starter'),
+        'section'     => 'scroll_to_top_section',
+        'default'     => false,
+        'active_callback' => [
+            [
+                'setting'  => 'enable_scroll_to_top',
+                'operator' => '==',
+                'value'    => true,
+            ],
+        ],
+    ]
+);
+
+new \Kirki\Field\Text(
+    [
+        'settings'    => 'scroll_to_top_horizontal_custom_value',
+        'label'       => esc_html__('Custom Horizontal Value', 'elementor-blank-starter'),
+        'description' => esc_html__('e.g., calc(2% - 2px) or 5vw', 'elementor-blank-starter'),
+        'section'     => 'scroll_to_top_section',
+        'default'     => 'calc(2% - 2px)',
+        'active_callback' => [
+            [
+                'setting'  => 'enable_scroll_to_top',
+                'operator' => '==',
+                'value'    => true,
+            ],
+            [
+                'setting'  => 'scroll_to_top_horizontal_custom',
+                'operator' => '==',
+                'value'    => true,
+            ],
+        ],
+    ]
+);
+
+/**
+ * Custom Vertical Position
+ */
+new \Kirki\Field\Checkbox_Switch(
+    [
+        'settings'    => 'scroll_to_top_vertical_custom',
+        'label'       => esc_html__('Use Custom Vertical Value', 'elementor-blank-starter'),
+        'description' => esc_html__('Enable to use calc() or custom CSS values', 'elementor-blank-starter'),
+        'section'     => 'scroll_to_top_section',
+        'default'     => false,
+        'active_callback' => [
+            [
+                'setting'  => 'enable_scroll_to_top',
+                'operator' => '==',
+                'value'    => true,
+            ],
+        ],
+    ]
+);
+
+new \Kirki\Field\Text(
+    [
+        'settings'    => 'scroll_to_top_vertical_custom_value',
+        'label'       => esc_html__('Custom Vertical Value', 'elementor-blank-starter'),
+        'description' => esc_html__('e.g., calc(5vh - 10px) or 3%', 'elementor-blank-starter'),
+        'section'     => 'scroll_to_top_section',
+        'default'     => 'calc(5vh - 10px)',
+        'active_callback' => [
+            [
+                'setting'  => 'enable_scroll_to_top',
+                'operator' => '==',
+                'value'    => true,
+            ],
+            [
+                'setting'  => 'scroll_to_top_vertical_custom',
                 'operator' => '==',
                 'value'    => true,
             ],
@@ -306,7 +438,13 @@ function elementor_blank_scroll_to_top_output() {
     $hover_bg = get_theme_mod('scroll_to_top_hover_bg_color', '#1e2640');
     $horizontal = get_theme_mod('scroll_to_top_horizontal', 'right');
     $horizontal_offset = get_theme_mod('scroll_to_top_horizontal_offset', 30);
+    $horizontal_unit = get_theme_mod('scroll_to_top_horizontal_unit', 'px');
+    $horizontal_custom = get_theme_mod('scroll_to_top_horizontal_custom', false);
+    $horizontal_custom_value = get_theme_mod('scroll_to_top_horizontal_custom_value', 'calc(2% - 2px)');
     $vertical_offset = get_theme_mod('scroll_to_top_vertical_offset', 30);
+    $vertical_unit = get_theme_mod('scroll_to_top_vertical_unit', 'px');
+    $vertical_custom = get_theme_mod('scroll_to_top_vertical_custom', false);
+    $vertical_custom_value = get_theme_mod('scroll_to_top_vertical_custom_value', 'calc(5vh - 10px)');
     $show_after = get_theme_mod('scroll_to_top_show_after', 300);
     $animation_speed = get_theme_mod('scroll_to_top_animation_speed', 300);
     $zindex = get_theme_mod('scroll_to_top_zindex', 9999);
@@ -318,16 +456,30 @@ function elementor_blank_scroll_to_top_output() {
         $border_radius = '8px';
     }
 
+    // Calculate horizontal position
+    if ($horizontal_custom) {
+        $horizontal_position = $horizontal_custom_value;
+    } else {
+        $horizontal_position = $horizontal_offset . $horizontal_unit;
+    }
+
+    // Calculate vertical position
+    if ($vertical_custom) {
+        $vertical_position = $vertical_custom_value;
+    } else {
+        $vertical_position = $vertical_offset . $vertical_unit;
+    }
+
     $position_style = $horizontal === 'left' 
-        ? "left: {$horizontal_offset}px;" 
-        : "right: {$horizontal_offset}px;";
+        ? "left: {$horizontal_position};" 
+        : "right: {$horizontal_position}";
 
     ?>
     <style id="scroll-to-top-css">
         .scroll-to-top {
             position: fixed;
-            bottom: <?php echo esc_attr($vertical_offset); ?>px;
-            <?php echo $position_style; ?>
+            bottom: <?php echo esc_attr($vertical_position); ?>;
+            <?php echo $position_style; ?>;
             width: <?php echo esc_attr($size); ?>px;
             height: <?php echo esc_attr($size); ?>px;
             background-color: <?php echo esc_attr($bg_color); ?>;

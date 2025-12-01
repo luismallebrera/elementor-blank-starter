@@ -20,9 +20,17 @@ if ( ! class_exists( 'Kirki' ) ) {
 class Elementor_Blank_Custom_Fonts {
 
 	/**
+	 * Default fonts from assets/fonts
+	 */
+	private $default_fonts = array();
+
+	/**
 	 * Constructor
 	 */
 	public function __construct() {
+		// Scan default fonts directory
+		$this->scan_default_fonts();
+		
 		// Enable font file uploads
 		add_filter( 'upload_mimes', array( $this, 'allow_font_uploads' ) );
 		
@@ -34,6 +42,94 @@ class Elementor_Blank_Custom_Fonts {
 		
 		// Add custom fonts to Kirki
 		add_filter( 'kirki_fonts_standard_fonts', array( $this, 'add_custom_fonts_to_kirki' ) );
+	}
+
+	/**
+	 * Scan assets/fonts directory for default fonts
+	 */
+	private function scan_default_fonts() {
+		$fonts_dir = get_template_directory() . '/assets/fonts';
+		
+		if ( ! is_dir( $fonts_dir ) ) {
+			return;
+		}
+
+		$fonts = array();
+		$scanned = scandir( $fonts_dir );
+
+		// Weight mapping from filename to numeric value
+		$weight_map = array(
+			'thin'        => '100',
+			'extralight'  => '200',
+			'light'       => '300',
+			'regular'     => '400',
+			'medium'      => '500',
+			'semibold'    => '600',
+			'bold'        => '700',
+			'extrabold'   => '800',
+			'black'       => '900',
+		);
+
+		foreach ( $scanned as $item ) {
+			if ( $item === '.' || $item === '..' ) {
+				continue;
+			}
+
+			$item_path = $fonts_dir . '/' . $item;
+
+			// If it's a directory, look for font files inside
+			if ( is_dir( $item_path ) ) {
+				$font_name = $item;
+				$font_files = scandir( $item_path );
+				
+				// Group files by weight
+				$variants = array();
+
+				foreach ( $font_files as $file ) {
+					$ext = strtolower( pathinfo( $file, PATHINFO_EXTENSION ) );
+					
+					if ( ! in_array( $ext, array( 'woff2', 'woff', 'ttf' ) ) ) {
+						continue;
+					}
+
+					// Extract weight from filename (e.g., ClashDisplay-Bold.woff2)
+					$filename_lower = strtolower( pathinfo( $file, PATHINFO_FILENAME ) );
+					
+					// Try to find weight in filename
+					$detected_weight = '400'; // Default to regular
+					foreach ( $weight_map as $weight_name => $weight_value ) {
+						if ( strpos( $filename_lower, $weight_name ) !== false ) {
+							$detected_weight = $weight_value;
+							break;
+						}
+					}
+
+					// Initialize variant array if not exists
+					if ( ! isset( $variants[ $detected_weight ] ) ) {
+						$variants[ $detected_weight ] = array(
+							'weight' => $detected_weight,
+							'woff2'  => '',
+							'woff'   => '',
+							'ttf'    => '',
+						);
+					}
+
+					// Add file URL to variant
+					$file_url = get_template_directory_uri() . '/assets/fonts/' . $font_name . '/' . $file;
+					$variants[ $detected_weight ][ $ext ] = $file_url;
+				}
+
+				// Add font with all its variants
+				if ( ! empty( $variants ) ) {
+					$fonts[ $font_name ] = array(
+						'name'     => $font_name,
+						'variants' => $variants,
+					);
+				}
+			}
+		}
+
+		$this->default_fonts = $fonts;
 	}
 
 	/**
@@ -176,7 +272,9 @@ class Elementor_Blank_Custom_Fonts {
 	 */
 	public function output_font_face_css() {
 		$css = '';
+		$has_custom_fonts = false;
 
+		// Check if there are custom fonts from Customizer
 		for ( $i = 1; $i <= 5; $i++ ) {
 			$font_name  = get_theme_mod( "custom_font_{$i}_name", '' );
 			$woff2_url  = get_theme_mod( "custom_font_{$i}_woff2", '' );
@@ -189,6 +287,8 @@ class Elementor_Blank_Custom_Fonts {
 			if ( empty( $font_name ) || ( empty( $woff2_url ) && empty( $woff_url ) && empty( $ttf_url ) ) ) {
 				continue;
 			}
+
+			$has_custom_fonts = true;
 
 			$css .= "@font-face {\n";
 			$css .= "  font-family: '" . esc_attr( $font_name ) . "';\n";
@@ -213,6 +313,38 @@ class Elementor_Blank_Custom_Fonts {
 			$css .= ";\n}\n\n";
 		}
 
+		// If no custom fonts, load default fonts from assets/fonts
+		if ( ! $has_custom_fonts && ! empty( $this->default_fonts ) ) {
+			foreach ( $this->default_fonts as $font ) {
+				// Loop through all variants (weights) of the font
+				if ( ! empty( $font['variants'] ) ) {
+					foreach ( $font['variants'] as $variant ) {
+						$css .= "@font-face {\n";
+						$css .= "  font-family: '" . esc_attr( $font['name'] ) . "';\n";
+						$css .= "  font-weight: " . esc_attr( $variant['weight'] ) . ";\n";
+						$css .= "  font-style: normal;\n";
+						$css .= "  font-display: swap;\n";
+						$css .= "  src: ";
+
+						$sources = array();
+
+						if ( ! empty( $variant['woff2'] ) ) {
+							$sources[] = "url('" . esc_url( $variant['woff2'] ) . "') format('woff2')";
+						}
+						if ( ! empty( $variant['woff'] ) ) {
+							$sources[] = "url('" . esc_url( $variant['woff'] ) . "') format('woff')";
+						}
+						if ( ! empty( $variant['ttf'] ) ) {
+							$sources[] = "url('" . esc_url( $variant['ttf'] ) . "') format('truetype')";
+						}
+
+						$css .= implode( ",\n       ", $sources );
+						$css .= ";\n}\n\n";
+					}
+				}
+			}
+		}
+
 		if ( ! empty( $css ) ) {
 			echo '<style id="custom-fonts-css">' . "\n" . $css . '</style>' . "\n";
 		}
@@ -222,6 +354,9 @@ class Elementor_Blank_Custom_Fonts {
 	 * Add custom fonts to Kirki font list
 	 */
 	public function add_custom_fonts_to_kirki( $standard_fonts ) {
+		$has_custom_fonts = false;
+
+		// Add fonts from Customizer
 		for ( $i = 1; $i <= 5; $i++ ) {
 			$font_name = get_theme_mod( "custom_font_{$i}_name", '' );
 			$woff2_url = get_theme_mod( "custom_font_{$i}_woff2", '' );
@@ -233,11 +368,23 @@ class Elementor_Blank_Custom_Fonts {
 				continue;
 			}
 
+			$has_custom_fonts = true;
+
 			// Add to standard fonts
 			$standard_fonts[ sanitize_title( $font_name ) ] = array(
 				'label' => $font_name,
 				'stack' => $font_name . ', sans-serif',
 			);
+		}
+
+		// If no custom fonts, add default fonts from assets/fonts
+		if ( ! $has_custom_fonts && ! empty( $this->default_fonts ) ) {
+			foreach ( $this->default_fonts as $font ) {
+				$standard_fonts[ sanitize_title( $font['name'] ) ] = array(
+					'label' => $font['name'],
+					'stack' => $font['name'] . ', sans-serif',
+				);
+			}
 		}
 
 		return $standard_fonts;

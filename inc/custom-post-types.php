@@ -9,6 +9,69 @@ if (!defined('ABSPATH')) {
 }
 
 /**
+ * Register Noticias Slider Post Type
+ */
+function elementor_blank_register_noticias_slider_cpt() {
+    if (!get_theme_mod('enable_noticias_slider_cpt', false)) {
+        return;
+    }
+
+    $labels = array(
+        'name'                  => _x('Noticias Slider', 'Post Type General Name', 'elementor-blank-starter'),
+        'singular_name'         => _x('Noticia Slider', 'Post Type Singular Name', 'elementor-blank-starter'),
+        'menu_name'             => __('Noticias Slider', 'elementor-blank-starter'),
+        'name_admin_bar'        => __('Noticia Slider', 'elementor-blank-starter'),
+        'archives'              => __('Noticias Slider Archives', 'elementor-blank-starter'),
+        'attributes'            => __('Noticia Attributes', 'elementor-blank-starter'),
+        'parent_item_colon'     => __('Parent Noticia:', 'elementor-blank-starter'),
+        'all_items'             => __('Todas las Noticias', 'elementor-blank-starter'),
+        'add_new_item'          => __('Añadir Nueva Noticia', 'elementor-blank-starter'),
+        'add_new'               => __('Añadir Nueva', 'elementor-blank-starter'),
+        'new_item'              => __('Nueva Noticia', 'elementor-blank-starter'),
+        'edit_item'             => __('Editar Noticia', 'elementor-blank-starter'),
+        'update_item'           => __('Actualizar Noticia', 'elementor-blank-starter'),
+        'view_item'             => __('Ver Noticia', 'elementor-blank-starter'),
+        'view_items'            => __('Ver Noticias', 'elementor-blank-starter'),
+        'search_items'          => __('Buscar Noticias', 'elementor-blank-starter'),
+        'not_found'             => __('No encontrado', 'elementor-blank-starter'),
+        'not_found_in_trash'    => __('No encontrado en papelera', 'elementor-blank-starter'),
+        'featured_image'        => __('Imagen destacada', 'elementor-blank-starter'),
+        'set_featured_image'    => __('Establecer imagen destacada', 'elementor-blank-starter'),
+        'remove_featured_image' => __('Eliminar imagen destacada', 'elementor-blank-starter'),
+        'use_featured_image'    => __('Usar como imagen destacada', 'elementor-blank-starter'),
+        'insert_into_item'      => __('Insertar en noticia', 'elementor-blank-starter'),
+        'uploaded_to_this_item' => __('Subido a esta noticia', 'elementor-blank-starter'),
+        'items_list'            => __('Lista de noticias', 'elementor-blank-starter'),
+        'items_list_navigation' => __('Navegación de lista de noticias', 'elementor-blank-starter'),
+        'filter_items_list'     => __('Filtrar lista de noticias', 'elementor-blank-starter'),
+    );
+
+    $args = array(
+        'label'                 => __('Noticia Slider', 'elementor-blank-starter'),
+        'description'           => __('Noticias para slider', 'elementor-blank-starter'),
+        'labels'                => $labels,
+        'supports'              => array('title', 'editor', 'thumbnail', 'excerpt', 'revisions', 'custom-fields'),
+        'hierarchical'          => false,
+        'public'                => true,
+        'show_ui'               => true,
+        'show_in_menu'          => true,
+        'menu_position'         => 6,
+        'menu_icon'             => 'dashicons-slides',
+        'show_in_admin_bar'     => true,
+        'show_in_nav_menus'     => true,
+        'can_export'            => true,
+        'has_archive'           => true,
+        'exclude_from_search'   => false,
+        'publicly_queryable'    => true,
+        'capability_type'       => 'post',
+        'show_in_rest'          => true,
+    );
+
+    register_post_type('noticias_slider', $args);
+}
+add_action('init', 'elementor_blank_register_noticias_slider_cpt', 0);
+
+/**
  * Register Portfolio Post Type
  */
 function elementor_blank_register_portfolio_cpt() {

@@ -360,7 +360,7 @@ if (class_exists('Kirki')) {
     /**
      * Typography Settings con Kirki
      */
-    require_once get_template_directory() . '/inc/typography-settings.php';
+    // require_once get_template_directory() . '/inc/typography-settings.php';
     
     /**
      * Menu Separator Settings con Kirki
