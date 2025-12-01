@@ -15,7 +15,7 @@ new \Kirki\Section(
     'scroll_indicator_section',
     [
         'title'       => esc_html__('Scroll Indicator', 'elementor-blank-starter'),
-        'panel'       => 'theme_options_panel',
+        'panel'       => 'theme_options',
         'priority'    => 50,
     ]
 );
@@ -102,17 +102,41 @@ new \Kirki\Field\Radio_Buttonset(
 /**
  * Horizontal Offset
  */
-new \Kirki\Field\Slider(
+new \Kirki\Field\Number(
     [
         'settings'    => 'scroll_indicator_horizontal_offset',
         'label'       => esc_html__('Horizontal Offset', 'elementor-blank-starter'),
-        'description' => esc_html__('Distance from edge in pixels', 'elementor-blank-starter'),
+        'description' => esc_html__('Distance from edge', 'elementor-blank-starter'),
         'section'     => 'scroll_indicator_section',
         'default'     => 0,
         'choices'     => [
             'min'  => 0,
-            'max'  => 100,
+            'max'  => 1000,
             'step' => 1,
+        ],
+        'active_callback' => [
+            [
+                'setting'  => 'enable_scroll_indicator',
+                'operator' => '==',
+                'value'    => true,
+            ],
+        ],
+    ]
+);
+
+/**
+ * Horizontal Offset Unit
+ */
+new \Kirki\Field\Radio_Buttonset(
+    [
+        'settings'    => 'scroll_indicator_horizontal_unit',
+        'label'       => esc_html__('Horizontal Unit', 'elementor-blank-starter'),
+        'section'     => 'scroll_indicator_section',
+        'default'     => 'px',
+        'choices'     => [
+            'px'  => 'px',
+            '%'   => '%',
+            'vw'  => 'vw',
         ],
         'active_callback' => [
             [
@@ -127,21 +151,129 @@ new \Kirki\Field\Slider(
 /**
  * Vertical Position
  */
-new \Kirki\Field\Slider(
+new \Kirki\Field\Number(
     [
         'settings'    => 'scroll_indicator_vertical_offset',
         'label'       => esc_html__('Vertical Position', 'elementor-blank-starter'),
-        'description' => esc_html__('Distance from top in pixels', 'elementor-blank-starter'),
+        'description' => esc_html__('Distance from bottom', 'elementor-blank-starter'),
         'section'     => 'scroll_indicator_section',
         'default'     => 0,
         'choices'     => [
             'min'  => 0,
-            'max'  => 500,
-            'step' => 5,
+            'max'  => 1000,
+            'step' => 1,
         ],
         'active_callback' => [
             [
                 'setting'  => 'enable_scroll_indicator',
+                'operator' => '==',
+                'value'    => true,
+            ],
+        ],
+    ]
+);
+
+/**
+ * Vertical Offset Unit
+ */
+new \Kirki\Field\Radio_Buttonset(
+    [
+        'settings'    => 'scroll_indicator_vertical_unit',
+        'label'       => esc_html__('Vertical Unit', 'elementor-blank-starter'),
+        'section'     => 'scroll_indicator_section',
+        'default'     => 'px',
+        'choices'     => [
+            'px'  => 'px',
+            '%'   => '%',
+            'vh'  => 'vh',
+        ],
+        'active_callback' => [
+            [
+                'setting'  => 'enable_scroll_indicator',
+                'operator' => '==',
+                'value'    => true,
+            ],
+        ],
+    ]
+);
+
+/**
+ * Custom Horizontal Position
+ */
+new \Kirki\Field\Checkbox_Switch(
+    [
+        'settings'    => 'scroll_indicator_horizontal_custom',
+        'label'       => esc_html__('Use Custom Horizontal Value', 'elementor-blank-starter'),
+        'description' => esc_html__('Enable to use calc() or custom CSS values', 'elementor-blank-starter'),
+        'section'     => 'scroll_indicator_section',
+        'default'     => false,
+        'active_callback' => [
+            [
+                'setting'  => 'enable_scroll_indicator',
+                'operator' => '==',
+                'value'    => true,
+            ],
+        ],
+    ]
+);
+
+new \Kirki\Field\Text(
+    [
+        'settings'    => 'scroll_indicator_horizontal_custom_value',
+        'label'       => esc_html__('Custom Horizontal Value', 'elementor-blank-starter'),
+        'description' => esc_html__('e.g., calc(2% - 2px) or 5vw', 'elementor-blank-starter'),
+        'section'     => 'scroll_indicator_section',
+        'default'     => 'calc(2% - 2px)',
+        'active_callback' => [
+            [
+                'setting'  => 'enable_scroll_indicator',
+                'operator' => '==',
+                'value'    => true,
+            ],
+            [
+                'setting'  => 'scroll_indicator_horizontal_custom',
+                'operator' => '==',
+                'value'    => true,
+            ],
+        ],
+    ]
+);
+
+/**
+ * Custom Vertical Position
+ */
+new \Kirki\Field\Checkbox_Switch(
+    [
+        'settings'    => 'scroll_indicator_vertical_custom',
+        'label'       => esc_html__('Use Custom Vertical Value', 'elementor-blank-starter'),
+        'description' => esc_html__('Enable to use calc() or custom CSS values', 'elementor-blank-starter'),
+        'section'     => 'scroll_indicator_section',
+        'default'     => false,
+        'active_callback' => [
+            [
+                'setting'  => 'enable_scroll_indicator',
+                'operator' => '==',
+                'value'    => true,
+            ],
+        ],
+    ]
+);
+
+new \Kirki\Field\Text(
+    [
+        'settings'    => 'scroll_indicator_vertical_custom_value',
+        'label'       => esc_html__('Custom Vertical Value', 'elementor-blank-starter'),
+        'description' => esc_html__('e.g., calc(50vh - 50px) or 10%', 'elementor-blank-starter'),
+        'section'     => 'scroll_indicator_section',
+        'default'     => 'calc(50vh - 50px)',
+        'active_callback' => [
+            [
+                'setting'  => 'enable_scroll_indicator',
+                'operator' => '==',
+                'value'    => true,
+            ],
+            [
+                'setting'  => 'scroll_indicator_vertical_custom',
                 'operator' => '==',
                 'value'    => true,
             ],
@@ -234,19 +366,40 @@ function elementor_blank_scroll_indicator_output() {
     $width = get_theme_mod('scroll_indicator_width', 4);
     $height = get_theme_mod('scroll_indicator_height', 100);
     $horizontal = get_theme_mod('scroll_indicator_horizontal', 'right');
-    $horizontal_offset = get_theme_mod('scroll_indicator_horizontal_offset', 0);
-    $vertical_offset = get_theme_mod('scroll_indicator_vertical_offset', 0);
     $border_radius = get_theme_mod('scroll_indicator_border_radius', 10);
-
-    $position_style = $horizontal === 'left' 
-        ? "left: {$horizontal_offset}px;" 
-        : "right: {$horizontal_offset}px;";
+    
+    // Check if using custom values
+    $use_horizontal_custom = get_theme_mod('scroll_indicator_horizontal_custom', false);
+    $use_vertical_custom = get_theme_mod('scroll_indicator_vertical_custom', false);
+    
+    // Horizontal position
+    if ($use_horizontal_custom) {
+        $horizontal_value = get_theme_mod('scroll_indicator_horizontal_custom_value', 'calc(2% - 2px)');
+        $position_style = $horizontal === 'left' 
+            ? "left: {$horizontal_value};" 
+            : "right: {$horizontal_value};";
+    } else {
+        $horizontal_offset = get_theme_mod('scroll_indicator_horizontal_offset', 0);
+        $horizontal_unit = get_theme_mod('scroll_indicator_horizontal_unit', 'px');
+        $position_style = $horizontal === 'left' 
+            ? "left: {$horizontal_offset}{$horizontal_unit};" 
+            : "right: {$horizontal_offset}{$horizontal_unit};";
+    }
+    
+    // Vertical position
+    if ($use_vertical_custom) {
+        $vertical_value = get_theme_mod('scroll_indicator_vertical_custom_value', 'calc(50vh - 50px)');
+    } else {
+        $vertical_offset = get_theme_mod('scroll_indicator_vertical_offset', 0);
+        $vertical_unit = get_theme_mod('scroll_indicator_vertical_unit', 'px');
+        $vertical_value = $vertical_offset . $vertical_unit;
+    }
 
     ?>
     <style id="scroll-indicator-css">
         .scroll-indicator {
             position: fixed;
-            top: <?php echo esc_attr($vertical_offset); ?>px;
+            bottom: <?php echo esc_attr($vertical_value); ?>;
             <?php echo $position_style; ?>
             width: <?php echo esc_attr($width); ?>px;
             height: <?php echo esc_attr($height); ?>px;

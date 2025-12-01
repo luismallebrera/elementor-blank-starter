@@ -386,6 +386,11 @@ if (class_exists('Kirki')) {
      * Scroll Indicator con Kirki
      */
     require_once get_template_directory() . '/inc/scroll-indicator.php';
+    
+    /**
+     * Scroll to Top Button con Kirki
+     */
+    require_once get_template_directory() . '/inc/scroll-to-top.php';
 } else {
     /**
      * Mostrar aviso si Kirki no está disponible
