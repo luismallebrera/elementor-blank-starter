@@ -371,32 +371,73 @@ function elementor_blank_scroll_to_top_output() {
         const showAfter = <?php echo esc_js($show_after); ?>;
         const animationSpeed = <?php echo esc_js($animation_speed); ?>;
         
+        // Custom easing function - easeInOutExpo
+        const easing = (x) => {
+            return x === 0
+                ? 0
+                : x === 1
+                ? 1
+                : x < 0.5
+                ? Math.pow(2, 20 * x - 10) / 2
+                : (2 - Math.pow(2, -20 * x + 10)) / 2;
+        };
+        
+        let lenisInstance = null;
+        
+        // Check for Lenis with a delay to ensure it's initialized
+        setTimeout(function() {
+            if (typeof window.lenis !== 'undefined') {
+                lenisInstance = window.lenis;
+                console.log('Lenis detected and ready');
+            }
+        }, 100);
+        
         // Show/hide button on scroll
         function toggleButton() {
-            if (window.pageYOffset > showAfter) {
+            const scrollPos = lenisInstance ? lenisInstance.scroll : window.pageYOffset;
+            if (scrollPos > showAfter) {
                 button.classList.add('visible');
             } else {
                 button.classList.remove('visible');
             }
         }
         
-        // Scroll to top with smooth animation
+        // Scroll to top
         button.addEventListener('click', function() {
-            const scrollDuration = animationSpeed;
-            const scrollStep = -window.pageYOffset / (scrollDuration / 15);
-            
-            const scrollInterval = setInterval(function() {
-                if (window.pageYOffset !== 0) {
-                    window.scrollBy(0, scrollStep);
-                } else {
-                    clearInterval(scrollInterval);
-                }
-            }, 15);
+            if (lenisInstance) {
+                // Use Lenis scrollTo with custom easing
+                lenisInstance.scrollTo(0, {
+                    duration: animationSpeed / 1000,
+                    easing: easing
+                });
+            } else {
+                // Fallback to standard smooth scroll
+                const scrollDuration = animationSpeed;
+                const scrollStep = -window.pageYOffset / (scrollDuration / 15);
+                
+                const scrollInterval = setInterval(function() {
+                    if (window.pageYOffset !== 0) {
+                        window.scrollBy(0, scrollStep);
+                    } else {
+                        clearInterval(scrollInterval);
+                    }
+                }, 15);
+            }
         });
         
         // Initialize and add listener
         toggleButton();
-        window.addEventListener('scroll', toggleButton, { passive: true });
+        
+        // Setup scroll listener after checking for Lenis
+        setTimeout(function() {
+            if (lenisInstance) {
+                // Listen to Lenis scroll event
+                lenisInstance.on('scroll', toggleButton);
+            } else {
+                // Standard scroll listener
+                window.addEventListener('scroll', toggleButton, { passive: true });
+            }
+        }, 150);
     });
     </script>
     <?php
