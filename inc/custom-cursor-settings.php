@@ -40,6 +40,26 @@ new \Kirki\Field\Checkbox_Switch(
 );
 
 /**
+ * Disable on Mobile
+ */
+new \Kirki\Field\Checkbox_Switch(
+	array(
+		'settings'        => 'disable_cursor_on_mobile',
+		'label'           => esc_html__( 'Disable on Mobile/Touch Devices', 'elementor-blank-starter' ),
+		'description'     => esc_html__( 'Automatically disable custom cursor on touch devices', 'elementor-blank-starter' ),
+		'section'         => 'custom_cursor_section',
+		'default'         => true,
+		'active_callback' => array(
+			array(
+				'setting'  => 'enable_custom_cursor',
+				'operator' => '==',
+				'value'    => true,
+			),
+		),
+	)
+);
+
+/**
  * Cursor Style
  */
 new \Kirki\Field\Radio_Buttonset(
@@ -218,6 +238,66 @@ new \Kirki\Field\Slider(
 );
 
 /**
+ * Dot Inertia
+ */
+new \Kirki\Field\Slider(
+	array(
+		'settings'        => 'cursor_dot_inertia',
+		'label'           => esc_html__( 'Dot Inertia/Delay', 'elementor-blank-starter' ),
+		'description'     => esc_html__( 'Smoothness of dot following (0 = instant, higher = more lag)', 'elementor-blank-starter' ),
+		'section'         => 'custom_cursor_section',
+		'default'         => 0.15,
+		'choices'         => array(
+			'min'  => 0,
+			'max'  => 0.5,
+			'step' => 0.05,
+		),
+		'active_callback' => array(
+			array(
+				'setting'  => 'enable_custom_cursor',
+				'operator' => '==',
+				'value'    => true,
+			),
+			array(
+				'setting'  => 'cursor_style',
+				'operator' => 'in',
+				'value'    => array( 'dot', 'both' ),
+			),
+		),
+	)
+);
+
+/**
+ * Ring Inertia
+ */
+new \Kirki\Field\Slider(
+	array(
+		'settings'        => 'cursor_ring_inertia',
+		'label'           => esc_html__( 'Ring Inertia/Delay', 'elementor-blank-starter' ),
+		'description'     => esc_html__( 'Smoothness of ring following (0 = instant, higher = more lag)', 'elementor-blank-starter' ),
+		'section'         => 'custom_cursor_section',
+		'default'         => 0.25,
+		'choices'         => array(
+			'min'  => 0,
+			'max'  => 0.5,
+			'step' => 0.05,
+		),
+		'active_callback' => array(
+			array(
+				'setting'  => 'enable_custom_cursor',
+				'operator' => '==',
+				'value'    => true,
+			),
+			array(
+				'setting'  => 'cursor_style',
+				'operator' => 'in',
+				'value'    => array( 'ring', 'both' ),
+			),
+		),
+	)
+);
+
+/**
  * Blend Mode
  */
 new \Kirki\Field\Select(
@@ -332,6 +412,7 @@ function elementor_blank_custom_cursor_enqueue() {
 		return;
 	}
 
+	$disable_on_mobile = get_theme_mod( 'disable_cursor_on_mobile', true );
 	$cursor_style = get_theme_mod( 'cursor_style', 'dot' );
 	$cursor_size = get_theme_mod( 'cursor_size', 8 );
 	$cursor_color = get_theme_mod( 'cursor_color', '#000000' );
@@ -342,6 +423,8 @@ function elementor_blank_custom_cursor_enqueue() {
 	$hover_scale = get_theme_mod( 'cursor_hover_scale', 1.5 );
 	$animation_speed = get_theme_mod( 'cursor_animation_speed', 200 );
 	$blend_mode = get_theme_mod( 'cursor_blend_mode', 'normal' );
+	$dot_inertia = get_theme_mod( 'cursor_dot_inertia', 0.15 );
+	$ring_inertia = get_theme_mod( 'cursor_ring_inertia', 0.25 );
 
 	// Add inline CSS
 	$css = "
@@ -360,7 +443,7 @@ function elementor_blank_custom_cursor_enqueue() {
 		border-radius: 50%;
 		pointer-events: none;
 		z-index: 99999;
-		transition: transform {$animation_speed}ms ease, opacity 0.3s ease;
+		transition: transform {$animation_speed}ms ease, opacity {$animation_speed}ms ease;
 		mix-blend-mode: {$blend_mode};
 	}
 	
@@ -375,17 +458,16 @@ function elementor_blank_custom_cursor_enqueue() {
 		border-radius: 50%;
 		pointer-events: none;
 		z-index: 99998;
-		transition: transform {$animation_speed}ms ease, opacity 0.3s ease, background-color {$animation_speed}ms ease;
+		transition: transform {$animation_speed}ms ease, opacity {$animation_speed}ms ease, background-color {$animation_speed}ms ease;
 		mix-blend-mode: {$blend_mode};
 	}
 	
 	.custom-cursor-ring.hover {
 		background-color: {$ring_fill_hover};
+		transform: scale({$hover_scale});
 	}
 	
-	.custom-cursor-dot.hover,
-	.custom-cursor-ring.hover {
-		transform: scale({$hover_scale});
+	.custom-cursor-dot.hover {
 		opacity: 0.7;
 	}
 	
@@ -399,11 +481,25 @@ function elementor_blank_custom_cursor_enqueue() {
 	echo $css;
 
 	// Add inline JavaScript
+	$disable_mobile_check = '';
+	if ( $disable_on_mobile ) {
+		$disable_mobile_check = "
+		// Check if device is touch-enabled
+		if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+			return; // Exit and don't initialize cursor on touch devices
+		}
+		";
+	}
+
 	$js = "
 	<script id='custom-cursor-script'>
 	document.addEventListener('DOMContentLoaded', function() {
+		" . $disable_mobile_check . "
+		
 		const cursorStyle = '" . esc_js( $cursor_style ) . "';
 		const body = document.body;
+		const dotInertia = " . esc_js( $dot_inertia ) . ";
+		const ringInertia = " . esc_js( $ring_inertia ) . ";
 		
 		// Create cursor elements
 		if (cursorStyle === 'dot' || cursorStyle === 'both') {
@@ -421,21 +517,42 @@ function elementor_blank_custom_cursor_enqueue() {
 		const dot = document.querySelector('.custom-cursor-dot');
 		const ring = document.querySelector('.custom-cursor-ring');
 		
-		// Mouse move
+		// Mouse position
+		let mouseX = 0;
+		let mouseY = 0;
+		let dotX = 0;
+		let dotY = 0;
+		let ringX = 0;
+		let ringY = 0;
+		
+		// Update mouse position
 		document.addEventListener('mousemove', function(e) {
-			const x = e.clientX;
-			const y = e.clientY;
-			
-			if (dot) {
-				dot.style.left = (x - " . ($cursor_size / 2) . ") + 'px';
-				dot.style.top = (y - " . ($cursor_size / 2) . ") + 'px';
-			}
-			
-			if (ring) {
-				ring.style.left = (x - " . ($ring_size / 2) . ") + 'px';
-				ring.style.top = (y - " . ($ring_size / 2) . ") + 'px';
-			}
+			mouseX = e.clientX;
+			mouseY = e.clientY;
 		});
+		
+		// Animate with inertia
+		function animateCursor() {
+			// Dot with its own inertia
+			if (dot) {
+				dotX += (mouseX - dotX) * (1 - dotInertia);
+				dotY += (mouseY - dotY) * (1 - dotInertia);
+				dot.style.left = (dotX - " . ($cursor_size / 2) . ") + 'px';
+				dot.style.top = (dotY - " . ($cursor_size / 2) . ") + 'px';
+			}
+			
+			// Ring with its own inertia
+			if (ring) {
+				ringX += (mouseX - ringX) * (1 - ringInertia);
+				ringY += (mouseY - ringY) * (1 - ringInertia);
+				ring.style.left = (ringX - " . ($ring_size / 2) . ") + 'px';
+				ring.style.top = (ringY - " . ($ring_size / 2) . ") + 'px';
+			}
+			
+			requestAnimationFrame(animateCursor);
+		}
+		
+		animateCursor();
 		
 		// Hover effects
 		const hoverElements = document.querySelectorAll('a, button, [onclick], input[type=\"button\"], input[type=\"submit\"]');
