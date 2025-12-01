@@ -383,6 +383,11 @@ if (class_exists('Kirki')) {
     require_once get_template_directory() . '/inc/custom-fonts-manager.php';
     
     /**
+     * Elementor Custom Fonts Integration
+     */
+    require_once get_template_directory() . '/inc/elementor-custom-fonts.php';
+    
+    /**
      * Scroll Indicator con Kirki
      */
     require_once get_template_directory() . '/inc/scroll-indicator.php';
