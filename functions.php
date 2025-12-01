@@ -368,6 +368,11 @@ if (class_exists('Kirki')) {
     require_once get_template_directory() . '/inc/menu-separator-settings.php';
     
     /**
+     * Custom Cursor Settings con Kirki
+     */
+    require_once get_template_directory() . '/inc/custom-cursor-settings.php';
+    
+    /**
      * Scrollbar Customizer con Kirki
      */
     require_once get_template_directory() . '/inc/scrollbar-customizer.php';
