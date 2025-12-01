@@ -246,6 +246,85 @@ new \Kirki\Field\Select(
 );
 
 /**
+ * Divider
+ */
+new \Kirki\Field\Custom(
+	array(
+		'settings' => 'cursor_fill_divider',
+		'section'  => 'custom_cursor_section',
+		'default'  => '<hr style="margin: 30px 0; border: 0; border-top: 2px solid #ddd;"><h3 style="margin: 10px 0;">' . esc_html__( 'Fill Settings', 'elementor-blank-starter' ) . '</h3>',
+		'active_callback' => array(
+			array(
+				'setting'  => 'enable_custom_cursor',
+				'operator' => '==',
+				'value'    => true,
+			),
+			array(
+				'setting'  => 'cursor_style',
+				'operator' => 'in',
+				'value'    => array( 'ring', 'both' ),
+			),
+		),
+	)
+);
+
+/**
+ * Ring Fill Color
+ */
+new \Kirki\Field\Color(
+	array(
+		'settings'        => 'cursor_ring_fill_color',
+		'label'           => esc_html__( 'Ring Fill Color', 'elementor-blank-starter' ),
+		'description'     => esc_html__( 'Background fill color for the ring', 'elementor-blank-starter' ),
+		'section'         => 'custom_cursor_section',
+		'default'         => 'rgba(0,0,0,0)',
+		'choices'         => array(
+			'alpha' => true,
+		),
+		'active_callback' => array(
+			array(
+				'setting'  => 'enable_custom_cursor',
+				'operator' => '==',
+				'value'    => true,
+			),
+			array(
+				'setting'  => 'cursor_style',
+				'operator' => 'in',
+				'value'    => array( 'ring', 'both' ),
+			),
+		),
+	)
+);
+
+/**
+ * Ring Fill Hover Color
+ */
+new \Kirki\Field\Color(
+	array(
+		'settings'        => 'cursor_ring_fill_hover_color',
+		'label'           => esc_html__( 'Ring Fill Hover Color', 'elementor-blank-starter' ),
+		'description'     => esc_html__( 'Background fill color when hovering over links', 'elementor-blank-starter' ),
+		'section'         => 'custom_cursor_section',
+		'default'         => 'rgba(0,0,0,0.1)',
+		'choices'         => array(
+			'alpha' => true,
+		),
+		'active_callback' => array(
+			array(
+				'setting'  => 'enable_custom_cursor',
+				'operator' => '==',
+				'value'    => true,
+			),
+			array(
+				'setting'  => 'cursor_style',
+				'operator' => 'in',
+				'value'    => array( 'ring', 'both' ),
+			),
+		),
+	)
+);
+
+/**
  * Enqueue Custom Cursor Scripts and Styles
  */
 function elementor_blank_custom_cursor_enqueue() {
@@ -258,6 +337,8 @@ function elementor_blank_custom_cursor_enqueue() {
 	$cursor_color = get_theme_mod( 'cursor_color', '#000000' );
 	$ring_size = get_theme_mod( 'cursor_ring_size', 40 );
 	$ring_border = get_theme_mod( 'cursor_ring_border', 2 );
+	$ring_fill = get_theme_mod( 'cursor_ring_fill_color', 'rgba(0,0,0,0)' );
+	$ring_fill_hover = get_theme_mod( 'cursor_ring_fill_hover_color', 'rgba(0,0,0,0.1)' );
 	$hover_scale = get_theme_mod( 'cursor_hover_scale', 1.5 );
 	$animation_speed = get_theme_mod( 'cursor_animation_speed', 200 );
 	$blend_mode = get_theme_mod( 'cursor_blend_mode', 'normal' );
@@ -290,11 +371,16 @@ function elementor_blank_custom_cursor_enqueue() {
 		width: {$ring_size}px;
 		height: {$ring_size}px;
 		border: {$ring_border}px solid {$cursor_color};
+		background-color: {$ring_fill};
 		border-radius: 50%;
 		pointer-events: none;
 		z-index: 99998;
-		transition: transform {$animation_speed}ms ease, opacity 0.3s ease;
+		transition: transform {$animation_speed}ms ease, opacity 0.3s ease, background-color {$animation_speed}ms ease;
 		mix-blend-mode: {$blend_mode};
+	}
+	
+	.custom-cursor-ring.hover {
+		background-color: {$ring_fill_hover};
 	}
 	
 	.custom-cursor-dot.hover,
