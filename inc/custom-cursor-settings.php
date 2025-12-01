@@ -40,6 +40,26 @@ new \Kirki\Field\Checkbox_Switch(
 );
 
 /**
+ * Hide Default Cursor
+ */
+new \Kirki\Field\Checkbox_Switch(
+	array(
+		'settings'        => 'hide_default_cursor',
+		'label'           => esc_html__( 'Hide Default Cursor', 'elementor-blank-starter' ),
+		'description'     => esc_html__( 'Hide the default system cursor when custom cursor is active', 'elementor-blank-starter' ),
+		'section'         => 'custom_cursor_section',
+		'default'         => true,
+		'active_callback' => array(
+			array(
+				'setting'  => 'enable_custom_cursor',
+				'operator' => '==',
+				'value'    => true,
+			),
+		),
+	)
+);
+
+/**
  * Disable on Mobile
  */
 new \Kirki\Field\Checkbox_Switch(
@@ -413,6 +433,7 @@ function elementor_blank_custom_cursor_enqueue() {
 	}
 
 	$disable_on_mobile = get_theme_mod( 'disable_cursor_on_mobile', true );
+	$hide_default = get_theme_mod( 'hide_default_cursor', true );
 	$cursor_style = get_theme_mod( 'cursor_style', 'dot' );
 	$cursor_size = get_theme_mod( 'cursor_size', 8 );
 	$cursor_color = get_theme_mod( 'cursor_color', '#000000' );
@@ -427,10 +448,12 @@ function elementor_blank_custom_cursor_enqueue() {
 	$ring_inertia = get_theme_mod( 'cursor_ring_inertia', 0.25 );
 
 	// Add inline CSS
+	$cursor_none = $hide_default ? 'cursor: none !important;' : '';
+	
 	$css = "
 	<style id='custom-cursor-styles'>
 	* {
-		cursor: none !important;
+		{$cursor_none}
 	}
 	
 	.custom-cursor-dot {
