@@ -9,6 +9,116 @@ if (!defined('ABSPATH')) {
 }
 
 /**
+ * Register GDRs Post Type
+ */
+function elementor_blank_register_gdrs_cpt() {
+    if (!get_theme_mod('enable_gdrs_cpt', false)) {
+        return;
+    }
+
+    $labels = array(
+        'name'                  => _x('GDRs', 'Post Type General Name', 'elementor-blank-starter'),
+        'singular_name'         => _x('GDR', 'Post Type Singular Name', 'elementor-blank-starter'),
+        'menu_name'             => __('GDRs', 'elementor-blank-starter'),
+        'name_admin_bar'        => __('GDR', 'elementor-blank-starter'),
+        'archives'              => __('GDRs Archives', 'elementor-blank-starter'),
+        'attributes'            => __('GDR Attributes', 'elementor-blank-starter'),
+        'parent_item_colon'     => __('Parent GDR:', 'elementor-blank-starter'),
+        'all_items'             => __('Todos los GDRs', 'elementor-blank-starter'),
+        'add_new_item'          => __('Añadir Nuevo GDR', 'elementor-blank-starter'),
+        'add_new'               => __('Añadir Nuevo', 'elementor-blank-starter'),
+        'new_item'              => __('Nuevo GDR', 'elementor-blank-starter'),
+        'edit_item'             => __('Editar GDR', 'elementor-blank-starter'),
+        'update_item'           => __('Actualizar GDR', 'elementor-blank-starter'),
+        'view_item'             => __('Ver GDR', 'elementor-blank-starter'),
+        'view_items'            => __('Ver GDRs', 'elementor-blank-starter'),
+        'search_items'          => __('Buscar GDRs', 'elementor-blank-starter'),
+        'not_found'             => __('No encontrado', 'elementor-blank-starter'),
+        'not_found_in_trash'    => __('No encontrado en papelera', 'elementor-blank-starter'),
+        'featured_image'        => __('Imagen destacada', 'elementor-blank-starter'),
+        'set_featured_image'    => __('Establecer imagen destacada', 'elementor-blank-starter'),
+        'remove_featured_image' => __('Eliminar imagen destacada', 'elementor-blank-starter'),
+        'use_featured_image'    => __('Usar como imagen destacada', 'elementor-blank-starter'),
+        'insert_into_item'      => __('Insertar en GDR', 'elementor-blank-starter'),
+        'uploaded_to_this_item' => __('Subido a este GDR', 'elementor-blank-starter'),
+        'items_list'            => __('Lista de GDRs', 'elementor-blank-starter'),
+        'items_list_navigation' => __('Navegación de lista de GDRs', 'elementor-blank-starter'),
+        'filter_items_list'     => __('Filtrar lista de GDRs', 'elementor-blank-starter'),
+    );
+
+    $args = array(
+        'label'                 => __('GDR', 'elementor-blank-starter'),
+        'description'           => __('Grupos de Desarrollo Rural', 'elementor-blank-starter'),
+        'labels'                => $labels,
+        'supports'              => array('title', 'editor', 'thumbnail', 'excerpt', 'revisions', 'custom-fields'),
+        'taxonomies'            => array('provincia'),
+        'hierarchical'          => false,
+        'public'                => true,
+        'show_ui'               => true,
+        'show_in_menu'          => true,
+        'menu_position'         => 7,
+        'menu_icon'             => 'dashicons-location-alt',
+        'show_in_admin_bar'     => true,
+        'show_in_nav_menus'     => true,
+        'can_export'            => true,
+        'has_archive'           => true,
+        'exclude_from_search'   => false,
+        'publicly_queryable'    => true,
+        'capability_type'       => 'post',
+        'show_in_rest'          => true,
+    );
+
+    register_post_type('gdrs', $args);
+}
+add_action('init', 'elementor_blank_register_gdrs_cpt', 0);
+
+/**
+ * Register Provincia Taxonomy for GDRs
+ */
+function elementor_blank_register_provincia_taxonomy() {
+    if (!get_theme_mod('enable_gdrs_cpt', false)) {
+        return;
+    }
+
+    $labels = array(
+        'name'                       => _x('Provincias', 'Taxonomy General Name', 'elementor-blank-starter'),
+        'singular_name'              => _x('Provincia', 'Taxonomy Singular Name', 'elementor-blank-starter'),
+        'menu_name'                  => __('Provincias', 'elementor-blank-starter'),
+        'all_items'                  => __('Todas las Provincias', 'elementor-blank-starter'),
+        'parent_item'                => __('Provincia Padre', 'elementor-blank-starter'),
+        'parent_item_colon'          => __('Provincia Padre:', 'elementor-blank-starter'),
+        'new_item_name'              => __('Nueva Provincia', 'elementor-blank-starter'),
+        'add_new_item'               => __('Añadir Nueva Provincia', 'elementor-blank-starter'),
+        'edit_item'                  => __('Editar Provincia', 'elementor-blank-starter'),
+        'update_item'                => __('Actualizar Provincia', 'elementor-blank-starter'),
+        'view_item'                  => __('Ver Provincia', 'elementor-blank-starter'),
+        'separate_items_with_commas' => __('Separar provincias con comas', 'elementor-blank-starter'),
+        'add_or_remove_items'        => __('Añadir o eliminar provincias', 'elementor-blank-starter'),
+        'choose_from_most_used'      => __('Elegir de las más usadas', 'elementor-blank-starter'),
+        'popular_items'              => __('Provincias Populares', 'elementor-blank-starter'),
+        'search_items'               => __('Buscar Provincias', 'elementor-blank-starter'),
+        'not_found'                  => __('No encontrado', 'elementor-blank-starter'),
+        'no_terms'                   => __('No hay provincias', 'elementor-blank-starter'),
+        'items_list'                 => __('Lista de provincias', 'elementor-blank-starter'),
+        'items_list_navigation'      => __('Navegación de lista de provincias', 'elementor-blank-starter'),
+    );
+
+    $args = array(
+        'labels'                     => $labels,
+        'hierarchical'               => true,
+        'public'                     => true,
+        'show_ui'                    => true,
+        'show_admin_column'          => true,
+        'show_in_nav_menus'          => true,
+        'show_tagcloud'              => true,
+        'show_in_rest'               => true,
+    );
+
+    register_taxonomy('provincia', array('gdrs'), $args);
+}
+add_action('init', 'elementor_blank_register_provincia_taxonomy', 0);
+
+/**
  * Register Noticias Slider Post Type
  */
 function elementor_blank_register_noticias_slider_cpt() {

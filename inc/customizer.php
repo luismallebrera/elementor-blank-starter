@@ -668,6 +668,23 @@ new \Kirki\Field\Checkbox_Switch(
 );
 
 /**
+ * Enable GDRs CPT
+ */
+new \Kirki\Field\Checkbox_Switch(
+    array(
+        'settings'    => 'enable_gdrs_cpt',
+        'label'       => esc_html__('Enable GDRs', 'elementor-blank-starter'),
+        'description' => esc_html__('Enable GDRs custom post type with Provincias taxonomy.', 'elementor-blank-starter'),
+        'section'     => 'custom_post_types_section',
+        'default'     => false,
+        'choices'     => array(
+            'on'  => esc_html__('Enabled', 'elementor-blank-starter'),
+            'off' => esc_html__('Disabled', 'elementor-blank-starter'),
+        ),
+    )
+);
+
+/**
  * Enable Grid Line
  */
 new \Kirki\Field\Checkbox_Switch(
