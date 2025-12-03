@@ -97,11 +97,15 @@ add_action( 'admin_head', 'elementor_blank_featured_image_column_width' );
  * Add JavaScript for media uploader
  */
 function elementor_blank_featured_image_column_js() {
-	global $pagenow;
+	global $pagenow, $typenow;
 	
-	if ( $pagenow !== 'edit.php' && $pagenow !== 'upload.php' ) {
+	// Only load on post list screens
+	if ( $pagenow !== 'edit.php' ) {
 		return;
 	}
+	
+	// Enqueue media uploader
+	wp_enqueue_media();
 	
 	?>
 	<script>
