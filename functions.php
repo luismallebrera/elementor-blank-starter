@@ -411,6 +411,11 @@ if (class_exists('Kirki')) {
      * Featured Image Admin Column
      */
     require_once get_template_directory() . '/inc/featured-image-column.php';
+    
+    /**
+     * Cleanup Old Meta Fields Tool
+     */
+    require_once get_template_directory() . '/inc/cleanup-old-meta.php';
 } else {
     /**
      * Mostrar aviso si Kirki no está disponible
