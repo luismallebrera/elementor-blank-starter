@@ -112,6 +112,11 @@ function elementor_blank_register_provincia_taxonomy() {
         'show_in_nav_menus'          => true,
         'show_tagcloud'              => true,
         'show_in_rest'               => true,
+        'rewrite'                    => array(
+            'slug'                   => 'provincia',
+            'with_front'             => false,
+            'hierarchical'           => true,
+        ),
     );
 
     register_taxonomy('provincia', array('gdrs'), $args);
@@ -158,6 +163,11 @@ function elementor_blank_register_municipio_taxonomy() {
         'show_in_nav_menus'          => true,
         'show_tagcloud'              => true,
         'show_in_rest'               => true,
+        'rewrite'                    => array(
+            'slug'                   => 'municipio',
+            'with_front'             => false,
+            'hierarchical'           => false,
+        ),
     );
 
     register_taxonomy('municipio', array('gdrs'), $args);
