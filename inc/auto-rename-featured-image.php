@@ -11,62 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Rename featured image on upload
- */
-function elementor_blank_rename_featured_image( $file ) {
-	// Only process if we're setting a featured image
-	if ( ! isset( $_POST['post_id'] ) || empty( $_POST['post_id'] ) ) {
-		return $file;
-	}
-
-	$post_id = absint( $_POST['post_id'] );
-	
-	// Get the post
-	$post = get_post( $post_id );
-	
-	if ( ! $post ) {
-		return $file;
-	}
-
-	// Get post title and sanitize it
-	$post_title = $post->post_title;
-	
-	if ( empty( $post_title ) ) {
-		return $file;
-	}
-
-	// Remove accents
-	$post_title = remove_accents( $post_title );
-	
-	// Convert to lowercase
-	$post_title = strtolower( $post_title );
-	
-	// Replace spaces with hyphens
-	$post_title = str_replace( ' ', '-', $post_title );
-	
-	// Remove special characters except hyphens
-	$post_title = preg_replace( '/[^a-z0-9\-]/', '', $post_title );
-	
-	// Remove multiple consecutive hyphens
-	$post_title = preg_replace( '/-+/', '-', $post_title );
-	
-	// Remove leading and trailing hyphens
-	$post_title = trim( $post_title, '-' );
-
-	// Get file extension
-	$file_ext = pathinfo( $file['name'], PATHINFO_EXTENSION );
-	
-	// Create new filename
-	$new_filename = $post_title . '.' . $file_ext;
-	
-	// Update the filename
-	$file['name'] = $new_filename;
-
-	return $file;
-}
-add_filter( 'wp_handle_upload_prefilter', 'elementor_blank_rename_featured_image', 10, 1 );
-
-/**
  * Rename existing featured image when post title changes
  */
 function elementor_blank_rename_featured_on_save( $post_id, $post, $update ) {
