@@ -45,8 +45,8 @@ function elementor_blank_display_featured_image_column( $column_name, $post_id )
 		$thumbnail_id = get_post_thumbnail_id( $post_id );
 		
 		if ( $thumbnail_id ) {
-			$thumbnail = wp_get_attachment_image( $thumbnail_id, array( 150, 150 ), false, array(
-				'style' => 'width: 150px; height: auto; max-height: 150px; cursor: pointer; border-radius: 4px;'
+			$thumbnail = wp_get_attachment_image( $thumbnail_id, array( 100, 100 ), false, array(
+				'style' => 'width: 100px; height: auto; max-height: 100px; cursor: pointer; border-radius: 4px;'
 			) );
 			
 			echo '<div class="featured-image-wrapper" data-post-id="' . esc_attr( $post_id ) . '">';
@@ -74,7 +74,7 @@ add_action( 'manage_pages_custom_column', 'elementor_blank_display_featured_imag
 function elementor_blank_featured_image_column_width() {
 	echo '<style>
 		.column-featured_image {
-			width: 170px;
+			width: 120px;
 			text-align: center;
 		}
 		.featured-image-wrapper {
