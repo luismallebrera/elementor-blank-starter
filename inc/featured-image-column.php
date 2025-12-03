@@ -94,30 +94,50 @@ function elementor_blank_featured_image_column_width() {
 add_action( 'admin_head', 'elementor_blank_featured_image_column_width' );
 
 /**
+ * Enqueue media uploader
+ */
+function elementor_blank_enqueue_media() {
+	global $pagenow;
+	
+	if ( $pagenow === 'edit.php' ) {
+		wp_enqueue_media();
+	}
+}
+add_action( 'admin_enqueue_scripts', 'elementor_blank_enqueue_media' );
+
+/**
  * Add JavaScript for media uploader
  */
 function elementor_blank_featured_image_column_js() {
-	global $pagenow, $typenow;
+	global $pagenow;
 	
 	// Only load on post list screens
 	if ( $pagenow !== 'edit.php' ) {
 		return;
 	}
 	
-	// Enqueue media uploader
-	wp_enqueue_media();
-	
 	?>
 	<script>
 	jQuery(document).ready(function($) {
+		console.log('Featured image column script loaded');
+		
 		var mediaUploader;
 		var currentPostId;
 		
 		// Handle click on featured image or "Set Image" button
 		$(document).on('click', '.change-featured-image, .set-featured-image', function(e) {
 			e.preventDefault();
+			console.log('Click detected on featured image');
 			
 			currentPostId = $(this).data('post-id');
+			console.log('Post ID:', currentPostId);
+			
+			// Check if wp.media is available
+			if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
+				console.error('wp.media is not available');
+				alert('Media uploader not loaded. Please refresh the page.');
+				return;
+			}
 			
 			// If the uploader object has already been created, reopen it
 			if (mediaUploader) {

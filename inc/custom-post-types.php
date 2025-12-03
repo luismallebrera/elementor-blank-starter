@@ -496,57 +496,6 @@ function elementor_blank_register_portfolio_tag() {
 add_action('init', 'elementor_blank_register_portfolio_tag', 0);
 
 /**
- * Add thumbnail column to Portfolio admin list
- */
-function elementor_blank_portfolio_columns($columns) {
-    $new_columns = array();
-    foreach ($columns as $key => $value) {
-        if ($key == 'title') {
-            $new_columns['thumbnail'] = __('Thumbnail', 'elementor-blank-starter');
-        }
-        $new_columns[$key] = $value;
-    }
-    return $new_columns;
-}
-add_filter('manage_portfolio_posts_columns', 'elementor_blank_portfolio_columns');
-
-/**
- * Display thumbnail in Portfolio admin list
- */
-function elementor_blank_portfolio_column_content($column_name, $post_id) {
-    if ($column_name == 'thumbnail') {
-        $thumbnail = get_the_post_thumbnail($post_id, array(60, 60));
-        echo $thumbnail ? $thumbnail : '—';
-    }
-}
-add_action('manage_portfolio_posts_custom_column', 'elementor_blank_portfolio_column_content', 10, 2);
-
-/**
- * Make thumbnail column sortable (optional)
- */
-function elementor_blank_portfolio_sortable_columns($columns) {
-    $columns['thumbnail'] = 'thumbnail';
-    return $columns;
-}
-add_filter('manage_edit-portfolio_sortable_columns', 'elementor_blank_portfolio_sortable_columns');
-
-/**
- * Set custom width for thumbnail column
- */
-function elementor_blank_portfolio_admin_css() {
-    echo '<style>
-        .column-thumbnail {
-            width: 80px !important;
-        }
-        .column-thumbnail img {
-            max-width: 60px;
-            height: auto;
-        }
-    </style>';
-}
-add_action('admin_head-edit.php', 'elementor_blank_portfolio_admin_css');
-
-/**
  * Register Proyectos Post Type
  */
 function elementor_blank_register_proyectos_cpt() {
