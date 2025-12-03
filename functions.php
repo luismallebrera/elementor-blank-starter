@@ -401,6 +401,11 @@ if (class_exists('Kirki')) {
      * Breadcrumbs con Kirki
      */
     require_once get_template_directory() . '/inc/breadcrumbs.php';
+    
+    /**
+     * Auto Rename Featured Image
+     */
+    require_once get_template_directory() . '/inc/auto-rename-featured-image.php';
 } else {
     /**
      * Mostrar aviso si Kirki no está disponible
