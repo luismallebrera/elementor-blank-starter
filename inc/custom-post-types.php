@@ -1007,17 +1007,17 @@ add_action('add_meta_boxes', 'elementor_blank_add_portfolio_title_color_meta_box
 function elementor_blank_portfolio_title_color_callback($post) {
     wp_nonce_field('portfolio_title_color_nonce', 'portfolio_title_color_nonce_field');
     $value = get_post_meta($post->ID, '_portfolio_title_color', true);
-    $value = $value ? $value : '#313C59';
+    $value = $value ? $value : 'dark';
     ?>
     <div class="portfolio-title-color-wrapper">
         <label>
-            <input type="radio" name="portfolio_title_color" value="#313C59" <?php checked($value, '#313C59'); ?>>
+            <input type="radio" name="portfolio_title_color" value="dark" <?php checked($value, 'dark'); ?>>
             <span style="display: inline-block; width: 20px; height: 20px; background-color: #313C59; vertical-align: middle; margin-right: 5px; border: 1px solid #ccc;"></span>
             <?php _e('DARK', 'elementor-blank-starter'); ?>
         </label>
         <br><br>
         <label>
-            <input type="radio" name="portfolio_title_color" value="#ffffff" <?php checked($value, '#ffffff'); ?>>
+            <input type="radio" name="portfolio_title_color" value="light" <?php checked($value, 'light'); ?>>
             <span style="display: inline-block; width: 20px; height: 20px; background-color: #ffffff; vertical-align: middle; margin-right: 5px; border: 1px solid #ccc;"></span>
             <?php _e('LIGHT', 'elementor-blank-starter'); ?>
         </label>
@@ -1040,7 +1040,12 @@ function elementor_blank_save_portfolio_title_color($post_id) {
     }
     
     if (isset($_POST['portfolio_title_color'])) {
-        update_post_meta($post_id, '_portfolio_title_color', sanitize_hex_color($_POST['portfolio_title_color']));
+        $allowed_values = array('dark', 'light');
+        $color_value = sanitize_text_field($_POST['portfolio_title_color']);
+        
+        if (in_array($color_value, $allowed_values)) {
+            update_post_meta($post_id, '_portfolio_title_color', $color_value);
+        }
     }
 }
 add_action('save_post_portfolio', 'elementor_blank_save_portfolio_title_color');
