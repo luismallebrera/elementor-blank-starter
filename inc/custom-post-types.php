@@ -165,6 +165,84 @@ function elementor_blank_register_municipio_taxonomy() {
 add_action('init', 'elementor_blank_register_municipio_taxonomy', 0);
 
 /**
+ * Replace excerpt with WYSIWYG Description field for GDRs
+ */
+function elementor_blank_add_gdrs_description_meta_box() {
+    if (!get_theme_mod('enable_gdrs_cpt', false)) {
+        return;
+    }
+    
+    remove_meta_box('postexcerpt', 'gdrs', 'normal');
+    add_meta_box(
+        'gdrs_description',
+        __('Descripción', 'elementor-blank-starter'),
+        'elementor_blank_gdrs_description_callback',
+        'gdrs',
+        'normal',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'elementor_blank_add_gdrs_description_meta_box');
+
+function elementor_blank_gdrs_description_callback($post) {
+    wp_nonce_field('gdrs_description_nonce', 'gdrs_description_nonce_field');
+    $description = get_post_meta($post->ID, '_gdrs_description', true);
+    
+    wp_editor($description, 'gdrs_description_editor', array(
+        'textarea_name' => 'gdrs_description',
+        'textarea_rows' => 10,
+        'media_buttons' => true,
+        'teeny' => false,
+        'tinymce' => array(
+            'toolbar1' => 'formatselect,bold,italic,underline,bullist,numlist,blockquote,alignleft,aligncenter,alignright,link,unlink',
+            'toolbar2' => 'forecolor,backcolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help'
+        )
+    ));
+}
+
+function elementor_blank_save_gdrs_description($post_id) {
+    if (!isset($_POST['gdrs_description_nonce_field']) || 
+        !wp_verify_nonce($_POST['gdrs_description_nonce_field'], 'gdrs_description_nonce')) {
+        return;
+    }
+    
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+    
+    if (isset($_POST['gdrs_description'])) {
+        update_post_meta($post_id, '_gdrs_description', wp_kses_post($_POST['gdrs_description']));
+    }
+}
+add_action('save_post_gdrs', 'elementor_blank_save_gdrs_description');
+
+/**
+ * Register Description custom field for Elementor
+ * Make it available in REST API and Elementor
+ */
+function elementor_blank_register_gdrs_description_meta() {
+    if (!get_theme_mod('enable_gdrs_cpt', false)) {
+        return;
+    }
+    
+    register_post_meta('gdrs', '_gdrs_description', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'string',
+        'description' => __('GDR Description', 'elementor-blank-starter'),
+        'sanitize_callback' => 'wp_kses_post',
+        'auth_callback' => function() {
+            return current_user_can('edit_posts');
+        }
+    ));
+}
+add_action('init', 'elementor_blank_register_gdrs_description_meta');
+
+/**
  * Register Noticias Slider Post Type
  */
 function elementor_blank_register_noticias_slider_cpt() {
