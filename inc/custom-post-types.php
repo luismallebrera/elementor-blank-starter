@@ -51,7 +51,7 @@ function elementor_blank_register_gdrs_cpt() {
         'description'           => __('Grupos de Desarrollo Rural', 'elementor-blank-starter'),
         'labels'                => $labels,
         'supports'              => array('title', 'editor', 'thumbnail', 'excerpt', 'revisions', 'custom-fields'),
-        'taxonomies'            => array('provincia'),
+        'taxonomies'            => array('provincia', 'municipio'),
         'hierarchical'          => false,
         'public'                => true,
         'show_ui'               => true,
@@ -117,6 +117,52 @@ function elementor_blank_register_provincia_taxonomy() {
     register_taxonomy('provincia', array('gdrs'), $args);
 }
 add_action('init', 'elementor_blank_register_provincia_taxonomy', 0);
+
+/**
+ * Register Municipio Taxonomy for GDRs
+ */
+function elementor_blank_register_municipio_taxonomy() {
+    if (!get_theme_mod('enable_gdrs_cpt', false)) {
+        return;
+    }
+
+    $labels = array(
+        'name'                       => _x('Municipios', 'Taxonomy General Name', 'elementor-blank-starter'),
+        'singular_name'              => _x('Municipio', 'Taxonomy Singular Name', 'elementor-blank-starter'),
+        'menu_name'                  => __('Municipios', 'elementor-blank-starter'),
+        'all_items'                  => __('Todos los Municipios', 'elementor-blank-starter'),
+        'parent_item'                => null,
+        'parent_item_colon'          => null,
+        'new_item_name'              => __('Nuevo Municipio', 'elementor-blank-starter'),
+        'add_new_item'               => __('Añadir Nuevo Municipio', 'elementor-blank-starter'),
+        'edit_item'                  => __('Editar Municipio', 'elementor-blank-starter'),
+        'update_item'                => __('Actualizar Municipio', 'elementor-blank-starter'),
+        'view_item'                  => __('Ver Municipio', 'elementor-blank-starter'),
+        'separate_items_with_commas' => __('Separar municipios con comas', 'elementor-blank-starter'),
+        'add_or_remove_items'        => __('Añadir o eliminar municipios', 'elementor-blank-starter'),
+        'choose_from_most_used'      => __('Elegir de los más usados', 'elementor-blank-starter'),
+        'popular_items'              => __('Municipios Populares', 'elementor-blank-starter'),
+        'search_items'               => __('Buscar Municipios', 'elementor-blank-starter'),
+        'not_found'                  => __('No encontrado', 'elementor-blank-starter'),
+        'no_terms'                   => __('No hay municipios', 'elementor-blank-starter'),
+        'items_list'                 => __('Lista de municipios', 'elementor-blank-starter'),
+        'items_list_navigation'      => __('Navegación de lista de municipios', 'elementor-blank-starter'),
+    );
+
+    $args = array(
+        'labels'                     => $labels,
+        'hierarchical'               => false,
+        'public'                     => true,
+        'show_ui'                    => true,
+        'show_admin_column'          => true,
+        'show_in_nav_menus'          => true,
+        'show_tagcloud'              => true,
+        'show_in_rest'               => true,
+    );
+
+    register_taxonomy('municipio', array('gdrs'), $args);
+}
+add_action('init', 'elementor_blank_register_municipio_taxonomy', 0);
 
 /**
  * Register Noticias Slider Post Type
