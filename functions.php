@@ -84,6 +84,9 @@ function elementor_blank_scripts() {
     // Estilo principal
     wp_enqueue_style('elementor-blank-style', get_stylesheet_uri(), array(), '1.0');
     
+    // Ensure sprintf is available for Elementor
+    wp_enqueue_script('wp-util');
+    
     // Script personalizado
     wp_enqueue_script('elementor-blank-script', get_template_directory_uri() . '/scripts.js', array(), '1.0', true);
     
