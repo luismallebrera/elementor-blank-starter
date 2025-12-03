@@ -406,6 +406,11 @@ if (class_exists('Kirki')) {
      * Auto Rename Featured Image
      */
     require_once get_template_directory() . '/inc/auto-rename-featured-image.php';
+    
+    /**
+     * Featured Image Admin Column
+     */
+    require_once get_template_directory() . '/inc/featured-image-column.php';
 } else {
     /**
      * Mostrar aviso si Kirki no está disponible
