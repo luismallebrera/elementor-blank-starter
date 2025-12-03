@@ -1006,8 +1006,8 @@ add_action('add_meta_boxes', 'elementor_blank_add_portfolio_title_color_meta_box
 
 function elementor_blank_portfolio_title_color_callback($post) {
     wp_nonce_field('portfolio_title_color_nonce', 'portfolio_title_color_nonce_field');
-    $value = get_post_meta($post->ID, '_portfolio_title_color', true);
-    $value = $value ? $value : 'dark';
+    $value = get_post_meta($post->ID, 'portfolio_title_color', true);
+    $value = $value ? $value : 'light';
     ?>
     <div class="portfolio-title-color-wrapper">
         <label>
@@ -1044,7 +1044,7 @@ function elementor_blank_save_portfolio_title_color($post_id) {
         $color_value = sanitize_text_field($_POST['portfolio_title_color']);
         
         if (in_array($color_value, $allowed_values)) {
-            update_post_meta($post_id, '_portfolio_title_color', $color_value);
+            update_post_meta($post_id, 'portfolio_title_color', $color_value);
         }
     }
 }

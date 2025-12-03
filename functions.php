@@ -416,6 +416,11 @@ if (class_exists('Kirki')) {
      * Cleanup Old Meta Fields Tool
      */
     require_once get_template_directory() . '/inc/cleanup-old-meta.php';
+    
+    /**
+     * Portfolio Shortcodes
+     */
+    require_once get_template_directory() . '/inc/portfolio-shortcodes.php';
 } else {
     /**
      * Mostrar aviso si Kirki no está disponible

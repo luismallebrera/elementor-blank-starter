@@ -38,8 +38,9 @@ function elementor_blank_get_old_portfolio_meta_keys() {
 		'add_custom_body_class',
 		'page_darklight',
 		'_page_darklight',
-		'title_color', // Old version (now uses _portfolio_title_color)
+		'title_color', // Old version
 		'_title_color', // Old version
+		'_portfolio_title_color', // Old version (now uses portfolio_title_color without underscore)
 		'color_title',
 		'_color_title',
 		'portfolio_category',
@@ -157,7 +158,7 @@ function elementor_blank_cleanup_admin_page() {
 			<p><?php _e( 'These are the meta fields currently in use:', 'elementor-blank-starter' ); ?></p>
 			<ul style="list-style: disc; margin-left: 20px;">
 				<li><code>_portfolio_description</code> - <?php _e( 'Portfolio Description', 'elementor-blank-starter' ); ?></li>
-				<li><code>_portfolio_title_color</code> - <?php _e( 'Title Color (dark/light)', 'elementor-blank-starter' ); ?></li>
+				<li><code>portfolio_title_color</code> - <?php _e( 'Title Color (dark/light)', 'elementor-blank-starter' ); ?></li>
 				<li><code>_portfolio_large_image</code> - <?php _e( 'Large Image', 'elementor-blank-starter' ); ?></li>
 				<li><code>_portfolio_medium_image</code> - <?php _e( 'Medium Image', 'elementor-blank-starter' ); ?></li>
 				<li><code>_portfolio_small_image</code> - <?php _e( 'Small Image', 'elementor-blank-starter' ); ?></li>
