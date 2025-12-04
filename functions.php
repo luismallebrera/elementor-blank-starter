@@ -537,3 +537,39 @@ function elementor_blank_grid_line_styles() {
     </style>
     <?php
 }
+
+/**
+ * Cambiar el nombre "Entradas" a "Noticias" en el admin
+ */
+add_action('init', 'change_post_labels_to_noticias');
+function change_post_labels_to_noticias() {
+    global $wp_post_types;
+    
+    $labels = &$wp_post_types['post']->labels;
+    $labels->name = 'Noticias';
+    $labels->singular_name = 'Noticia';
+    $labels->add_new = 'Añadir noticia';
+    $labels->add_new_item = 'Añadir nueva noticia';
+    $labels->edit_item = 'Editar noticia';
+    $labels->new_item = 'Nueva noticia';
+    $labels->view_item = 'Ver noticia';
+    $labels->search_items = 'Buscar noticias';
+    $labels->not_found = 'No se encontraron noticias';
+    $labels->not_found_in_trash = 'No se encontraron noticias en la papelera';
+    $labels->all_items = 'Todas las noticias';
+    $labels->menu_name = 'Noticias';
+    $labels->name_admin_bar = 'Noticia';
+}
+
+/**
+ * Cambiar el icono del menú de Entradas a uno de noticias
+ */
+add_action('admin_menu', 'change_post_menu_icon');
+function change_post_menu_icon() {
+    global $menu;
+    foreach ($menu as $key => $val) {
+        if ($val[2] == 'edit.php') {
+            $menu[$key][6] = 'dashicons-megaphone'; // Icono de megáfono para noticias
+        }
+    }
+}
