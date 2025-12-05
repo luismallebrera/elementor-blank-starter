@@ -1413,6 +1413,109 @@ function elementor_blank_register_noticias_tag() {
 add_action('init', 'elementor_blank_register_noticias_tag', 0);
 
 /**
+ * Register Municipio Post Type
+ */
+function elementor_blank_register_municipio_cpt() {
+    $labels = array(
+        'name'                  => _x('Municipios', 'Post Type General Name', 'elementor-blank-starter'),
+        'singular_name'         => _x('Municipio', 'Post Type Singular Name', 'elementor-blank-starter'),
+        'menu_name'             => __('Municipios', 'elementor-blank-starter'),
+        'name_admin_bar'        => __('Municipio', 'elementor-blank-starter'),
+        'archives'              => __('Municipios Archives', 'elementor-blank-starter'),
+        'attributes'            => __('Municipio Attributes', 'elementor-blank-starter'),
+        'parent_item_colon'     => __('Parent Municipio:', 'elementor-blank-starter'),
+        'all_items'             => __('Todos los Municipios', 'elementor-blank-starter'),
+        'add_new_item'          => __('Añadir Nuevo Municipio', 'elementor-blank-starter'),
+        'add_new'               => __('Añadir Nuevo', 'elementor-blank-starter'),
+        'new_item'              => __('Nuevo Municipio', 'elementor-blank-starter'),
+        'edit_item'             => __('Editar Municipio', 'elementor-blank-starter'),
+        'update_item'           => __('Actualizar Municipio', 'elementor-blank-starter'),
+        'view_item'             => __('Ver Municipio', 'elementor-blank-starter'),
+        'view_items'            => __('Ver Municipios', 'elementor-blank-starter'),
+        'search_items'          => __('Buscar Municipios', 'elementor-blank-starter'),
+        'not_found'             => __('No encontrado', 'elementor-blank-starter'),
+        'not_found_in_trash'    => __('No encontrado en papelera', 'elementor-blank-starter'),
+        'featured_image'        => __('Imagen destacada', 'elementor-blank-starter'),
+        'set_featured_image'    => __('Establecer imagen destacada', 'elementor-blank-starter'),
+        'remove_featured_image' => __('Eliminar imagen destacada', 'elementor-blank-starter'),
+        'use_featured_image'    => __('Usar como imagen destacada', 'elementor-blank-starter'),
+        'insert_into_item'      => __('Insertar en Municipio', 'elementor-blank-starter'),
+        'uploaded_to_this_item' => __('Subido a este Municipio', 'elementor-blank-starter'),
+        'items_list'            => __('Lista de Municipios', 'elementor-blank-starter'),
+        'items_list_navigation' => __('Navegación de lista de Municipios', 'elementor-blank-starter'),
+        'filter_items_list'     => __('Filtrar lista de Municipios', 'elementor-blank-starter'),
+    );
+
+    $args = array(
+        'label'                 => __('Municipio', 'elementor-blank-starter'),
+        'description'           => __('Municipios de Castilla-La Mancha', 'elementor-blank-starter'),
+        'labels'                => $labels,
+        'supports'              => array('title', 'editor', 'thumbnail', 'excerpt', 'revisions', 'custom-fields'),
+        'taxonomies'            => array('gal_gdr'),
+        'hierarchical'          => false,
+        'public'                => true,
+        'show_ui'               => true,
+        'show_in_menu'          => true,
+        'menu_position'         => 8,
+        'menu_icon'             => 'dashicons-admin-home',
+        'show_in_admin_bar'     => true,
+        'show_in_nav_menus'     => true,
+        'can_export'            => true,
+        'has_archive'           => true,
+        'exclude_from_search'   => false,
+        'publicly_queryable'    => true,
+        'capability_type'       => 'post',
+        'show_in_rest'          => true,
+    );
+
+    register_post_type('municipio', $args);
+}
+add_action('init', 'elementor_blank_register_municipio_cpt', 0);
+
+/**
+ * Register GAL/GDR Taxonomy for Municipios
+ */
+function elementor_blank_register_gal_gdr_taxonomy() {
+    $labels = array(
+        'name'                       => _x('GAL/GDR', 'Taxonomy General Name', 'elementor-blank-starter'),
+        'singular_name'              => _x('GAL/GDR', 'Taxonomy Singular Name', 'elementor-blank-starter'),
+        'menu_name'                  => __('GAL/GDR', 'elementor-blank-starter'),
+        'all_items'                  => __('Todos los GAL/GDR', 'elementor-blank-starter'),
+        'parent_item'                => __('GAL/GDR Padre', 'elementor-blank-starter'),
+        'parent_item_colon'          => __('GAL/GDR Padre:', 'elementor-blank-starter'),
+        'new_item_name'              => __('Nuevo GAL/GDR', 'elementor-blank-starter'),
+        'add_new_item'               => __('Añadir Nuevo GAL/GDR', 'elementor-blank-starter'),
+        'edit_item'                  => __('Editar GAL/GDR', 'elementor-blank-starter'),
+        'update_item'                => __('Actualizar GAL/GDR', 'elementor-blank-starter'),
+        'view_item'                  => __('Ver GAL/GDR', 'elementor-blank-starter'),
+        'separate_items_with_commas' => __('Separar GAL/GDR con comas', 'elementor-blank-starter'),
+        'add_or_remove_items'        => __('Añadir o eliminar GAL/GDR', 'elementor-blank-starter'),
+        'choose_from_most_used'      => __('Elegir de los más usados', 'elementor-blank-starter'),
+        'popular_items'              => __('GAL/GDR Populares', 'elementor-blank-starter'),
+        'search_items'               => __('Buscar GAL/GDR', 'elementor-blank-starter'),
+        'not_found'                  => __('No encontrado', 'elementor-blank-starter'),
+        'no_terms'                   => __('No hay GAL/GDR', 'elementor-blank-starter'),
+        'items_list'                 => __('Lista de GAL/GDR', 'elementor-blank-starter'),
+        'items_list_navigation'      => __('Navegación de lista de GAL/GDR', 'elementor-blank-starter'),
+    );
+
+    $args = array(
+        'labels'                     => $labels,
+        'hierarchical'               => true,
+        'public'                     => true,
+        'show_ui'                    => true,
+        'show_admin_column'          => true,
+        'show_in_nav_menus'          => true,
+        'show_tagcloud'              => false,
+        'show_in_rest'               => true,
+        'rewrite'                    => array('slug' => 'gal-gdr', 'with_front' => false),
+    );
+
+    register_taxonomy('gal_gdr', array('municipio'), $args);
+}
+add_action('init', 'elementor_blank_register_gal_gdr_taxonomy', 0);
+
+/**
  * Flush rewrite rules on theme activation
  */
 function elementor_blank_flush_rewrite_rules() {
@@ -1425,6 +1528,8 @@ function elementor_blank_flush_rewrite_rules() {
     elementor_blank_register_noticias_cpt();
     elementor_blank_register_noticias_category();
     elementor_blank_register_noticias_tag();
+    elementor_blank_register_municipio_cpt();
+    elementor_blank_register_gal_gdr_taxonomy();
     flush_rewrite_rules();
 }
 register_activation_hook(__FILE__, 'elementor_blank_flush_rewrite_rules');
