@@ -175,38 +175,17 @@ function elementor_blank_register_municipio_taxonomy() {
 add_action('init', 'elementor_blank_register_municipio_taxonomy', 0);
 
 /**
- * Replace excerpt with WYSIWYG Excerpt field for GDRs
+ * Move excerpt meta box from sidebar to below content for GDRs
  */
-function elementor_blank_add_gdrs_excerpt_meta_box() {
+function elementor_blank_move_gdrs_excerpt_meta_box() {
     if (!get_theme_mod('enable_gdrs_cpt', false)) {
         return;
     }
     
     remove_meta_box('postexcerpt', 'gdrs', 'side');
-    add_meta_box(
-        'postexcerpt',
-        __('Excerpt', 'elementor-blank-starter'),
-        'elementor_blank_gdrs_excerpt_callback',
-        'gdrs',
-        'normal',
-        'default'
-    );
+    add_meta_box('postexcerpt', __('Excerpt'), 'post_excerpt_meta_box', 'gdrs', 'normal', 'high');
 }
-add_action('add_meta_boxes', 'elementor_blank_add_gdrs_excerpt_meta_box');
-
-function elementor_blank_gdrs_excerpt_callback($post) {
-    $excerpt = $post->post_excerpt;
-    
-    wp_editor($excerpt, 'excerpt', array(
-        'textarea_rows' => 10,
-        'media_buttons' => true,
-        'teeny' => false,
-        'tinymce' => array(
-            'toolbar1' => 'formatselect,bold,italic,underline,bullist,numlist,blockquote,alignleft,aligncenter,alignright,link,unlink',
-            'toolbar2' => 'forecolor,backcolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help'
-        )
-    ));
-}
+add_action('add_meta_boxes', 'elementor_blank_move_gdrs_excerpt_meta_box');
 
 /**
  * Register Noticias Slider Post Type
