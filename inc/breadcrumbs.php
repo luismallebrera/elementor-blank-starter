@@ -218,11 +218,25 @@ function elementor_blank_breadcrumbs( $args = array() ) {
 			$breadcrumbs[] = '<span>' . esc_html( $taxonomy->labels->name ) . '</span>';
 		}
 		
-		// Add parent terms if hierarchical
+		// Add all parent terms recursively if hierarchical
 		if ( $term->parent ) {
-			$parent_term = get_term( $term->parent, $term->taxonomy );
-			if ( $parent_term && ! is_wp_error( $parent_term ) ) {
-				$breadcrumbs[] = '<a href="' . esc_url( get_term_link( $parent_term ) ) . '">' . esc_html( $parent_term->name ) . '</a>';
+			$parent_terms = array();
+			$current_term = $term;
+			
+			while ( $current_term->parent ) {
+				$parent_term = get_term( $current_term->parent, $term->taxonomy );
+				if ( $parent_term && ! is_wp_error( $parent_term ) ) {
+					$parent_terms[] = $parent_term;
+					$current_term = $parent_term;
+				} else {
+					break;
+				}
+			}
+			
+			// Reverse to show from top-level parent down
+			$parent_terms = array_reverse( $parent_terms );
+			foreach ( $parent_terms as $parent ) {
+				$breadcrumbs[] = '<a href="' . esc_url( get_term_link( $parent ) ) . '">' . esc_html( $parent->name ) . '</a>';
 			}
 		}
 		
