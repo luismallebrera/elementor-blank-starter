@@ -44,11 +44,35 @@ function elementor_blank_register_galgdr_cpt() {
         'menu_icon'             => 'dashicons-groups',
         'has_archive'           => true,
         'show_in_rest'          => true,
-        'rewrite'               => array('slug' => 'galgdr'),
+        'rewrite'               => array(
+            'slug'       => 'galgdr/%provincia%',
+            'with_front' => false,
+        ),
     );
 
     register_post_type('galgdr', $args);
 }
+add_action('init', 'elementor_blank_register_galgdr_cpt', 0);
+
+/**
+ * Replace %provincia% in GAL/GDR permalinks
+ */
+function elementor_blank_galgdr_permalink($post_link, $post) {
+    if ($post->post_type !== 'galgdr') {
+        return $post_link;
+    }
+    
+    $terms = wp_get_object_terms($post->ID, 'provincia');
+    if (!empty($terms) && !is_wp_error($terms)) {
+        $post_link = str_replace('%provincia%', $terms[0]->slug, $post_link);
+    } else {
+        $post_link = str_replace('%provincia%', 'sin-provincia', $post_link);
+    }
+    
+    return $post_link;
+}
+add_filter('post_type_link', 'elementor_blank_galgdr_permalink', 10, 2);
+
 add_action('init', 'elementor_blank_register_galgdr_cpt', 0);
 
 /**
@@ -140,43 +164,62 @@ function elementor_blank_register_provincia_taxonomy() {
 add_action('init', 'elementor_blank_register_provincia_taxonomy', 0);
 
 /**
- * Add custom rewrite rules for /galgdr/{provincia}/
+ * Add custom rewrite rules for /galgdr/{provincia}/ archives
  */
 function elementor_blank_galgdr_provincia_rewrite_rules() {
     if (!get_theme_mod('enable_galgdr_cpt', false)) {
         return;
     }
     
+    // Archive by provincia: /galgdr/toledo/
     add_rewrite_rule(
         '^galgdr/([^/]+)/?$',
-        'index.php?provincia=$matches[1]&post_type=galgdr',
+        'index.php?provincia=$matches[1]',
+        'top'
+    );
+    
+    // Single GAL/GDR: /galgdr/toledo/nombre-del-galgdr/
+    add_rewrite_rule(
+        '^galgdr/([^/]+)/([^/]+)/?$',
+        'index.php?galgdr=$matches[2]',
         'top'
     );
 }
 add_action('init', 'elementor_blank_galgdr_provincia_rewrite_rules');
 
 /**
- * Modify main query for galgdr provincia archive
+ * Modify main query for provincia archives to show GAL/GDR
  */
 function elementor_blank_modify_galgdr_provincia_query($query) {
-    if (!is_admin() && $query->is_main_query()) {
-        if (get_query_var('provincia') && get_query_var('post_type') === 'galgdr') {
-            $query->set('post_type', 'galgdr');
-            $provincia_slug = get_query_var('provincia');
-            
-            if ($provincia_slug) {
-                $query->set('tax_query', array(
-                    array(
-                        'taxonomy' => 'provincia',
-                        'field'    => 'slug',
-                        'terms'    => $provincia_slug,
-                    )
-                ));
-            }
-        }
+    if (!is_admin() && $query->is_main_query() && is_tax('provincia')) {
+        $query->set('post_type', 'galgdr');
     }
 }
 add_action('pre_get_posts', 'elementor_blank_modify_galgdr_provincia_query');
+
+/**
+ * Modify page title for provincia archive pages
+ */
+function elementor_blank_galgdr_provincia_title($title) {
+    if (is_tax('provincia')) {
+        $term = get_queried_object();
+        if ($term) {
+            return 'GAL/GDR de ' . $term->name;
+        }
+    }
+    return $title;
+}
+add_filter('pre_get_document_title', 'elementor_blank_galgdr_provincia_title', 10, 1);
+add_filter('wp_title', 'elementor_blank_galgdr_provincia_title', 10, 1);
+
+/**
+ * Make provincia query var public
+ */
+function elementor_blank_add_query_vars($vars) {
+    $vars[] = 'provincia';
+    return $vars;
+}
+add_filter('query_vars', 'elementor_blank_add_query_vars');
 
 /**
  * Custom Elementor Query for GAL/GDR filtered by Provincia
