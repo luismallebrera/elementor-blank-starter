@@ -123,13 +123,38 @@ function elementor_blank_register_provincia_taxonomy() {
         'hierarchical'               => true,
         'public'                     => true,
         'show_ui'                    => true,
+        'show_admin_column'          => true,
+        'show_in_nav_menus'          => true,
+        'show_tagcloud'              => false,
         'show_in_rest'               => true,
-        'rewrite'                    => array('slug' => 'provincia'),
+        'has_archive'                => true,
+        'rewrite'                    => array(
+            'slug'                   => 'provincia',
+            'with_front'             => false,
+            'hierarchical'           => true,
+        ),
     );
 
     register_taxonomy('provincia', array('galgdr', 'municipio'), $args);
 }
 add_action('init', 'elementor_blank_register_provincia_taxonomy', 0);
+
+/**
+ * Custom Elementor Query for GAL/GDR filtered by Provincia
+ * Use Query ID: galgdr_provincia
+ */
+function elementor_blank_galgdr_provincia_query($query) {
+    if (!get_theme_mod('enable_galgdr_cpt', false)) {
+        return;
+    }
+    
+    // Set post type to galgdr
+    $query->set('post_type', 'galgdr');
+    
+    // If we're on a provincia taxonomy page, Elementor will automatically filter
+    // No need to manually set the tax_query - Elementor handles it
+}
+add_action('elementor/query/galgdr_provincia', 'elementor_blank_galgdr_provincia_query');
 
 /**
  * Add GAL/GDR relationship meta box to Municipio

@@ -74,13 +74,13 @@ function elementor_blank_import_galgdr_municipios() {
                 continue;
             }
             
-            // Assign provincia to GAL/GDR
-            wp_set_post_terms($galgdr_post_id, array($provincia_term_id), 'provincia');
-            
             $results['galgdr_created']++;
         } else {
             $galgdr_post_id = $existing_galgdr->ID;
         }
+        
+        // Assign provincia to GAL/GDR (always update to ensure it's correct)
+        wp_set_post_terms($galgdr_post_id, array($provincia_term_id), 'provincia');
         
         // Create municipios posts
         foreach ($municipios as $municipio_name) {
