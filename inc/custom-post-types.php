@@ -140,6 +140,45 @@ function elementor_blank_register_provincia_taxonomy() {
 add_action('init', 'elementor_blank_register_provincia_taxonomy', 0);
 
 /**
+ * Add custom rewrite rules for /galgdr/{provincia}/
+ */
+function elementor_blank_galgdr_provincia_rewrite_rules() {
+    if (!get_theme_mod('enable_galgdr_cpt', false)) {
+        return;
+    }
+    
+    add_rewrite_rule(
+        '^galgdr/([^/]+)/?$',
+        'index.php?provincia=$matches[1]&post_type=galgdr',
+        'top'
+    );
+}
+add_action('init', 'elementor_blank_galgdr_provincia_rewrite_rules');
+
+/**
+ * Modify main query for galgdr provincia archive
+ */
+function elementor_blank_modify_galgdr_provincia_query($query) {
+    if (!is_admin() && $query->is_main_query()) {
+        if (get_query_var('provincia') && get_query_var('post_type') === 'galgdr') {
+            $query->set('post_type', 'galgdr');
+            $provincia_slug = get_query_var('provincia');
+            
+            if ($provincia_slug) {
+                $query->set('tax_query', array(
+                    array(
+                        'taxonomy' => 'provincia',
+                        'field'    => 'slug',
+                        'terms'    => $provincia_slug,
+                    )
+                ));
+            }
+        }
+    }
+}
+add_action('pre_get_posts', 'elementor_blank_modify_galgdr_provincia_query');
+
+/**
  * Custom Elementor Query for GAL/GDR filtered by Provincia
  * Use Query ID: galgdr_provincia
  */
