@@ -211,6 +211,21 @@ function elementor_blank_breadcrumbs( $args = array() ) {
 		$breadcrumbs[] = '<span class="breadcrumb-current">' . esc_html( $tag->name ) . '</span>';
 	} elseif ( is_tax() ) {
 		$term = get_queried_object();
+		$taxonomy = get_taxonomy( $term->taxonomy );
+		
+		// Add taxonomy archive link
+		if ( $taxonomy && $taxonomy->public ) {
+			$breadcrumbs[] = '<a href="' . esc_url( get_post_type_archive_link( $taxonomy->object_type[0] ) ) . '">' . esc_html( $taxonomy->labels->name ) . '</a>';
+		}
+		
+		// Add parent terms if hierarchical
+		if ( $term->parent ) {
+			$parent_term = get_term( $term->parent, $term->taxonomy );
+			if ( $parent_term && ! is_wp_error( $parent_term ) ) {
+				$breadcrumbs[] = '<a href="' . esc_url( get_term_link( $parent_term ) ) . '">' . esc_html( $parent_term->name ) . '</a>';
+			}
+		}
+		
 		$breadcrumbs[] = '<span class="breadcrumb-current">' . esc_html( $term->name ) . '</span>';
 	} elseif ( is_search() ) {
 		$breadcrumbs[] = '<span class="breadcrumb-current">' . sprintf( esc_html__( 'Search Results for: %s', 'elementor-blank-starter' ), get_search_query() ) . '</span>';
