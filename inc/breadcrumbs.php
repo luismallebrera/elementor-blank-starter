@@ -213,17 +213,20 @@ function elementor_blank_breadcrumbs( $args = array() ) {
 		$term = get_queried_object();
 		$taxonomy = get_taxonomy( $term->taxonomy );
 		
+		// Debug: ver información del término
+		// error_log('Term ID: ' . $term->term_id . ' | Parent: ' . $term->parent . ' | Name: ' . $term->name);
+		
 		// Add taxonomy name (not linked, just label)
 		if ( $taxonomy && $taxonomy->public ) {
 			$breadcrumbs[] = '<span>' . esc_html( $taxonomy->labels->name ) . '</span>';
 		}
 		
 		// Add all parent terms recursively if hierarchical
-		if ( $term->parent ) {
+		if ( isset( $term->parent ) && $term->parent > 0 ) {
 			$parent_terms = array();
 			$current_term = $term;
 			
-			while ( $current_term->parent ) {
+			while ( isset( $current_term->parent ) && $current_term->parent > 0 ) {
 				$parent_term = get_term( $current_term->parent, $term->taxonomy );
 				if ( $parent_term && ! is_wp_error( $parent_term ) ) {
 					$parent_terms[] = $parent_term;
