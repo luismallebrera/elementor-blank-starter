@@ -132,6 +132,115 @@ function elementor_blank_register_provincia_taxonomy() {
 add_action('init', 'elementor_blank_register_provincia_taxonomy', 0);
 
 /**
+ * Add GAL/GDR relationship meta box to Municipio
+ */
+function elementor_blank_add_municipio_galgdr_meta_box() {
+    if (!get_theme_mod('enable_galgdr_cpt', false)) {
+        return;
+    }
+    
+    add_meta_box(
+        'municipio_galgdr_relationship',
+        __('GAL/GDR Asociado', 'elementor-blank-starter'),
+        'elementor_blank_municipio_galgdr_callback',
+        'municipio',
+        'side',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'elementor_blank_add_municipio_galgdr_meta_box');
+
+function elementor_blank_municipio_galgdr_callback($post) {
+    wp_nonce_field('municipio_galgdr_nonce', 'municipio_galgdr_nonce_field');
+    $selected_galgdr = get_post_meta($post->ID, '_municipio_galgdr_asociado', true);
+    
+    // Get all GAL/GDR posts
+    $galgdr_posts = get_posts(array(
+        'post_type'      => 'galgdr',
+        'posts_per_page' => -1,
+        'orderby'        => 'title',
+        'order'          => 'ASC',
+        'post_status'    => 'publish',
+    ));
+    
+    echo '<label for="municipio_galgdr_select">' . __('Selecciona GAL/GDR:', 'elementor-blank-starter') . '</label><br>';
+    echo '<select id="municipio_galgdr_select" name="municipio_galgdr_asociado" style="width: 100%;">';
+    echo '<option value="">' . __('-- Ninguno --', 'elementor-blank-starter') . '</option>';
+    
+    foreach ($galgdr_posts as $galgdr_post) {
+        $selected = ($selected_galgdr == $galgdr_post->ID) ? 'selected="selected"' : '';
+        echo '<option value="' . esc_attr($galgdr_post->ID) . '" ' . $selected . '>' . esc_html($galgdr_post->post_title) . '</option>';
+    }
+    
+    echo '</select>';
+}
+
+function elementor_blank_save_municipio_galgdr($post_id) {
+    if (!isset($_POST['municipio_galgdr_nonce_field']) || 
+        !wp_verify_nonce($_POST['municipio_galgdr_nonce_field'], 'municipio_galgdr_nonce')) {
+        return;
+    }
+    
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+    
+    if (isset($_POST['municipio_galgdr_asociado'])) {
+        $galgdr_id = absint($_POST['municipio_galgdr_asociado']);
+        update_post_meta($post_id, '_municipio_galgdr_asociado', $galgdr_id);
+    }
+}
+add_action('save_post_municipio', 'elementor_blank_save_municipio_galgdr');
+
+/**
+ * Register GAL/GDR relationship meta for REST API
+ */
+function elementor_blank_register_municipio_galgdr_meta() {
+    if (!get_theme_mod('enable_galgdr_cpt', false)) {
+        return;
+    }
+    
+    register_post_meta('municipio', '_municipio_galgdr_asociado', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'integer',
+        'description' => __('ID del GAL/GDR asociado', 'elementor-blank-starter'),
+        'sanitize_callback' => 'absint',
+        'auth_callback' => function() {
+            return current_user_can('edit_posts');
+        }
+    ));
+}
+add_action('init', 'elementor_blank_register_municipio_galgdr_meta');
+
+/**
+ * Custom Elementor Query for Municipios related to GAL/GDR
+ * Use Query ID: municipios_de_gal
+ */
+function elementor_blank_municipios_de_gal_query($query) {
+    if (!get_theme_mod('enable_galgdr_cpt', false)) {
+        return;
+    }
+    
+    if (is_singular('galgdr')) {
+        $gal_id = get_the_ID();
+        $meta_query = array(
+            array(
+                'key'     => '_municipio_galgdr_asociado',
+                'value'   => $gal_id,
+                'compare' => '='
+            )
+        );
+        $query->set('meta_query', $meta_query);
+    }
+}
+add_action('elementor/query/municipios_de_gal', 'elementor_blank_municipios_de_gal_query');
+
+/**
  * Register Noticias Slider Post Type
  */
 function elementor_blank_register_noticias_slider_cpt() {
