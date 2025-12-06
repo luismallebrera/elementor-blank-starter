@@ -199,6 +199,138 @@ function elementor_blank_register_municipio_taxonomy() {
 add_action('init', 'elementor_blank_register_municipio_taxonomy', 0);
 
 /**
+ * Register Pueblos Post Type
+ */
+function elementor_blank_register_pueblos_cpt() {
+    if (!get_theme_mod('enable_pueblos_cpt', false)) {
+        return;
+    }
+
+    $labels = array(
+        'name'                  => _x('Pueblos', 'Post Type General Name', 'elementor-blank-starter'),
+        'singular_name'         => _x('Pueblo', 'Post Type Singular Name', 'elementor-blank-starter'),
+        'menu_name'             => __('Pueblos', 'elementor-blank-starter'),
+        'name_admin_bar'        => __('Pueblo', 'elementor-blank-starter'),
+        'archives'              => __('Pueblos Archives', 'elementor-blank-starter'),
+        'attributes'            => __('Pueblo Attributes', 'elementor-blank-starter'),
+        'parent_item_colon'     => __('Parent Pueblo:', 'elementor-blank-starter'),
+        'all_items'             => __('Todos los Pueblos', 'elementor-blank-starter'),
+        'add_new_item'          => __('Añadir Nuevo Pueblo', 'elementor-blank-starter'),
+        'add_new'               => __('Añadir Nuevo', 'elementor-blank-starter'),
+        'new_item'              => __('Nuevo Pueblo', 'elementor-blank-starter'),
+        'edit_item'             => __('Editar Pueblo', 'elementor-blank-starter'),
+        'update_item'           => __('Actualizar Pueblo', 'elementor-blank-starter'),
+        'view_item'             => __('Ver Pueblo', 'elementor-blank-starter'),
+        'view_items'            => __('Ver Pueblos', 'elementor-blank-starter'),
+        'search_items'          => __('Buscar Pueblos', 'elementor-blank-starter'),
+        'not_found'             => __('No encontrado', 'elementor-blank-starter'),
+        'not_found_in_trash'    => __('No encontrado en papelera', 'elementor-blank-starter'),
+        'featured_image'        => __('Imagen destacada', 'elementor-blank-starter'),
+        'set_featured_image'    => __('Establecer imagen destacada', 'elementor-blank-starter'),
+        'remove_featured_image' => __('Eliminar imagen destacada', 'elementor-blank-starter'),
+        'use_featured_image'    => __('Usar como imagen destacada', 'elementor-blank-starter'),
+        'insert_into_item'      => __('Insertar en pueblo', 'elementor-blank-starter'),
+        'uploaded_to_this_item' => __('Subido a este pueblo', 'elementor-blank-starter'),
+        'items_list'            => __('Lista de pueblos', 'elementor-blank-starter'),
+        'items_list_navigation' => __('Navegación de lista de pueblos', 'elementor-blank-starter'),
+        'filter_items_list'     => __('Filtrar lista de pueblos', 'elementor-blank-starter'),
+    );
+
+    $args = array(
+        'label'                 => __('Pueblos', 'elementor-blank-starter'),
+        'description'           => __('Pueblos de Castilla-La Mancha', 'elementor-blank-starter'),
+        'labels'                => $labels,
+        'supports'              => array('title', 'editor', 'thumbnail', 'excerpt', 'revisions', 'custom-fields'),
+        'taxonomies'            => array('provincia', 'gal_gdr'),
+        'hierarchical'          => false,
+        'public'                => true,
+        'show_ui'               => true,
+        'show_in_menu'          => true,
+        'menu_position'         => 8,
+        'menu_icon'             => 'dashicons-admin-home',
+        'show_in_admin_bar'     => true,
+        'show_in_nav_menus'     => true,
+        'can_export'            => true,
+        'has_archive'           => true,
+        'exclude_from_search'   => false,
+        'publicly_queryable'    => true,
+        'capability_type'       => 'post',
+        'show_in_rest'          => true,
+        'rewrite'               => array(
+            'slug'              => 'pueblo',
+            'with_front'        => false,
+        ),
+    );
+
+    register_post_type('pueblos', $args);
+}
+add_action('init', 'elementor_blank_register_pueblos_cpt', 0);
+
+/**
+ * Register GAL/GDR Taxonomy for Pueblos
+ */
+function elementor_blank_register_galgdr_taxonomy() {
+    if (!get_theme_mod('enable_pueblos_cpt', false)) {
+        return;
+    }
+
+    $labels = array(
+        'name'                       => _x('GAL/GDR', 'Taxonomy General Name', 'elementor-blank-starter'),
+        'singular_name'              => _x('GAL/GDR', 'Taxonomy Singular Name', 'elementor-blank-starter'),
+        'menu_name'                  => __('GAL/GDR', 'elementor-blank-starter'),
+        'all_items'                  => __('Todos los GAL/GDR', 'elementor-blank-starter'),
+        'parent_item'                => __('GAL/GDR Padre', 'elementor-blank-starter'),
+        'parent_item_colon'          => __('GAL/GDR Padre:', 'elementor-blank-starter'),
+        'new_item_name'              => __('Nuevo GAL/GDR', 'elementor-blank-starter'),
+        'add_new_item'               => __('Añadir Nuevo GAL/GDR', 'elementor-blank-starter'),
+        'edit_item'                  => __('Editar GAL/GDR', 'elementor-blank-starter'),
+        'update_item'                => __('Actualizar GAL/GDR', 'elementor-blank-starter'),
+        'view_item'                  => __('Ver GAL/GDR', 'elementor-blank-starter'),
+        'separate_items_with_commas' => __('Separar con comas', 'elementor-blank-starter'),
+        'add_or_remove_items'        => __('Añadir o eliminar', 'elementor-blank-starter'),
+        'choose_from_most_used'      => __('Elegir de los más usados', 'elementor-blank-starter'),
+        'popular_items'              => __('GAL/GDR Populares', 'elementor-blank-starter'),
+        'search_items'               => __('Buscar GAL/GDR', 'elementor-blank-starter'),
+        'not_found'                  => __('No encontrado', 'elementor-blank-starter'),
+        'no_terms'                   => __('No hay GAL/GDR', 'elementor-blank-starter'),
+        'items_list'                 => __('Lista de GAL/GDR', 'elementor-blank-starter'),
+        'items_list_navigation'      => __('Navegación de lista de GAL/GDR', 'elementor-blank-starter'),
+    );
+
+    $args = array(
+        'labels'                     => $labels,
+        'hierarchical'               => true,
+        'public'                     => true,
+        'show_ui'                    => true,
+        'show_admin_column'          => true,
+        'show_in_nav_menus'          => true,
+        'show_tagcloud'              => true,
+        'show_in_rest'               => true,
+        'has_archive'                => true,
+        'rewrite'                    => array(
+            'slug'                   => 'gal-gdr',
+            'with_front'             => false,
+            'hierarchical'           => true,
+        ),
+    );
+
+    register_taxonomy('gal_gdr', array('pueblos'), $args);
+}
+add_action('init', 'elementor_blank_register_galgdr_taxonomy', 0);
+
+/**
+ * Also register Provincia taxonomy for Pueblos
+ */
+function elementor_blank_register_provincia_for_pueblos() {
+    if (!get_theme_mod('enable_pueblos_cpt', false)) {
+        return;
+    }
+    
+    register_taxonomy_for_object_type('provincia', 'pueblos');
+}
+add_action('init', 'elementor_blank_register_provincia_for_pueblos', 0);
+
+/**
  * Replace excerpt with WYSIWYG Excerpt field for GDRs
  */
 function elementor_blank_add_gdrs_excerpt_meta_box() {

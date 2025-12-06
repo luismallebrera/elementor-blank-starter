@@ -685,6 +685,23 @@ new \Kirki\Field\Checkbox_Switch(
 );
 
 /**
+ * Enable Pueblos CPT
+ */
+new \Kirki\Field\Checkbox_Switch(
+    array(
+        'settings'    => 'enable_pueblos_cpt',
+        'label'       => esc_html__('Enable Pueblos', 'elementor-blank-starter'),
+        'description' => esc_html__('Enable Pueblos custom post type with Provincia and GAL/GDR taxonomies.', 'elementor-blank-starter'),
+        'section'     => 'custom_post_types_section',
+        'default'     => false,
+        'choices'     => array(
+            'on'  => esc_html__('Enabled', 'elementor-blank-starter'),
+            'off' => esc_html__('Disabled', 'elementor-blank-starter'),
+        ),
+    )
+);
+
+/**
  * Enable Grid Line
  */
 new \Kirki\Field\Checkbox_Switch(
