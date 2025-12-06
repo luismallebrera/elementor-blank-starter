@@ -164,6 +164,7 @@ function elementor_blank_register_municipio_taxonomy() {
         'show_in_nav_menus'          => true,
         'show_tagcloud'              => true,
         'show_in_rest'               => true,
+        'has_archive'                => true,
         'rewrite'                    => array(
             'slug'                   => 'municipio',
             'with_front'             => false,
