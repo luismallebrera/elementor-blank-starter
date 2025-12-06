@@ -9,6 +9,129 @@ if (!defined('ABSPATH')) {
 }
 
 /**
+ * Register GAL/GDR Post Type
+ */
+function elementor_blank_register_galgdr_cpt() {
+    if (!get_theme_mod('enable_galgdr_cpt', false)) {
+        return;
+    }
+
+    $labels = array(
+        'name'                  => _x('GAL/GDR', 'Post Type General Name', 'elementor-blank-starter'),
+        'singular_name'         => _x('GAL/GDR', 'Post Type Singular Name', 'elementor-blank-starter'),
+        'menu_name'             => __('GAL/GDR', 'elementor-blank-starter'),
+        'name_admin_bar'        => __('GAL/GDR', 'elementor-blank-starter'),
+        'archives'              => __('GAL/GDR Archives', 'elementor-blank-starter'),
+        'all_items'             => __('Todos los GAL/GDR', 'elementor-blank-starter'),
+        'add_new_item'          => __('Añadir Nuevo GAL/GDR', 'elementor-blank-starter'),
+        'add_new'               => __('Añadir Nuevo', 'elementor-blank-starter'),
+        'new_item'              => __('Nuevo GAL/GDR', 'elementor-blank-starter'),
+        'edit_item'             => __('Editar GAL/GDR', 'elementor-blank-starter'),
+        'update_item'           => __('Actualizar GAL/GDR', 'elementor-blank-starter'),
+        'view_item'             => __('Ver GAL/GDR', 'elementor-blank-starter'),
+        'search_items'          => __('Buscar GAL/GDR', 'elementor-blank-starter'),
+        'not_found'             => __('No encontrado', 'elementor-blank-starter'),
+        'not_found_in_trash'    => __('No encontrado en papelera', 'elementor-blank-starter'),
+    );
+
+    $args = array(
+        'label'                 => __('GAL/GDR', 'elementor-blank-starter'),
+        'labels'                => $labels,
+        'supports'              => array('title', 'editor', 'thumbnail', 'excerpt'),
+        'public'                => true,
+        'show_ui'               => true,
+        'show_in_menu'          => true,
+        'menu_icon'             => 'dashicons-groups',
+        'has_archive'           => true,
+        'show_in_rest'          => true,
+        'rewrite'               => array('slug' => 'galgdr'),
+    );
+
+    register_post_type('galgdr', $args);
+}
+add_action('init', 'elementor_blank_register_galgdr_cpt', 0);
+
+/**
+ * Register Municipio Post Type
+ */
+function elementor_blank_register_municipio_cpt() {
+    if (!get_theme_mod('enable_galgdr_cpt', false)) {
+        return;
+    }
+
+    $labels = array(
+        'name'                  => _x('Municipios', 'Post Type General Name', 'elementor-blank-starter'),
+        'singular_name'         => _x('Municipio', 'Post Type Singular Name', 'elementor-blank-starter'),
+        'menu_name'             => __('Municipios', 'elementor-blank-starter'),
+        'name_admin_bar'        => __('Municipio', 'elementor-blank-starter'),
+        'archives'              => __('Municipios Archives', 'elementor-blank-starter'),
+        'all_items'             => __('Todos los Municipios', 'elementor-blank-starter'),
+        'add_new_item'          => __('Añadir Nuevo Municipio', 'elementor-blank-starter'),
+        'add_new'               => __('Añadir Nuevo', 'elementor-blank-starter'),
+        'new_item'              => __('Nuevo Municipio', 'elementor-blank-starter'),
+        'edit_item'             => __('Editar Municipio', 'elementor-blank-starter'),
+        'update_item'           => __('Actualizar Municipio', 'elementor-blank-starter'),
+        'view_item'             => __('Ver Municipio', 'elementor-blank-starter'),
+        'search_items'          => __('Buscar Municipios', 'elementor-blank-starter'),
+        'not_found'             => __('No encontrado', 'elementor-blank-starter'),
+        'not_found_in_trash'    => __('No encontrado en papelera', 'elementor-blank-starter'),
+    );
+
+    $args = array(
+        'label'                 => __('Municipios', 'elementor-blank-starter'),
+        'labels'                => $labels,
+        'supports'              => array('title', 'editor', 'thumbnail', 'excerpt'),
+        'public'                => true,
+        'show_ui'               => true,
+        'show_in_menu'          => true,
+        'menu_icon'             => 'dashicons-location',
+        'has_archive'           => true,
+        'show_in_rest'          => true,
+        'rewrite'               => array('slug' => 'municipios'),
+    );
+
+    register_post_type('municipio', $args);
+}
+add_action('init', 'elementor_blank_register_municipio_cpt', 0);
+
+/**
+ * Register Provincia Taxonomy
+ */
+function elementor_blank_register_provincia_taxonomy() {
+    if (!get_theme_mod('enable_galgdr_cpt', false)) {
+        return;
+    }
+
+    $labels = array(
+        'name'                       => _x('Provincias', 'Taxonomy General Name', 'elementor-blank-starter'),
+        'singular_name'              => _x('Provincia', 'Taxonomy Singular Name', 'elementor-blank-starter'),
+        'menu_name'                  => __('Provincias', 'elementor-blank-starter'),
+        'all_items'                  => __('Todas las Provincias', 'elementor-blank-starter'),
+        'parent_item'                => __('Provincia Padre', 'elementor-blank-starter'),
+        'parent_item_colon'          => __('Provincia Padre:', 'elementor-blank-starter'),
+        'new_item_name'              => __('Nueva Provincia', 'elementor-blank-starter'),
+        'add_new_item'               => __('Añadir Nueva Provincia', 'elementor-blank-starter'),
+        'edit_item'                  => __('Editar Provincia', 'elementor-blank-starter'),
+        'update_item'                => __('Actualizar Provincia', 'elementor-blank-starter'),
+        'view_item'                  => __('Ver Provincia', 'elementor-blank-starter'),
+        'search_items'               => __('Buscar Provincias', 'elementor-blank-starter'),
+        'not_found'                  => __('No encontrado', 'elementor-blank-starter'),
+    );
+
+    $args = array(
+        'labels'                     => $labels,
+        'hierarchical'               => true,
+        'public'                     => true,
+        'show_ui'                    => true,
+        'show_in_rest'               => true,
+        'rewrite'                    => array('slug' => 'provincia'),
+    );
+
+    register_taxonomy('provincia', array('galgdr', 'municipio'), $args);
+}
+add_action('init', 'elementor_blank_register_provincia_taxonomy', 0);
+
+/**
  * Register Noticias Slider Post Type
  */
 function elementor_blank_register_noticias_slider_cpt() {
