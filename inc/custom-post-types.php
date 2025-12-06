@@ -66,6 +66,10 @@ function elementor_blank_register_gdrs_cpt() {
         'publicly_queryable'    => true,
         'capability_type'       => 'post',
         'show_in_rest'          => true,
+        'rewrite'               => array(
+            'slug'              => 'gal-gdr',
+            'with_front'        => false,
+        ),
     );
 
     register_post_type('gdrs', $args);
@@ -123,6 +127,24 @@ function elementor_blank_register_provincia_taxonomy() {
     register_taxonomy('provincia', array('gdrs'), $args);
 }
 add_action('init', 'elementor_blank_register_provincia_taxonomy', 0);
+
+/**
+ * Add rewrite rule to redirect old gdrs URLs to new gal-gdr URLs
+ */
+function elementor_blank_gdrs_redirect() {
+    if (is_singular('gdrs')) {
+        global $post;
+        $new_url = home_url('/gal-gdr/' . $post->post_name . '/');
+        $current_url = home_url($_SERVER['REQUEST_URI']);
+        
+        // Only redirect if current URL uses old slug
+        if (strpos($current_url, '/gdrs/') !== false) {
+            wp_redirect($new_url, 301);
+            exit;
+        }
+    }
+}
+add_action('template_redirect', 'elementor_blank_gdrs_redirect');
 
 /**
  * Register Municipio Taxonomy for GDRs
