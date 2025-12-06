@@ -51,7 +51,7 @@ function elementor_blank_register_gdrs_cpt() {
         'description'           => __('Grupos de Acción Local / Grupos de Desarrollo Rural', 'elementor-blank-starter'),
         'labels'                => $labels,
         'supports'              => array('title', 'editor', 'thumbnail', 'excerpt', 'revisions', 'custom-fields', 'page-attributes'),
-        'taxonomies'            => array('provincia', 'municipio'),
+        'taxonomies'            => array('municipio'),
         'hierarchical'          => true,
         'public'                => true,
         'show_ui'               => true,
