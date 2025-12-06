@@ -241,7 +241,7 @@ function elementor_blank_register_pueblos_cpt() {
         'description'           => __('Pueblos de Castilla-La Mancha', 'elementor-blank-starter'),
         'labels'                => $labels,
         'supports'              => array('title', 'editor', 'thumbnail', 'excerpt', 'revisions', 'custom-fields'),
-        'taxonomies'            => array('provincia', 'gal_gdr'),
+        'taxonomies'            => array('gal_gdr'),
         'hierarchical'          => false,
         'public'                => true,
         'show_ui'               => true,
@@ -317,18 +317,6 @@ function elementor_blank_register_galgdr_taxonomy() {
     register_taxonomy('gal_gdr', array('pueblos'), $args);
 }
 add_action('init', 'elementor_blank_register_galgdr_taxonomy', 0);
-
-/**
- * Also register Provincia taxonomy for Pueblos
- */
-function elementor_blank_register_provincia_for_pueblos() {
-    if (!get_theme_mod('enable_pueblos_cpt', false)) {
-        return;
-    }
-    
-    register_taxonomy_for_object_type('provincia', 'pueblos');
-}
-add_action('init', 'elementor_blank_register_provincia_for_pueblos', 0);
 
 /**
  * Replace excerpt with WYSIWYG Excerpt field for GDRs
