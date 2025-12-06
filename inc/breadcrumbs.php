@@ -213,9 +213,9 @@ function elementor_blank_breadcrumbs( $args = array() ) {
 		$term = get_queried_object();
 		$taxonomy = get_taxonomy( $term->taxonomy );
 		
-		// Add taxonomy archive link
+		// Add taxonomy name (not linked, just label)
 		if ( $taxonomy && $taxonomy->public ) {
-			$breadcrumbs[] = '<a href="' . esc_url( get_post_type_archive_link( $taxonomy->object_type[0] ) ) . '">' . esc_html( $taxonomy->labels->name ) . '</a>';
+			$breadcrumbs[] = '<span>' . esc_html( $taxonomy->labels->name ) . '</span>';
 		}
 		
 		// Add parent terms if hierarchical
