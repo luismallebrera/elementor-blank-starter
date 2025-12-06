@@ -73,8 +73,6 @@ function elementor_blank_galgdr_permalink($post_link, $post) {
 }
 add_filter('post_type_link', 'elementor_blank_galgdr_permalink', 10, 2);
 
-add_action('init', 'elementor_blank_register_galgdr_cpt', 0);
-
 /**
  * Register Municipio Post Type
  */
@@ -237,6 +235,70 @@ function elementor_blank_galgdr_provincia_query($query) {
     // No need to manually set the tax_query - Elementor handles it
 }
 add_action('elementor/query/galgdr_provincia', 'elementor_blank_galgdr_provincia_query');
+
+/**
+ * Auto-assign provincia to GAL/GDR posts without provincia
+ * Runs once to fix existing posts
+ */
+function elementor_blank_auto_assign_provincia_to_galgdr() {
+    if (!get_theme_mod('enable_galgdr_cpt', false)) {
+        return;
+    }
+    
+    // Check if we've already run this
+    if (get_option('elementor_blank_provincia_assigned', false)) {
+        return;
+    }
+    
+    // Get all GAL/GDR posts
+    $galgdr_posts = get_posts(array(
+        'post_type'      => 'galgdr',
+        'posts_per_page' => -1,
+        'post_status'    => 'publish',
+    ));
+    
+    // Map of provincia keywords to find in titles
+    $provincia_map = array(
+        'ALBACETE' => array('albacete'),
+        'CIUDAD REAL' => array('ciudad real', 'ciudad-real'),
+        'CUENCA' => array('cuenca'),
+        'GUADALAJARA' => array('guadalajara'),
+        'TOLEDO' => array('toledo'),
+    );
+    
+    foreach ($galgdr_posts as $post) {
+        // Check if post already has provincia assigned
+        $existing_terms = wp_get_object_terms($post->ID, 'provincia');
+        if (!empty($existing_terms) && !is_wp_error($existing_terms)) {
+            continue; // Already has provincia
+        }
+        
+        // Try to detect provincia from title
+        $title_lower = strtolower($post->post_title);
+        $provincia_found = null;
+        
+        foreach ($provincia_map as $provincia_name => $keywords) {
+            foreach ($keywords as $keyword) {
+                if (strpos($title_lower, $keyword) !== false) {
+                    $provincia_found = $provincia_name;
+                    break 2;
+                }
+            }
+        }
+        
+        // If found, assign it
+        if ($provincia_found) {
+            $term = term_exists($provincia_found, 'provincia');
+            if ($term) {
+                wp_set_object_terms($post->ID, array($term['term_id']), 'provincia');
+            }
+        }
+    }
+    
+    // Mark as done
+    update_option('elementor_blank_provincia_assigned', true);
+}
+add_action('admin_init', 'elementor_blank_auto_assign_provincia_to_galgdr');
 
 /**
  * Add GAL/GDR relationship meta box to Municipio
