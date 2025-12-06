@@ -424,6 +424,11 @@ if (class_exists('Kirki')) {
      * Portfolio Shortcodes
      */
     require_once get_template_directory() . '/inc/portfolio-shortcodes.php';
+    
+    /**
+     * Import GAL/GDR & Municipios
+     */
+    require_once get_template_directory() . '/inc/import-galgdr-municipios.php';
 } else {
     /**
      * Mostrar aviso si Kirki no está disponible
