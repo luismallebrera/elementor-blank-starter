@@ -125,6 +125,16 @@ function elementor_blank_municipio_search_shortcode($atts) {
         border: 1px solid #ddd;
         border-radius: 4px;
         font-size: 16px;
+        height: 44px;
+    }
+    .select2-container .select2-selection--single {
+        height: 44px;
+    }
+    .select2-container .select2-selection--single .select2-selection__rendered {
+        line-height: 44px;
+    }
+    .select2-container .select2-selection--single .select2-selection__arrow {
+        height: 42px;
     }
     </style>
     <?php
