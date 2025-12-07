@@ -189,8 +189,16 @@ add_action('init', 'elementor_blank_galgdr_provincia_rewrite_rules');
  * Modify main query for provincia archives to show GAL/GDR
  */
 function elementor_blank_modify_galgdr_provincia_query($query) {
-    if (!is_admin() && $query->is_main_query() && is_tax('provincia')) {
-        $query->set('post_type', 'galgdr');
+    if (!is_admin() && $query->is_main_query()) {
+        // For provincia taxonomy archives
+        if (is_tax('provincia')) {
+            $query->set('post_type', 'galgdr');
+            $query->set('posts_per_page', -1);
+        }
+        // For GAL/GDR post type archive
+        if (is_post_type_archive('galgdr')) {
+            $query->set('posts_per_page', -1);
+        }
     }
 }
 add_action('pre_get_posts', 'elementor_blank_modify_galgdr_provincia_query');
