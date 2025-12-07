@@ -193,6 +193,7 @@ add_action('wp_ajax_nopriv_get_municipios_by_provincia', 'elementor_blank_get_mu
  * Register widget
  */
 function elementor_blank_register_municipio_search_widget($widgets_manager) {
-    $widgets_manager->register(new Elementor_Municipio_Search_Widget());
+    require_once(__FILE__);
+    $widgets_manager->register_widget_type(new Elementor_Municipio_Search_Widget());
 }
-add_action('elementor/widgets/register', 'elementor_blank_register_municipio_search_widget');
+add_action('elementor/widgets/widgets_registered', 'elementor_blank_register_municipio_search_widget');
