@@ -604,35 +604,41 @@ function elementor_blank_galgdr_siglas_shortcode($atts) {
 add_shortcode('galgdr_siglas', 'elementor_blank_galgdr_siglas_shortcode');
 
 /**
- * Simple shortcode to get post title by ID
+ * Complete municipio info shortcode - reads municipio_id from URL
  */
-function elementor_blank_get_post_title_by_id($atts) {
-    $atts = shortcode_atts(array('id' => 0), $atts);
-    $id = absint($atts['id']);
+function elementor_blank_show_municipio_info($atts) {
+    $atts = shortcode_atts(array('field' => 'title'), $atts);
     
-    if ($id) {
-        return get_the_title($id);
-    }
-    return '';
-}
-add_shortcode('post_title_by_id', 'elementor_blank_get_post_title_by_id');
-
-/**
- * Simple shortcode to get term name by ID
- */
-function elementor_blank_get_term_name_by_id($atts) {
-    $atts = shortcode_atts(array('id' => 0, 'taxonomy' => 'provincia'), $atts);
-    $id = absint($atts['id']);
+    // Get municipio_id from URL
+    $municipio_id = isset($_GET['municipio_id']) ? absint($_GET['municipio_id']) : 0;
     
-    if ($id) {
-        $term = get_term($id, $atts['taxonomy']);
-        if ($term && !is_wp_error($term)) {
-            return $term->name;
-        }
+    if (!$municipio_id) {
+        return '';
     }
-    return '';
+    
+    $field = $atts['field'];
+    
+    switch ($field) {
+        case 'title':
+            return get_the_title($municipio_id);
+            
+        case 'galgdr':
+            $galgdr_id = get_post_meta($municipio_id, '_municipio_galgdr_asociado', true);
+            return $galgdr_id ? get_the_title($galgdr_id) : '';
+            
+        case 'provincia':
+            $provincia_id = get_post_meta($municipio_id, '_municipio_provincia', true);
+            if ($provincia_id) {
+                $term = get_term($provincia_id, 'provincia');
+                return ($term && !is_wp_error($term)) ? $term->name : '';
+            }
+            return '';
+            
+        default:
+            return '';
+    }
 }
-add_shortcode('term_name_by_id', 'elementor_blank_get_term_name_by_id');
+add_shortcode('municipio_info', 'elementor_blank_show_municipio_info');
 
 /**
  * Register Noticias Slider Post Type
