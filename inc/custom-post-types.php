@@ -169,13 +169,6 @@ function elementor_blank_galgdr_provincia_rewrite_rules() {
         return;
     }
     
-    // Main archive: /galgdr/
-    add_rewrite_rule(
-        '^galgdr/?$',
-        'index.php?post_type=galgdr',
-        'top'
-    );
-    
     // Archive by provincia: /galgdr/toledo/
     add_rewrite_rule(
         '^galgdr/([^/]+)/?$',
@@ -314,6 +307,73 @@ function elementor_blank_auto_assign_provincia_to_galgdr() {
     update_option('elementor_blank_provincia_assigned', true);
 }
 add_action('admin_init', 'elementor_blank_auto_assign_provincia_to_galgdr');
+
+/**
+ * Add Siglas (Acronym) custom field to GAL/GDR
+ */
+function elementor_blank_add_galgdr_siglas_meta_box() {
+    if (!get_theme_mod('enable_galgdr_cpt', false)) {
+        return;
+    }
+    
+    add_meta_box(
+        'galgdr_siglas',
+        __('Siglas', 'elementor-blank-starter'),
+        'elementor_blank_galgdr_siglas_callback',
+        'galgdr',
+        'side',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'elementor_blank_add_galgdr_siglas_meta_box');
+
+function elementor_blank_galgdr_siglas_callback($post) {
+    wp_nonce_field('galgdr_siglas_nonce', 'galgdr_siglas_nonce_field');
+    $value = get_post_meta($post->ID, '_galgdr_siglas', true);
+    echo '<label for="galgdr_siglas_field">' . __('Siglas:', 'elementor-blank-starter') . '</label>';
+    echo '<input type="text" id="galgdr_siglas_field" name="galgdr_siglas_field" value="' . esc_attr($value) . '" class="widefat" placeholder="' . __('Ej: ADIMAN', 'elementor-blank-starter') . '">';
+}
+
+function elementor_blank_save_galgdr_siglas($post_id) {
+    if (!isset($_POST['galgdr_siglas_nonce_field']) || 
+        !wp_verify_nonce($_POST['galgdr_siglas_nonce_field'], 'galgdr_siglas_nonce')) {
+        return;
+    }
+    
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+    
+    if (isset($_POST['galgdr_siglas_field'])) {
+        update_post_meta($post_id, '_galgdr_siglas', sanitize_text_field($_POST['galgdr_siglas_field']));
+    }
+}
+add_action('save_post_galgdr', 'elementor_blank_save_galgdr_siglas');
+
+/**
+ * Register Siglas custom field for REST API and Elementor
+ */
+function elementor_blank_register_galgdr_siglas_meta() {
+    if (!get_theme_mod('enable_galgdr_cpt', false)) {
+        return;
+    }
+    
+    register_post_meta('galgdr', '_galgdr_siglas', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'string',
+        'description' => __('Siglas del GAL/GDR', 'elementor-blank-starter'),
+        'sanitize_callback' => 'sanitize_text_field',
+        'auth_callback' => function() {
+            return current_user_can('edit_posts');
+        }
+    ));
+}
+add_action('init', 'elementor_blank_register_galgdr_siglas_meta');
 
 /**
  * Add GAL/GDR relationship meta box to Municipio
