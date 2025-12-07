@@ -42,12 +42,9 @@ function elementor_blank_register_galgdr_cpt() {
         'show_ui'               => true,
         'show_in_menu'          => true,
         'menu_icon'             => 'dashicons-groups',
-        'has_archive'           => true,
+        'has_archive'           => false,
         'show_in_rest'          => true,
-        'rewrite'               => array(
-            'slug'       => 'galgdr/%provincia%',
-            'with_front' => false,
-        ),
+        'rewrite'               => false,
     );
 
     register_post_type('galgdr', $args);
@@ -55,35 +52,21 @@ function elementor_blank_register_galgdr_cpt() {
 add_action('init', 'elementor_blank_register_galgdr_cpt', 0);
 
 /**
- * Replace %provincia% in GAL/GDR permalinks
+ * Generate correct permalink for GAL/GDR posts
  */
 function elementor_blank_galgdr_permalink($post_link, $post) {
     if ($post->post_type !== 'galgdr') {
         return $post_link;
     }
     
-    if (strpos($post_link, '%provincia%') === false) {
-        return $post_link;
-    }
-    
     $terms = wp_get_object_terms($post->ID, 'provincia');
     if (!empty($terms) && !is_wp_error($terms)) {
-        $post_link = str_replace('%provincia%', $terms[0]->slug, $post_link);
+        return home_url('/galgdr/' . $terms[0]->slug . '/' . $post->post_name . '/');
     } else {
-        $post_link = str_replace('%provincia%', 'sin-provincia', $post_link);
+        return home_url('/galgdr/sin-provincia/' . $post->post_name . '/');
     }
-    
-    return $post_link;
 }
 add_filter('post_type_link', 'elementor_blank_galgdr_permalink', 10, 2);
-
-/**
- * Register %provincia% as a valid permalink structure tag
- */
-function elementor_blank_register_provincia_permalink_tag() {
-    add_rewrite_tag('%provincia%', '([^/]+)', 'provincia=');
-}
-add_action('init', 'elementor_blank_register_provincia_permalink_tag', 0);
 
 /**
  * Register Municipio Post Type
@@ -191,7 +174,7 @@ function elementor_blank_galgdr_provincia_rewrite_rules() {
     // Single GAL/GDR: /galgdr/toledo/nombre-del-galgdr/
     add_rewrite_rule(
         '^galgdr/([^/]+)/([^/]+)/?$',
-        'index.php?galgdr=$matches[2]',
+        'index.php?post_type=galgdr&name=$matches[2]',
         'top'
     );
 }
