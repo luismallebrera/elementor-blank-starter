@@ -429,6 +429,11 @@ if (class_exists('Kirki')) {
      * Import GAL/GDR & Municipios
      */
     require_once get_template_directory() . '/inc/import-galgdr-municipios.php';
+    
+    /**
+     * Cleanup: Remove provincia from municipios (run once)
+     */
+    require_once get_template_directory() . '/inc/cleanup-municipio-provincias.php';
 } else {
     /**
      * Mostrar aviso si Kirki no está disponible
