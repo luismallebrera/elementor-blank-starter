@@ -62,6 +62,10 @@ function elementor_blank_galgdr_permalink($post_link, $post) {
         return $post_link;
     }
     
+    if (strpos($post_link, '%provincia%') === false) {
+        return $post_link;
+    }
+    
     $terms = wp_get_object_terms($post->ID, 'provincia');
     if (!empty($terms) && !is_wp_error($terms)) {
         $post_link = str_replace('%provincia%', $terms[0]->slug, $post_link);
@@ -72,6 +76,14 @@ function elementor_blank_galgdr_permalink($post_link, $post) {
     return $post_link;
 }
 add_filter('post_type_link', 'elementor_blank_galgdr_permalink', 10, 2);
+
+/**
+ * Register %provincia% as a valid permalink structure tag
+ */
+function elementor_blank_register_provincia_permalink_tag() {
+    add_rewrite_tag('%provincia%', '([^/]+)', 'provincia=');
+}
+add_action('init', 'elementor_blank_register_provincia_permalink_tag', 0);
 
 /**
  * Register Municipio Post Type
