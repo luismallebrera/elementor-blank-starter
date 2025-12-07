@@ -42,9 +42,8 @@ function elementor_blank_register_galgdr_cpt() {
         'show_ui'               => true,
         'show_in_menu'          => true,
         'menu_icon'             => 'dashicons-groups',
-        'has_archive'           => false,
+        'has_archive'           => true,
         'show_in_rest'          => true,
-        'rewrite'               => false,
     );
 
     register_post_type('galgdr', $args);
@@ -56,6 +55,11 @@ add_action('init', 'elementor_blank_register_galgdr_cpt', 0);
  */
 function elementor_blank_galgdr_permalink($post_link, $post) {
     if ($post->post_type !== 'galgdr') {
+        return $post_link;
+    }
+    
+    // Solo modificar si no tiene ya la estructura correcta
+    if (strpos($post_link, '/galgdr/') !== false) {
         return $post_link;
     }
     
