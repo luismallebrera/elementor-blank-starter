@@ -376,9 +376,9 @@ function elementor_blank_register_galgdr_siglas_meta() {
 add_action('init', 'elementor_blank_register_galgdr_siglas_meta');
 
 /**
- * Add GAL/GDR relationship meta box to Municipio
+ * Add GAL/GDR and Provincia relationship meta boxes to Municipio
  */
-function elementor_blank_add_municipio_galgdr_meta_box() {
+function elementor_blank_add_municipio_meta_boxes() {
     if (!get_theme_mod('enable_galgdr_cpt', false)) {
         return;
     }
@@ -391,8 +391,17 @@ function elementor_blank_add_municipio_galgdr_meta_box() {
         'side',
         'default'
     );
+    
+    add_meta_box(
+        'municipio_provincia_relationship',
+        __('Provincia', 'elementor-blank-starter'),
+        'elementor_blank_municipio_provincia_callback',
+        'municipio',
+        'side',
+        'default'
+    );
 }
-add_action('add_meta_boxes', 'elementor_blank_add_municipio_galgdr_meta_box');
+add_action('add_meta_boxes', 'elementor_blank_add_municipio_meta_boxes');
 
 function elementor_blank_municipio_galgdr_callback($post) {
     wp_nonce_field('municipio_galgdr_nonce', 'municipio_galgdr_nonce_field');
@@ -419,6 +428,32 @@ function elementor_blank_municipio_galgdr_callback($post) {
     echo '</select>';
 }
 
+function elementor_blank_municipio_provincia_callback($post) {
+    wp_nonce_field('municipio_provincia_nonce', 'municipio_provincia_nonce_field');
+    $selected_provincia = get_post_meta($post->ID, '_municipio_provincia', true);
+    
+    // Get all provincia terms
+    $provincias = get_terms(array(
+        'taxonomy'   => 'provincia',
+        'hide_empty' => false,
+        'orderby'    => 'name',
+        'order'      => 'ASC',
+    ));
+    
+    echo '<label for="municipio_provincia_select">' . __('Selecciona Provincia:', 'elementor-blank-starter') . '</label><br>';
+    echo '<select id="municipio_provincia_select" name="municipio_provincia" style="width: 100%;">';
+    echo '<option value="">' . __('-- Ninguna --', 'elementor-blank-starter') . '</option>';
+    
+    if (!is_wp_error($provincias) && !empty($provincias)) {
+        foreach ($provincias as $provincia) {
+            $selected = ($selected_provincia == $provincia->term_id) ? 'selected="selected"' : '';
+            echo '<option value="' . esc_attr($provincia->term_id) . '" ' . $selected . '>' . esc_html($provincia->name) . '</option>';
+        }
+    }
+    
+    echo '</select>';
+}
+
 function elementor_blank_save_municipio_galgdr($post_id) {
     if (!isset($_POST['municipio_galgdr_nonce_field']) || 
         !wp_verify_nonce($_POST['municipio_galgdr_nonce_field'], 'municipio_galgdr_nonce')) {
@@ -437,11 +472,16 @@ function elementor_blank_save_municipio_galgdr($post_id) {
         $galgdr_id = absint($_POST['municipio_galgdr_asociado']);
         update_post_meta($post_id, '_municipio_galgdr_asociado', $galgdr_id);
     }
+    
+    if (isset($_POST['municipio_provincia'])) {
+        $provincia_id = absint($_POST['municipio_provincia']);
+        update_post_meta($post_id, '_municipio_provincia', $provincia_id);
+    }
 }
 add_action('save_post_municipio', 'elementor_blank_save_municipio_galgdr');
 
 /**
- * Register GAL/GDR relationship meta for REST API
+ * Register GAL/GDR and Provincia relationship meta for REST API
  */
 function elementor_blank_register_municipio_galgdr_meta() {
     if (!get_theme_mod('enable_galgdr_cpt', false)) {
@@ -453,6 +493,17 @@ function elementor_blank_register_municipio_galgdr_meta() {
         'single' => true,
         'type' => 'integer',
         'description' => __('ID del GAL/GDR asociado', 'elementor-blank-starter'),
+        'sanitize_callback' => 'absint',
+        'auth_callback' => function() {
+            return current_user_can('edit_posts');
+        }
+    ));
+    
+    register_post_meta('municipio', '_municipio_provincia', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'integer',
+        'description' => __('ID de la provincia asociada', 'elementor-blank-starter'),
         'sanitize_callback' => 'absint',
         'auth_callback' => function() {
             return current_user_can('edit_posts');
