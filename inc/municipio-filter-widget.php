@@ -87,10 +87,12 @@ function elementor_blank_municipio_filter_shortcode() {
                 // Update URL with municipio_id parameter
                 const url = new URL(window.location);
                 url.searchParams.set('municipio_id', municipioId);
-                window.history.pushState({}, '', url);
+                window.history.replaceState({}, '', url);
                 
-                // Open popup
-                elementorProFrontend.modules.popup.showPopup({ id: 7468 });
+                // Small delay to ensure URL is updated
+                setTimeout(function() {
+                    elementorProFrontend.modules.popup.showPopup({ id: 7468 });
+                }, 100);
             }
         });
     });
