@@ -604,6 +604,37 @@ function elementor_blank_galgdr_siglas_shortcode($atts) {
 add_shortcode('galgdr_siglas', 'elementor_blank_galgdr_siglas_shortcode');
 
 /**
+ * Simple shortcode to get post title by ID
+ */
+function elementor_blank_get_post_title_by_id($atts) {
+    $atts = shortcode_atts(array('id' => 0), $atts);
+    $id = absint($atts['id']);
+    
+    if ($id) {
+        return get_the_title($id);
+    }
+    return '';
+}
+add_shortcode('post_title_by_id', 'elementor_blank_get_post_title_by_id');
+
+/**
+ * Simple shortcode to get term name by ID
+ */
+function elementor_blank_get_term_name_by_id($atts) {
+    $atts = shortcode_atts(array('id' => 0, 'taxonomy' => 'provincia'), $atts);
+    $id = absint($atts['id']);
+    
+    if ($id) {
+        $term = get_term($id, $atts['taxonomy']);
+        if ($term && !is_wp_error($term)) {
+            return $term->name;
+        }
+    }
+    return '';
+}
+add_shortcode('term_name_by_id', 'elementor_blank_get_term_name_by_id');
+
+/**
  * Register Noticias Slider Post Type
  */
 function elementor_blank_register_noticias_slider_cpt() {
