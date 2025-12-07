@@ -106,9 +106,6 @@ function elementor_blank_import_galgdr_municipios() {
                     continue;
                 }
                 
-                // Assign provincia to municipio
-                wp_set_post_terms($municipio_post_id, array($provincia_term_id), 'provincia');
-                
                 // Assign GAL/GDR relationship
                 update_post_meta($municipio_post_id, '_municipio_galgdr_asociado', $galgdr_post_id);
                 

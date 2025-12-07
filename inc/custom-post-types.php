@@ -169,7 +169,7 @@ function elementor_blank_register_provincia_taxonomy() {
         ),
     );
 
-    register_taxonomy('provincia', array('galgdr', 'municipio'), $args);
+    register_taxonomy('provincia', array('galgdr'), $args);
 }
 add_action('init', 'elementor_blank_register_provincia_taxonomy', 0);
 
