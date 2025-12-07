@@ -565,6 +565,14 @@ function elementor_blank_municipio_provincia_name_shortcode($atts) {
 }
 add_shortcode('municipio_provincia_name', 'elementor_blank_municipio_provincia_name_shortcode');
 
+function elementor_blank_galgdr_siglas_shortcode($atts) {
+    $post_id = get_the_ID();
+    $siglas = get_post_meta($post_id, '_galgdr_siglas', true);
+    
+    return $siglas ? esc_html($siglas) : '';
+}
+add_shortcode('galgdr_siglas', 'elementor_blank_galgdr_siglas_shortcode');
+
 /**
  * Register Noticias Slider Post Type
  */
