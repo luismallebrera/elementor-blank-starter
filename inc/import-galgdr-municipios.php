@@ -109,7 +109,14 @@ function elementor_blank_import_galgdr_municipios() {
                 // Assign GAL/GDR relationship
                 update_post_meta($municipio_post_id, '_municipio_galgdr_asociado', $galgdr_post_id);
                 
+                // Assign Provincia relationship
+                update_post_meta($municipio_post_id, '_municipio_provincia', $provincia_term_id);
+                
                 $results['municipios_created']++;
+            } else {
+                // Update existing municipio with GAL/GDR and Provincia
+                update_post_meta($existing_municipio->ID, '_municipio_galgdr_asociado', $galgdr_post_id);
+                update_post_meta($existing_municipio->ID, '_municipio_provincia', $provincia_term_id);
             }
         }
     }
