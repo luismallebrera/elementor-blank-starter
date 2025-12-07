@@ -359,3 +359,26 @@ function elementor_blank_breadcrumbs_css() {
 	<?php
 }
 add_action( 'wp_head', 'elementor_blank_breadcrumbs_css' );
+
+/**
+ * Filter Elementor breadcrumbs for provincia taxonomy
+ */
+function elementor_blank_filter_elementor_breadcrumbs( $breadcrumbs ) {
+	if ( is_tax( 'provincia' ) ) {
+		$term = get_queried_object();
+		
+		// Find and replace any breadcrumb that's just the term name with GAL/GDR > Term
+		foreach ( $breadcrumbs as $key => $crumb ) {
+			// If we find "Provincias" or similar, replace with GAL/GDR
+			if ( isset( $crumb['text'] ) && ( $crumb['text'] === 'Provincias' || $crumb['text'] === 'Provincia' ) ) {
+				$breadcrumbs[$key] = array(
+					'text' => 'GAL/GDR',
+					'url'  => home_url( '/galgdr/' ),
+				);
+			}
+		}
+	}
+	
+	return $breadcrumbs;
+}
+add_filter( 'elementor/breadcrumbs/items', 'elementor_blank_filter_elementor_breadcrumbs', 20 );
