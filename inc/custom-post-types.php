@@ -163,7 +163,7 @@ function elementor_blank_register_provincia_taxonomy() {
         'show_in_rest'               => true,
         'has_archive'                => true,
         'rewrite'                    => array(
-            'slug'                   => 'provincia',
+            'slug'                   => 'galgdr',
             'with_front'             => false,
             'hierarchical'           => true,
         ),
