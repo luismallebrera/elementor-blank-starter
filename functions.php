@@ -439,6 +439,11 @@ if (class_exists('Kirki')) {
      * Municipio Popup Support
      */
     require_once get_template_directory() . '/inc/municipio-popup-support.php';
+    
+    /**
+     * Municipio Search Widget
+     */
+    require_once get_template_directory() . '/inc/municipio-search-widget.php';
 } else {
     /**
      * Mostrar aviso si Kirki no está disponible
