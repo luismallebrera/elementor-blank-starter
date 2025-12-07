@@ -79,20 +79,15 @@ function elementor_blank_municipio_filter_shortcode() {
             });
         });
         
-        // When municipio changes, open popup with municipio_id
+        // When municipio changes, reload page with municipio_id to open popup
         $('#municipio-select').on('change', function() {
             const municipioId = $(this).val();
             
-            if (municipioId && typeof elementorProFrontend !== 'undefined') {
-                // Update URL with municipio_id parameter
+            if (municipioId) {
+                // Reload page with municipio_id parameter (will auto-open popup)
                 const url = new URL(window.location);
                 url.searchParams.set('municipio_id', municipioId);
-                window.history.replaceState({}, '', url);
-                
-                // Small delay to ensure URL is updated
-                setTimeout(function() {
-                    elementorProFrontend.modules.popup.showPopup({ id: 7468 });
-                }, 100);
+                window.location.href = url.toString();
             }
         });
     });
