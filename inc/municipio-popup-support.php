@@ -1,7 +1,7 @@
 <?php
 /**
  * Municipio Popup Support
- * Auto-open popup when municipio_id is in URL
+ * Simple page reload approach with municipio_id parameter
  */
 
 if (!defined('ABSPATH')) {
@@ -9,12 +9,13 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * JavaScript to auto-open popup when municipio_id is in URL
+ * JavaScript to auto-open popup and reload page when clicking municipio links
  */
 function elementor_blank_popup_auto_open_script() {
     ?>
     <script>
     jQuery(document).ready(function($) {
+        // Auto-open popup if municipio_id is in URL
         const urlParams = new URLSearchParams(window.location.search);
         const municipioId = urlParams.get('municipio_id');
         

@@ -617,25 +617,22 @@ function elementor_blank_show_municipio_info($atts) {
     }
     
     $field = $atts['field'];
-    $output = '';
     
     switch ($field) {
         case 'title':
-            $output = get_the_title($municipio_id);
-            return '<span class="municipio-title">' . esc_html($output) . '</span>';
+            return get_the_title($municipio_id);
             
         case 'galgdr':
             $galgdr_id = get_post_meta($municipio_id, '_municipio_galgdr_asociado', true);
-            $output = $galgdr_id ? get_the_title($galgdr_id) : '';
-            return '<span class="municipio-galgdr">' . esc_html($output) . '</span>';
+            return $galgdr_id ? get_the_title($galgdr_id) : '';
             
         case 'provincia':
             $provincia_id = get_post_meta($municipio_id, '_municipio_provincia', true);
             if ($provincia_id) {
                 $term = get_term($provincia_id, 'provincia');
-                $output = ($term && !is_wp_error($term)) ? $term->name : '';
+                return ($term && !is_wp_error($term)) ? $term->name : '';
             }
-            return '<span class="municipio-provincia">' . esc_html($output) . '</span>';
+            return '';
             
         default:
             return '';
