@@ -536,6 +536,36 @@ function elementor_blank_municipios_de_gal_query($query) {
 add_action('elementor/query/municipios_de_gal', 'elementor_blank_municipios_de_gal_query');
 
 /**
+ * Shortcodes for displaying Municipio relationships in Elementor
+ */
+function elementor_blank_municipio_galgdr_name_shortcode($atts) {
+    $post_id = get_the_ID();
+    $galgdr_id = get_post_meta($post_id, '_municipio_galgdr_asociado', true);
+    
+    if ($galgdr_id) {
+        return get_the_title($galgdr_id);
+    }
+    
+    return '';
+}
+add_shortcode('municipio_galgdr_name', 'elementor_blank_municipio_galgdr_name_shortcode');
+
+function elementor_blank_municipio_provincia_name_shortcode($atts) {
+    $post_id = get_the_ID();
+    $provincia_id = get_post_meta($post_id, '_municipio_provincia', true);
+    
+    if ($provincia_id) {
+        $term = get_term($provincia_id, 'provincia');
+        if ($term && !is_wp_error($term)) {
+            return $term->name;
+        }
+    }
+    
+    return '';
+}
+add_shortcode('municipio_provincia_name', 'elementor_blank_municipio_provincia_name_shortcode');
+
+/**
  * Register Noticias Slider Post Type
  */
 function elementor_blank_register_noticias_slider_cpt() {
