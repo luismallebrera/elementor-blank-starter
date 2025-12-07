@@ -494,9 +494,7 @@ function elementor_blank_register_municipio_galgdr_meta() {
         'type' => 'integer',
         'description' => __('ID del GAL/GDR asociado', 'elementor-blank-starter'),
         'sanitize_callback' => 'absint',
-        'auth_callback' => function() {
-            return current_user_can('edit_posts');
-        }
+        'auth_callback' => '__return_true'
     ));
     
     register_post_meta('municipio', '_municipio_provincia', array(
@@ -505,9 +503,7 @@ function elementor_blank_register_municipio_galgdr_meta() {
         'type' => 'integer',
         'description' => __('ID de la provincia asociada', 'elementor-blank-starter'),
         'sanitize_callback' => 'absint',
-        'auth_callback' => function() {
-            return current_user_can('edit_posts');
-        }
+        'auth_callback' => '__return_true'
     ));
 }
 add_action('init', 'elementor_blank_register_municipio_galgdr_meta');
