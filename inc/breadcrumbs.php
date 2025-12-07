@@ -213,12 +213,15 @@ function elementor_blank_breadcrumbs( $args = array() ) {
 		$term = get_queried_object();
 		$taxonomy = get_taxonomy( $term->taxonomy );
 		
-		// Debug: ver información del término
-		// error_log('Term ID: ' . $term->term_id . ' | Parent: ' . $term->parent . ' | Name: ' . $term->name);
-		
-		// Add taxonomy name (not linked, just label)
-		if ( $taxonomy && $taxonomy->public ) {
-			$breadcrumbs[] = '<span>' . esc_html( $taxonomy->labels->name ) . '</span>';
+		// Special handling for provincia taxonomy
+		if ( $term->taxonomy === 'provincia' ) {
+			// Add GAL/GDR post type archive link
+			$breadcrumbs[] = '<a href="' . esc_url( home_url( '/galgdr/' ) ) . '">GAL/GDR</a>';
+		} else {
+			// Add taxonomy name (not linked, just label)
+			if ( $taxonomy && $taxonomy->public ) {
+				$breadcrumbs[] = '<span>' . esc_html( $taxonomy->labels->name ) . '</span>';
+			}
 		}
 		
 		// Add all parent terms recursively if hierarchical
