@@ -434,6 +434,11 @@ if (class_exists('Kirki')) {
      * Cleanup: Remove provincia from municipios (run once)
      */
     require_once get_template_directory() . '/inc/cleanup-municipio-provincias.php';
+    
+    /**
+     * Municipio Popup Dynamic Content
+     */
+    require_once get_template_directory() . '/inc/municipio-popup-dynamic.php';
 } else {
     /**
      * Mostrar aviso si Kirki no está disponible
