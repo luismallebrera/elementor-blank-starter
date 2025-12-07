@@ -59,15 +59,15 @@ function elementor_blank_galgdr_permalink($post_link, $post) {
     }
     
     // Solo modificar si no tiene ya la estructura correcta
-    if (strpos($post_link, '/galgdr/provincia/') !== false) {
+    if (strpos($post_link, '/galgdr/') !== false && strpos($post_link, '/galgdr/galgdr/') === false) {
         return $post_link;
     }
     
     $terms = wp_get_object_terms($post->ID, 'provincia');
     if (!empty($terms) && !is_wp_error($terms)) {
-        return home_url('/galgdr/provincia/' . $terms[0]->slug . '/' . $post->post_name . '/');
+        return home_url('/galgdr/' . $terms[0]->slug . '/' . $post->post_name . '/');
     } else {
-        return home_url('/galgdr/provincia/sin-provincia/' . $post->post_name . '/');
+        return home_url('/galgdr/sin-provincia/' . $post->post_name . '/');
     }
 }
 add_filter('post_type_link', 'elementor_blank_galgdr_permalink', 10, 2);
@@ -150,7 +150,7 @@ function elementor_blank_register_provincia_taxonomy() {
         'show_in_rest'               => true,
         'has_archive'                => true,
         'rewrite'                    => array(
-            'slug'                   => 'galgdr/provincia',
+            'slug'                   => 'galgdr',
             'with_front'             => false,
             'hierarchical'           => true,
         ),
@@ -168,16 +168,16 @@ function elementor_blank_galgdr_provincia_rewrite_rules() {
         return;
     }
     
-    // Archive by provincia: /galgdr/provincia/toledo/
+    // Archive by provincia: /galgdr/toledo/
     add_rewrite_rule(
-        '^galgdr/provincia/([^/]+)/?$',
+        '^galgdr/([^/]+)/?$',
         'index.php?provincia=$matches[1]',
         'top'
     );
     
-    // Single GAL/GDR: /galgdr/provincia/toledo/nombre-del-galgdr/
+    // Single GAL/GDR: /galgdr/toledo/nombre-del-galgdr/
     add_rewrite_rule(
-        '^galgdr/provincia/([^/]+)/([^/]+)/?$',
+        '^galgdr/([^/]+)/([^/]+)/?$',
         'index.php?post_type=galgdr&name=$matches[2]',
         'top'
     );
