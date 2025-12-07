@@ -79,15 +79,39 @@ function elementor_blank_municipio_filter_shortcode() {
             });
         });
         
-        // When municipio changes, reload page with municipio_id to open popup
+        // When municipio changes, open popup with municipio_id
         $('#municipio-select').on('change', function() {
             const municipioId = $(this).val();
             
             if (municipioId) {
-                // Reload page with municipio_id parameter (will auto-open popup)
+                // Update URL
                 const url = new URL(window.location);
                 url.searchParams.set('municipio_id', municipioId);
-                window.location.href = url.toString();
+                window.history.replaceState({}, '', url);
+                
+                // Load municipio data and update popup
+                $.ajax({
+                    url: '<?php echo admin_url('admin-ajax.php'); ?>',
+                    data: {
+                        action: 'get_municipio_popup_data',
+                        municipio_id: municipioId
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            const data = response.data;
+                            
+                            // Update all shortcode spans
+                            $('.municipio-title').text(data.title);
+                            $('.municipio-galgdr').text(data.galgdr);
+                            $('.municipio-provincia').text(data.provincia);
+                            
+                            // Open popup
+                            if (typeof elementorProFrontend !== 'undefined') {
+                                elementorProFrontend.modules.popup.showPopup({ id: 7468 });
+                            }
+                        }
+                    }
+                });
             }
         });
     });
@@ -118,6 +142,38 @@ function elementor_blank_municipio_filter_shortcode() {
     return ob_get_clean();
 }
 add_shortcode('municipio_filter', 'elementor_blank_municipio_filter_shortcode');
+
+/**
+ * AJAX handler to get municipio popup data
+ */
+function elementor_blank_get_municipio_popup_data() {
+    $municipio_id = isset($_GET['municipio_id']) ? absint($_GET['municipio_id']) : 0;
+    
+    if (!$municipio_id) {
+        wp_send_json_error('No municipio ID');
+    }
+    
+    $galgdr_id = get_post_meta($municipio_id, '_municipio_galgdr_asociado', true);
+    $provincia_id = get_post_meta($municipio_id, '_municipio_provincia', true);
+    
+    $galgdr_name = $galgdr_id ? get_the_title($galgdr_id) : '';
+    $provincia_name = '';
+    
+    if ($provincia_id) {
+        $term = get_term($provincia_id, 'provincia');
+        if ($term && !is_wp_error($term)) {
+            $provincia_name = $term->name;
+        }
+    }
+    
+    wp_send_json_success(array(
+        'title' => get_the_title($municipio_id),
+        'galgdr' => $galgdr_name,
+        'provincia' => $provincia_name,
+    ));
+}
+add_action('wp_ajax_get_municipio_popup_data', 'elementor_blank_get_municipio_popup_data');
+add_action('wp_ajax_nopriv_get_municipio_popup_data', 'elementor_blank_get_municipio_popup_data');
 
 /**
  * AJAX handler to get municipios by provincia
