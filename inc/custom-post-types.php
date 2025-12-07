@@ -509,6 +509,32 @@ function elementor_blank_register_municipio_galgdr_meta() {
 add_action('init', 'elementor_blank_register_municipio_galgdr_meta');
 
 /**
+ * Add meta fields to REST API response for municipio
+ */
+function elementor_blank_add_municipio_meta_to_rest() {
+    register_rest_field('municipio', 'galgdr_asociado', array(
+        'get_callback' => function($post) {
+            return get_post_meta($post['id'], '_municipio_galgdr_asociado', true);
+        },
+        'schema' => array(
+            'description' => 'ID del GAL/GDR asociado',
+            'type' => 'integer'
+        ),
+    ));
+    
+    register_rest_field('municipio', 'provincia_asociada', array(
+        'get_callback' => function($post) {
+            return get_post_meta($post['id'], '_municipio_provincia', true);
+        },
+        'schema' => array(
+            'description' => 'ID de la provincia asociada',
+            'type' => 'integer'
+        ),
+    ));
+}
+add_action('rest_api_init', 'elementor_blank_add_municipio_meta_to_rest');
+
+/**
  * Custom Elementor Query for Municipios related to GAL/GDR
  * Use Query ID: municipios_de_gal
  */
