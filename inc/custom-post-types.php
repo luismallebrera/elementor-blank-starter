@@ -44,6 +44,7 @@ function elementor_blank_register_galgdr_cpt() {
         'menu_icon'             => 'dashicons-groups',
         'has_archive'           => true,
         'show_in_rest'          => true,
+        'rewrite'               => false,
     );
 
     register_post_type('galgdr', $args);
