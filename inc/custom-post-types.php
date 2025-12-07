@@ -604,50 +604,6 @@ function elementor_blank_galgdr_siglas_shortcode($atts) {
 add_shortcode('galgdr_siglas', 'elementor_blank_galgdr_siglas_shortcode');
 
 /**
- * Complete municipio info shortcode - reads municipio_id from URL
- */
-function elementor_blank_show_municipio_info($atts) {
-    $atts = shortcode_atts(array('field' => 'title'), $atts);
-    
-    // Get municipio_id from URL
-    $municipio_id = isset($_GET['municipio_id']) ? absint($_GET['municipio_id']) : 0;
-    
-    // Debug output
-    if (!$municipio_id) {
-        return '[No municipio_id in URL]';
-    }
-    
-    $field = $atts['field'];
-    
-    switch ($field) {
-        case 'title':
-            return get_the_title($municipio_id);
-            
-        case 'galgdr':
-            $galgdr_id = get_post_meta($municipio_id, '_municipio_galgdr_asociado', true);
-            if (!$galgdr_id) {
-                return '[No GAL/GDR for municipio ' . $municipio_id . ']';
-            }
-            return get_the_title($galgdr_id);
-            
-        case 'provincia':
-            $provincia_id = get_post_meta($municipio_id, '_municipio_provincia', true);
-            if (!$provincia_id) {
-                return '[No provincia for municipio ' . $municipio_id . ']';
-            }
-            $term = get_term($provincia_id, 'provincia');
-            if (!$term || is_wp_error($term)) {
-                return '[Invalid provincia ID ' . $provincia_id . ']';
-            }
-            return $term->name;
-            
-        default:
-            return '[Invalid field: ' . $field . ']';
-    }
-}
-add_shortcode('municipio_info', 'elementor_blank_show_municipio_info');
-
-/**
  * Register Noticias Slider Post Type
  */
 function elementor_blank_register_noticias_slider_cpt() {
