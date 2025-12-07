@@ -84,6 +84,12 @@ function elementor_blank_scripts() {
     // Estilo principal
     wp_enqueue_style('elementor-blank-style', get_stylesheet_uri(), array(), '1.0');
     
+    // Select2 CSS
+    wp_enqueue_style('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css', array(), '4.1.0');
+    
+    // Select2 JS
+    wp_enqueue_script('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', array('jquery'), '4.1.0', true);
+    
     // Ensure sprintf is available for Elementor
     wp_enqueue_script('wp-util');
     

@@ -49,6 +49,19 @@ function elementor_blank_municipio_search_shortcode($atts) {
     jQuery(document).ready(function($) {
         var popupId = <?php echo $popup_id; ?>;
         
+        // Initialize Select2 on both selects
+        $('#provincia-select').select2({
+            placeholder: '<?php _e('-- Selecciona una provincia --', 'elementor-blank-starter'); ?>',
+            allowClear: true,
+            width: '100%'
+        });
+        
+        $('#municipio-select').select2({
+            placeholder: '<?php _e('-- Selecciona un municipio --', 'elementor-blank-starter'); ?>',
+            allowClear: true,
+            width: '100%'
+        });
+        
         // When provincia changes, load municipios
         $('#provincia-select').on('change', function() {
             var provinciaId = $(this).val();
@@ -75,6 +88,8 @@ function elementor_blank_municipio_search_shortcode($atts) {
                             $select.append('<option value="' + municipio.id + '">' + municipio.title + '</option>');
                         });
                         
+                        // Refresh Select2 after adding options
+                        $select.trigger('change.select2');
                         $('.search-municipio').show();
                     }
                 }
