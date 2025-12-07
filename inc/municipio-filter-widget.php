@@ -89,29 +89,31 @@ function elementor_blank_municipio_filter_shortcode() {
                 url.searchParams.set('municipio_id', municipioId);
                 window.history.replaceState({}, '', url);
                 
-                // Load municipio data and update popup
-                $.ajax({
-                    url: '<?php echo admin_url('admin-ajax.php'); ?>',
-                    data: {
-                        action: 'get_municipio_popup_data',
-                        municipio_id: municipioId
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            const data = response.data;
-                            
-                            // Update all shortcode spans
-                            $('.municipio-title').text(data.title);
-                            $('.municipio-galgdr').text(data.galgdr);
-                            $('.municipio-provincia').text(data.provincia);
-                            
-                            // Open popup
-                            if (typeof elementorProFrontend !== 'undefined') {
-                                elementorProFrontend.modules.popup.showPopup({ id: 7468 });
+                // Open popup first
+                if (typeof elementorProFrontend !== 'undefined') {
+                    elementorProFrontend.modules.popup.showPopup({ id: 7468 });
+                    
+                    // Wait for popup to open, then load and update data
+                    setTimeout(function() {
+                        $.ajax({
+                            url: '<?php echo admin_url('admin-ajax.php'); ?>',
+                            data: {
+                                action: 'get_municipio_popup_data',
+                                municipio_id: municipioId
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    const data = response.data;
+                                    
+                                    // Update all shortcode spans inside popup
+                                    $('.elementor-popup-modal .municipio-title').text(data.title);
+                                    $('.elementor-popup-modal .municipio-galgdr').text(data.galgdr);
+                                    $('.elementor-popup-modal .municipio-provincia').text(data.provincia);
+                                }
                             }
-                        }
-                    }
-                });
+                        });
+                    }, 300);
+                }
             }
         });
     });
