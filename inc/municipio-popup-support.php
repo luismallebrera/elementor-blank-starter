@@ -9,6 +9,15 @@ if (!defined('ABSPATH')) {
 }
 
 /**
+ * Force Elementor to process shortcodes in popup content
+ */
+function elementor_blank_force_shortcode_processing($content) {
+    // Process shortcodes in the content
+    return do_shortcode($content);
+}
+add_filter('elementor/widget/render_content', 'elementor_blank_force_shortcode_processing', 10, 1);
+
+/**
  * JavaScript to auto-open popup and modify entry list links
  */
 function elementor_blank_popup_auto_open_script() {
