@@ -169,6 +169,13 @@ function elementor_blank_galgdr_provincia_rewrite_rules() {
         return;
     }
     
+    // Main archive: /galgdr/
+    add_rewrite_rule(
+        '^galgdr/?$',
+        'index.php?post_type=galgdr',
+        'top'
+    );
+    
     // Archive by provincia: /galgdr/toledo/
     add_rewrite_rule(
         '^galgdr/([^/]+)/?$',
