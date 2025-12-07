@@ -561,7 +561,11 @@ add_action('elementor/query/municipios_de_gal', 'elementor_blank_municipios_de_g
  * Shortcodes for displaying Municipio relationships in Elementor
  */
 function elementor_blank_municipio_galgdr_name_shortcode($atts) {
-    $post_id = get_the_ID();
+    $atts = shortcode_atts(array(
+        'id' => get_the_ID()
+    ), $atts);
+    
+    $post_id = isset($_GET['municipio_id']) ? absint($_GET['municipio_id']) : $atts['id'];
     $galgdr_id = get_post_meta($post_id, '_municipio_galgdr_asociado', true);
     
     if ($galgdr_id) {
@@ -573,7 +577,11 @@ function elementor_blank_municipio_galgdr_name_shortcode($atts) {
 add_shortcode('municipio_galgdr_name', 'elementor_blank_municipio_galgdr_name_shortcode');
 
 function elementor_blank_municipio_provincia_name_shortcode($atts) {
-    $post_id = get_the_ID();
+    $atts = shortcode_atts(array(
+        'id' => get_the_ID()
+    ), $atts);
+    
+    $post_id = isset($_GET['municipio_id']) ? absint($_GET['municipio_id']) : $atts['id'];
     $provincia_id = get_post_meta($post_id, '_municipio_provincia', true);
     
     if ($provincia_id) {
