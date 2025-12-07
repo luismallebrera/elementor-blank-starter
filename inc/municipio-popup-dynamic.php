@@ -65,40 +65,34 @@ function elementor_blank_municipio_popup_script() {
     ?>
     <script>
     jQuery(document).ready(function($) {
-        // Clean up href attributes that have municipio_id parameter
-        $('a[href*="#popup-7468?municipio_id="]').each(function() {
+        // Handle clicks BEFORE cleaning hrefs (use event delegation on document)
+        $(document).on('click', 'a[href*="#popup-7468?municipio_id="]', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
             var href = $(this).attr('href');
             var matches = href.match(/municipio_id=(\d+)/);
             
             if (matches && matches[1]) {
-                // Store municipio ID in data attribute
-                $(this).attr('data-municipio-id', matches[1]);
-                // Clean href to just the popup anchor
-                $(this).attr('href', '#popup-7468');
-            }
-        });
-        
-        // Handle clicks on popup links
-        $(document).on('click', 'a[href="#popup-7468"][data-municipio-id]', function(e) {
-            e.preventDefault();
-            
-            var municipioId = $(this).attr('data-municipio-id');
-            
-            if (municipioId) {
-                // Update URL with municipio_id parameter
-                var newUrl = window.location.pathname + '?municipio_id=' + municipioId + '#popup-7468';
-                window.history.pushState({}, '', newUrl);
+                var municipioId = matches[1];
                 
-                // Open popup
-                if (typeof elementorProFrontend !== 'undefined') {
-                    elementorProFrontend.modules.popup.showPopup({ id: 7468 });
-                } else {
-                    window.location.href = newUrl;
+                // Update URL with municipio_id parameter
+                var newUrl = window.location.pathname + '?municipio_id=' + municipioId;
+                window.history.replaceState({}, '', newUrl);
+                
+                // Force open popup with Elementor API
+                if (typeof elementorProFrontend !== 'undefined' && elementorProFrontend.modules.popup) {
+                    elementorProFrontend.modules.popup.showPopup({ 
+                        id: 7468,
+                        toggle: false 
+                    });
                 }
             }
+            
+            return false;
         });
     });
     </script>
     <?php
 }
-add_action('wp_footer', 'elementor_blank_municipio_popup_script');
+add_action('wp_footer', 'elementor_blank_municipio_popup_script', 999);
