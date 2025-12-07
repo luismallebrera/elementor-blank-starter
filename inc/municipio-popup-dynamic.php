@@ -65,22 +65,32 @@ function elementor_blank_municipio_popup_script() {
     ?>
     <script>
     jQuery(document).ready(function($) {
-        // Intercept clicks on popup links with municipio_id
-        $(document).on('click', 'a[href*="#popup-7468?municipio_id="]', function(e) {
-            e.preventDefault();
-            
+        // Clean up href attributes that have municipio_id parameter
+        $('a[href*="#popup-7468?municipio_id="]').each(function() {
             var href = $(this).attr('href');
             var matches = href.match(/municipio_id=(\d+)/);
             
             if (matches && matches[1]) {
-                var municipioId = matches[1];
-                
-                // Update URL with municipio_id parameter (clean, without showing in URL bar)
+                // Store municipio ID in data attribute
+                $(this).attr('data-municipio-id', matches[1]);
+                // Clean href to just the popup anchor
+                $(this).attr('href', '#popup-7468');
+            }
+        });
+        
+        // Handle clicks on popup links
+        $(document).on('click', 'a[href="#popup-7468"][data-municipio-id]', function(e) {
+            e.preventDefault();
+            
+            var municipioId = $(this).attr('data-municipio-id');
+            
+            if (municipioId) {
+                // Update URL with municipio_id parameter
                 var newUrl = window.location.pathname + '?municipio_id=' + municipioId + '#popup-7468';
+                window.history.pushState({}, '', newUrl);
                 
                 // Open popup
                 if (typeof elementorProFrontend !== 'undefined') {
-                    window.history.pushState({}, '', newUrl);
                     elementorProFrontend.modules.popup.showPopup({ id: 7468 });
                 } else {
                     window.location.href = newUrl;
