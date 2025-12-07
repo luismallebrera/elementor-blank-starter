@@ -367,16 +367,24 @@ function elementor_blank_filter_elementor_breadcrumbs( $breadcrumbs ) {
 	if ( is_tax( 'provincia' ) ) {
 		$term = get_queried_object();
 		
-		// Find and replace any breadcrumb that's just the term name with GAL/GDR > Term
-		foreach ( $breadcrumbs as $key => $crumb ) {
-			// If we find "Provincias" or similar, replace with GAL/GDR
-			if ( isset( $crumb['text'] ) && ( $crumb['text'] === 'Provincias' || $crumb['text'] === 'Provincia' ) ) {
-				$breadcrumbs[$key] = array(
+		// Insert GAL/GDR before the current term
+		// Find the last item (current term)
+		$new_breadcrumbs = array();
+		$items_count = count( $breadcrumbs );
+		
+		foreach ( $breadcrumbs as $index => $crumb ) {
+			$new_breadcrumbs[] = $crumb;
+			
+			// After home, insert GAL/GDR
+			if ( $index === 0 ) {
+				$new_breadcrumbs[] = array(
 					'text' => 'GAL/GDR',
 					'url'  => home_url( '/galgdr/' ),
 				);
 			}
 		}
+		
+		return $new_breadcrumbs;
 	}
 	
 	return $breadcrumbs;
