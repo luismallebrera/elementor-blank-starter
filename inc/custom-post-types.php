@@ -102,7 +102,7 @@ function elementor_blank_register_municipio_cpt() {
     $args = array(
         'label'                 => __('Municipios', 'elementor-blank-starter'),
         'labels'                => $labels,
-        'supports'              => array('title', 'editor', 'thumbnail', 'excerpt'),
+        'supports'              => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields'),
         'public'                => true,
         'show_ui'               => true,
         'show_in_menu'          => true,
