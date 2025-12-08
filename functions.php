@@ -27,6 +27,9 @@ function elementor_blank_setup() {
         'flex-height' => true,
         'flex-width'  => true,
     ));
+    
+    // Add custom image size
+    add_image_size('post_image', 1000, 550, true);
 }
 
 /**
