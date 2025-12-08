@@ -45,6 +45,38 @@ function elementor_blank_disable_image_sizes($sizes) {
 }
 
 /**
+ * Sanitize uploaded filenames
+ * Remove spaces, special characters, convert to lowercase, use dashes
+ */
+add_filter('sanitize_file_name', 'elementor_blank_sanitize_filename', 10, 1);
+function elementor_blank_sanitize_filename($filename) {
+    // Get file extension
+    $info = pathinfo($filename);
+    $ext = !empty($info['extension']) ? '.' . $info['extension'] : '';
+    $name = basename($filename, $ext);
+    
+    // Convert to lowercase
+    $name = strtolower($name);
+    
+    // Remove accents
+    $name = remove_accents($name);
+    
+    // Replace spaces and underscores with dashes
+    $name = str_replace(['_', ' '], '-', $name);
+    
+    // Remove special characters (keep only alphanumeric and dashes)
+    $name = preg_replace('/[^a-z0-9\-]/', '', $name);
+    
+    // Remove multiple consecutive dashes
+    $name = preg_replace('/-+/', '-', $name);
+    
+    // Remove leading/trailing dashes
+    $name = trim($name, '-');
+    
+    return $name . $ext;
+}
+
+/**
  * Allow SVG uploads
  */
 add_filter('upload_mimes', 'elementor_blank_allow_svg_upload');
