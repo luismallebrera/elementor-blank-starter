@@ -86,13 +86,11 @@ class Elementor_Blank_Custom_Fonts {
 				$variants = array();
 
 				foreach ( $font_files as $file ) {
-					$ext = strtolower( pathinfo( $file, PATHINFO_EXTENSION ) );
-					
-					if ( ! in_array( $ext, array( 'woff2', 'woff', 'ttf' ) ) ) {
-						continue;
-					}
-
-					// Extract weight from filename (e.g., ClashDisplay-Bold.woff2)
+				$ext = strtolower( pathinfo( $file, PATHINFO_EXTENSION ) );
+				
+				if ( ! in_array( $ext, array( 'woff2', 'woff' ) ) ) {
+					continue;
+				}					// Extract weight from filename (e.g., ClashDisplay-Bold.woff2)
 					$filename_lower = strtolower( pathinfo( $file, PATHINFO_FILENAME ) );
 					
 					// Try to find weight in filename
@@ -110,7 +108,6 @@ class Elementor_Blank_Custom_Fonts {
 							'weight' => $detected_weight,
 							'woff2'  => '',
 							'woff'   => '',
-							'ttf'    => '',
 						);
 					}
 
@@ -138,7 +135,6 @@ class Elementor_Blank_Custom_Fonts {
 	public function allow_font_uploads( $mimes ) {
 		$mimes['woff']  = 'font/woff';
 		$mimes['woff2'] = 'font/woff2';
-		$mimes['ttf']   = 'font/ttf';
 		$mimes['otf']   = 'font/otf';
 		$mimes['eot']   = 'application/vnd.ms-fontobject';
 		return $mimes;
@@ -211,17 +207,6 @@ class Elementor_Blank_Custom_Fonts {
 			)
 		);
 
-		// TTF File
-		new \Kirki\Field\Upload(
-			array(
-				'settings'    => "custom_font_{$font_number}_ttf",
-				'label'       => sprintf( esc_html__( 'Font %d - TTF File', 'elementor-blank-starter' ), $font_number ),
-				'description' => esc_html__( 'Upload .ttf file (optional)', 'elementor-blank-starter' ),
-				'section'     => 'custom_fonts_section',
-				'default'     => '',
-			)
-		);
-
 		// Font Weight
 		new \Kirki\Field\Select(
 			array(
@@ -279,12 +264,11 @@ class Elementor_Blank_Custom_Fonts {
 			$font_name  = get_theme_mod( "custom_font_{$i}_name", '' );
 			$woff2_url  = get_theme_mod( "custom_font_{$i}_woff2", '' );
 			$woff_url   = get_theme_mod( "custom_font_{$i}_woff", '' );
-			$ttf_url    = get_theme_mod( "custom_font_{$i}_ttf", '' );
 			$weight     = get_theme_mod( "custom_font_{$i}_weight", '400' );
 			$style      = get_theme_mod( "custom_font_{$i}_style", 'normal' );
 
 			// Skip if no font name or no font files
-			if ( empty( $font_name ) || ( empty( $woff2_url ) && empty( $woff_url ) && empty( $ttf_url ) ) ) {
+			if ( empty( $font_name ) || ( empty( $woff2_url ) && empty( $woff_url ) ) ) {
 				continue;
 			}
 
@@ -304,9 +288,6 @@ class Elementor_Blank_Custom_Fonts {
 			}
 			if ( ! empty( $woff_url ) ) {
 				$sources[] = "url('" . esc_url( $woff_url ) . "') format('woff')";
-			}
-			if ( ! empty( $ttf_url ) ) {
-				$sources[] = "url('" . esc_url( $ttf_url ) . "') format('truetype')";
 			}
 
 			$css .= implode( ",\n       ", $sources );
@@ -331,14 +312,11 @@ class Elementor_Blank_Custom_Fonts {
 						if ( ! empty( $variant['woff2'] ) ) {
 							$sources[] = "url('" . esc_url( $variant['woff2'] ) . "') format('woff2')";
 						}
-						if ( ! empty( $variant['woff'] ) ) {
-							$sources[] = "url('" . esc_url( $variant['woff'] ) . "') format('woff')";
-						}
-						if ( ! empty( $variant['ttf'] ) ) {
-							$sources[] = "url('" . esc_url( $variant['ttf'] ) . "') format('truetype')";
-						}
+					if ( ! empty( $variant['woff'] ) ) {
+						$sources[] = "url('" . esc_url( $variant['woff'] ) . "') format('woff')";
+					}
 
-						$css .= implode( ",\n       ", $sources );
+					$css .= implode( ",\n       ", $sources );
 						$css .= ";\n}\n\n";
 					}
 				}
@@ -361,10 +339,9 @@ class Elementor_Blank_Custom_Fonts {
 			$font_name = get_theme_mod( "custom_font_{$i}_name", '' );
 			$woff2_url = get_theme_mod( "custom_font_{$i}_woff2", '' );
 			$woff_url  = get_theme_mod( "custom_font_{$i}_woff", '' );
-			$ttf_url   = get_theme_mod( "custom_font_{$i}_ttf", '' );
 
 			// Skip if no font name or no font files
-			if ( empty( $font_name ) || ( empty( $woff2_url ) && empty( $woff_url ) && empty( $ttf_url ) ) ) {
+			if ( empty( $font_name ) || ( empty( $woff2_url ) && empty( $woff_url ) ) ) {
 				continue;
 			}
 
