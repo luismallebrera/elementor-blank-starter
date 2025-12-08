@@ -30,6 +30,18 @@ function elementor_blank_setup() {
 }
 
 /**
+ * Disable default WordPress intermediate image sizes
+ */
+add_filter('intermediate_image_sizes_advanced', 'elementor_blank_disable_image_sizes');
+function elementor_blank_disable_image_sizes($sizes) {
+    unset($sizes['medium_large']); // 768px
+    unset($sizes['large']);         // 1024px
+    unset($sizes['1536x1536']);     // 1536px
+    unset($sizes['2048x2048']);     // 2048px
+    return $sizes;
+}
+
+/**
  * Allow SVG uploads
  */
 add_filter('upload_mimes', 'elementor_blank_allow_svg_upload');
