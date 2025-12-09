@@ -91,6 +91,7 @@
                 this.posX -= (centerX - this.posX) * scaleDiff / oldScale;
                 this.posY -= (centerY - this.posY) * scaleDiff / oldScale;
                 
+                this.constrainPosition();
                 this.updateTransform();
                 this.updateButtons();
             }
@@ -116,8 +117,35 @@
             this.posX = point.x - this.startX;
             this.posY = point.y - this.startY;
             
+            this.constrainPosition();
             this.updateTransform();
             e.preventDefault();
+        }
+        
+        constrainPosition() {
+            const containerRect = this.container.getBoundingClientRect();
+            const imgWidth = this.img.naturalWidth * this.scale;
+            const imgHeight = this.img.naturalHeight * this.scale;
+            
+            // Calculate boundaries
+            const maxX = 0;
+            const minX = containerRect.width - imgWidth;
+            const maxY = 0;
+            const minY = containerRect.height - imgHeight;
+            
+            // Constrain horizontal
+            if (imgWidth > containerRect.width) {
+                this.posX = Math.max(minX, Math.min(maxX, this.posX));
+            } else {
+                this.posX = (containerRect.width - imgWidth) / 2;
+            }
+            
+            // Constrain vertical
+            if (imgHeight > containerRect.height) {
+                this.posY = Math.max(minY, Math.min(maxY, this.posY));
+            } else {
+                this.posY = (containerRect.height - imgHeight) / 2;
+            }
         }
         
         endDrag() {
