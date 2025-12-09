@@ -497,6 +497,11 @@ if (class_exists('Kirki')) {
      * Municipio Search Widget
      */
     require_once get_template_directory() . '/inc/municipio-search-widget.php';
+    
+    /**
+     * ArcGIS Map Shortcode
+     */
+    require_once get_template_directory() . '/inc/arcgis-map-shortcode.php';
 } else {
     /**
      * Mostrar aviso si Kirki no está disponible
