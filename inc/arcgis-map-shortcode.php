@@ -12,6 +12,7 @@ if (!defined('ABSPATH')) {
 function elementor_blank_arcgis_map_shortcode($atts) {
     $atts = shortcode_atts([
         'layers' => '0f8130f83d7b4faab7ecc4e148b4fd4f',
+        'sublayer' => '66',
         'height' => '600',
         'width' => '100%',
         'hide_panel' => 'false'
@@ -19,9 +20,15 @@ function elementor_blank_arcgis_map_shortcode($atts) {
     
     // Check URL parameters
     $url_layers = isset($_GET['layers']) ? sanitize_text_field($_GET['layers']) : $atts['layers'];
+    $url_sublayer = isset($_GET['sublayer']) ? sanitize_text_field($_GET['sublayer']) : $atts['sublayer'];
     $url_hide_panel = isset($_GET['hidePanel']) ? sanitize_text_field($_GET['hidePanel']) : $atts['hide_panel'];
     
     $url = 'https://www.arcgis.com/apps/mapviewer/index.html?layers=' . esc_attr($url_layers);
+    
+    // Add sublayer if provided
+    if (!empty($url_sublayer)) {
+        $url .= ':' . esc_attr($url_sublayer);
+    }
     
     // Add hide_panel parameter if set to true
     if ($url_hide_panel === 'true') {
