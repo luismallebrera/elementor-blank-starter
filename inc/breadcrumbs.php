@@ -270,7 +270,7 @@ function elementor_blank_breadcrumbs( $args = array() ) {
 				$category = $categories[0];
 				$breadcrumbs[] = '<a href="' . esc_url( get_category_link( $category->term_id ) ) . '">' . esc_html( $category->name ) . '</a>';
 			}
-		elseif ( $post_type !== 'attachment' ) {
+		} elseif ( $post_type !== 'attachment' ) {
 			// Custom post type
 			$post_type_object = get_post_type_object( $post_type );
 			if ( $post_type_object && $post_type_object->has_archive ) {
