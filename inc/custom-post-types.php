@@ -376,6 +376,60 @@ function elementor_blank_register_galgdr_siglas_meta() {
 add_action('init', 'elementor_blank_register_galgdr_siglas_meta');
 
 /**
+ * Add SIGLAS column to GAL/GDR admin list
+ */
+function elementor_blank_galgdr_columns($columns) {
+    $new_columns = array();
+    
+    foreach ($columns as $key => $value) {
+        $new_columns[$key] = $value;
+        
+        // Add SIGLAS column after title
+        if ($key === 'title') {
+            $new_columns['siglas'] = __('SIGLAS', 'elementor-blank-starter');
+        }
+    }
+    
+    return $new_columns;
+}
+add_filter('manage_galgdr_posts_columns', 'elementor_blank_galgdr_columns');
+
+/**
+ * Display SIGLAS column content
+ */
+function elementor_blank_galgdr_column_content($column, $post_id) {
+    if ($column === 'siglas') {
+        $siglas = get_post_meta($post_id, '_galgdr_siglas', true);
+        echo esc_html($siglas ?: '—');
+    }
+}
+add_action('manage_galgdr_posts_custom_column', 'elementor_blank_galgdr_column_content', 10, 2);
+
+/**
+ * Make SIGLAS column sortable
+ */
+function elementor_blank_galgdr_sortable_columns($columns) {
+    $columns['siglas'] = 'siglas';
+    return $columns;
+}
+add_filter('manage_edit-galgdr_sortable_columns', 'elementor_blank_galgdr_sortable_columns');
+
+/**
+ * Sort by SIGLAS meta field
+ */
+function elementor_blank_galgdr_column_orderby($query) {
+    if (!is_admin() || !$query->is_main_query()) {
+        return;
+    }
+    
+    if ('siglas' === $query->get('orderby')) {
+        $query->set('meta_key', '_galgdr_siglas');
+        $query->set('orderby', 'meta_value');
+    }
+}
+add_action('pre_get_posts', 'elementor_blank_galgdr_column_orderby');
+
+/**
  * Add GAL/GDR and Provincia relationship meta boxes to Municipio
  */
 function elementor_blank_add_municipio_meta_boxes() {
