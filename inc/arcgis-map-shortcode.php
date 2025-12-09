@@ -14,13 +14,17 @@ function elementor_blank_arcgis_map_shortcode($atts) {
         'layers' => '0f8130f83d7b4faab7ecc4e148b4fd4f',
         'height' => '600',
         'width' => '100%',
-        'hide_panel' => 'true'
+        'hide_panel' => 'false'
     ], $atts);
     
-    $url = 'https://www.arcgis.com/apps/mapviewer/index.html?layers=' . esc_attr($atts['layers']);
+    // Check URL parameters
+    $url_layers = isset($_GET['layers']) ? sanitize_text_field($_GET['layers']) : $atts['layers'];
+    $url_hide_panel = isset($_GET['hidePanel']) ? sanitize_text_field($_GET['hidePanel']) : $atts['hide_panel'];
+    
+    $url = 'https://www.arcgis.com/apps/mapviewer/index.html?layers=' . esc_attr($url_layers);
     
     // Add hide_panel parameter if set to true
-    if ($atts['hide_panel'] === 'true') {
+    if ($url_hide_panel === 'true') {
         $url .= '&hidePanel=true';
     }
     
