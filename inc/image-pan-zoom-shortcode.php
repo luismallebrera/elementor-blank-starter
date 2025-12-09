@@ -19,7 +19,8 @@ function elementor_blank_image_pan_zoom_shortcode($atts) {
         'width' => '100%',
         'mouse_wheel' => 'true',
         'drag' => 'true',
-        'controls' => 'true'
+        'controls' => 'true',
+        'controls_position' => 'top-right'
     ], $atts);
     
     if (empty($atts['image'])) {
@@ -32,8 +33,9 @@ function elementor_blank_image_pan_zoom_shortcode($atts) {
     
     $controls_html = '';
     if ($atts['controls'] === 'true') {
+        $position_class = 'ipz-controls-' . esc_attr($atts['controls_position']);
         $controls_html = '
-            <div class="ipz-controls">
+            <div class="ipz-controls ' . $position_class . '">
                 <button class="ipz-btn ipz-zoom-in" data-target="' . $id . '">+</button>
                 <button class="ipz-btn ipz-zoom-out" data-target="' . $id . '">−</button>
                 <button class="ipz-btn ipz-reset" data-target="' . $id . '">⟲</button>

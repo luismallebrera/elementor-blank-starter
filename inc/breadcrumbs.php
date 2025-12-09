@@ -187,9 +187,18 @@ function elementor_blank_breadcrumbs( $args = array() ) {
 		'home_text'  => get_theme_mod( 'breadcrumbs_home_text', 'Home' ),
 		'separator'  => get_theme_mod( 'breadcrumbs_separator', '/' ),
 		'show_current' => true,
+		'max_length' => 50,
 	);
 
 	$args = wp_parse_args( $args, $defaults );
+
+	// Helper function to truncate text
+	$truncate_text = function( $text, $max_length ) {
+		if ( mb_strlen( $text ) > $max_length ) {
+			return mb_substr( $text, 0, $max_length ) . '...';
+		}
+		return $text;
+	};
 
 	$breadcrumbs = array();
 	$home_url    = home_url( '/' );
@@ -261,7 +270,7 @@ function elementor_blank_breadcrumbs( $args = array() ) {
 				$category = $categories[0];
 				$breadcrumbs[] = '<a href="' . esc_url( get_category_link( $category->term_id ) ) . '">' . esc_html( $category->name ) . '</a>';
 			}
-		} elseif ( $post_type !== 'attachment' ) {
+		elseif ( $post_type !== 'attachment' ) {
 			// Custom post type
 			$post_type_object = get_post_type_object( $post_type );
 			if ( $post_type_object && $post_type_object->has_archive ) {
@@ -270,7 +279,7 @@ function elementor_blank_breadcrumbs( $args = array() ) {
 		}
 		
 		if ( $args['show_current'] ) {
-			$breadcrumbs[] = '<span class="breadcrumb-current">' . esc_html( get_the_title() ) . '</span>';
+			$breadcrumbs[] = '<span class="breadcrumb-current">' . esc_html( $truncate_text( get_the_title(), $args['max_length'] ) ) . '</span>';
 		}
 	} elseif ( is_page() ) {
 		// Page
@@ -289,7 +298,7 @@ function elementor_blank_breadcrumbs( $args = array() ) {
 		}
 		
 		if ( $args['show_current'] ) {
-			$breadcrumbs[] = '<span class="breadcrumb-current">' . esc_html( get_the_title() ) . '</span>';
+			$breadcrumbs[] = '<span class="breadcrumb-current">' . esc_html( $truncate_text( get_the_title(), $args['max_length'] ) ) . '</span>';
 		}
 	}
 
