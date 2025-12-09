@@ -1087,6 +1087,33 @@ function elementor_blank_proyectos_galgdr_callback($post) {
     echo '</select>';
 }
 
+function elementor_blank_proyectos_municipio_callback($post) {
+    wp_nonce_field('proyectos_municipio_nonce', 'proyectos_municipio_nonce_field');
+    $selected_municipio = get_post_meta($post->ID, '_proyectos_municipio_asociado', true);
+    
+    // Get all Municipio posts
+    $municipios = get_posts(array(
+        'post_type'      => 'municipio',
+        'posts_per_page' => -1,
+        'orderby'        => 'title',
+        'order'          => 'ASC',
+        'post_status'    => 'publish',
+    ));
+    
+    echo '<label for="proyectos_municipio_select">' . __('Selecciona Municipio:', 'elementor-blank-starter') . '</label><br>';
+    echo '<select id="proyectos_municipio_select" name="proyectos_municipio_asociado" style="width: 100%;">';
+    echo '<option value="">' . __('-- Ninguno --', 'elementor-blank-starter') . '</option>';
+    
+    if (!empty($municipios)) {
+        foreach ($municipios as $municipio) {
+            $selected = ($selected_municipio == $municipio->ID) ? 'selected="selected"' : '';
+            echo '<option value="' . esc_attr($municipio->ID) . '" ' . $selected . '>' . esc_html($municipio->post_title) . '</option>';
+        }
+    }
+    
+    echo '</select>';
+}
+
 function elementor_blank_save_proyectos_provincia($post_id) {
     // Check provincia nonce
     if (isset($_POST['proyectos_provincia_nonce_field']) && 
@@ -1111,6 +1138,20 @@ function elementor_blank_save_proyectos_provincia($post_id) {
                 if (isset($_POST['proyectos_galgdr_asociado'])) {
                     $galgdr_id = absint($_POST['proyectos_galgdr_asociado']);
                     update_post_meta($post_id, '_proyectos_galgdr_asociado', $galgdr_id);
+                }
+            }
+        }
+    }
+    
+    // Check municipio nonce
+    if (isset($_POST['proyectos_municipio_nonce_field']) && 
+        wp_verify_nonce($_POST['proyectos_municipio_nonce_field'], 'proyectos_municipio_nonce')) {
+        
+        if (!defined('DOING_AUTOSAVE') || !DOING_AUTOSAVE) {
+            if (current_user_can('edit_post', $post_id)) {
+                if (isset($_POST['proyectos_municipio_asociado'])) {
+                    $municipio_id = absint($_POST['proyectos_municipio_asociado']);
+                    update_post_meta($post_id, '_proyectos_municipio_asociado', $municipio_id);
                 }
             }
         }
@@ -1143,6 +1184,17 @@ function elementor_blank_register_provincia_meta() {
         'single' => true,
         'type' => 'integer',
         'description' => __('GAL/GDR asociado al proyecto (post ID)', 'elementor-blank-starter'),
+        'sanitize_callback' => 'absint',
+        'auth_callback' => function() {
+            return current_user_can('edit_posts');
+        }
+    ));
+    
+    register_post_meta('proyectos', '_proyectos_municipio_asociado', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'integer',
+        'description' => __('Municipio asociado al proyecto (post ID)', 'elementor-blank-starter'),
         'sanitize_callback' => 'absint',
         'auth_callback' => function() {
             return current_user_can('edit_posts');
