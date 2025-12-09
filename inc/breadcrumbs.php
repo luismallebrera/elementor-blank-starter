@@ -187,7 +187,7 @@ function elementor_blank_breadcrumbs( $args = array() ) {
 		'home_text'  => get_theme_mod( 'breadcrumbs_home_text', 'Home' ),
 		'separator'  => get_theme_mod( 'breadcrumbs_separator', '/' ),
 		'show_current' => true,
-		'max_length' => 50,
+		'max_length' => 60,
 	);
 
 	$args = wp_parse_args( $args, $defaults );
