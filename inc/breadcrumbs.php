@@ -192,12 +192,23 @@ function elementor_blank_breadcrumbs( $args = array() ) {
 
 	$args = wp_parse_args( $args, $defaults );
 
-	// Helper function to truncate text
+	// Helper function to truncate text at word boundary
 	$truncate_text = function( $text, $max_length ) {
-		if ( mb_strlen( $text ) > $max_length ) {
-			return mb_substr( $text, 0, $max_length ) . '...';
+		if ( mb_strlen( $text ) <= $max_length ) {
+			return $text;
 		}
-		return $text;
+		
+		// Cut at max length
+		$truncated = mb_substr( $text, 0, $max_length );
+		
+		// Find the last space to cut at word boundary
+		$last_space = mb_strrpos( $truncated, ' ' );
+		
+		if ( $last_space !== false ) {
+			$truncated = mb_substr( $truncated, 0, $last_space );
+		}
+		
+		return $truncated . '...';
 	};
 
 	$breadcrumbs = array();
