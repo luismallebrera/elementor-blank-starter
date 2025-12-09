@@ -637,6 +637,64 @@ function elementor_blank_term_name_shortcode($atts) {
 add_shortcode('term_name', 'elementor_blank_term_name_shortcode');
 
 /**
+ * Shortcode to show linked GAL/GDR from proyectos meta
+ * Usage: [proyectos_galgdr_link] (uses current post) or [proyectos_galgdr_link id="123"]
+ */
+function elementor_blank_proyectos_galgdr_link_shortcode($atts) {
+    $atts = shortcode_atts(array('id' => get_the_ID()), $atts);
+    $post_id = absint($atts['id']);
+    
+    $galgdr_id = get_post_meta($post_id, '_proyectos_galgdr_asociado', true);
+    
+    if ($galgdr_id) {
+        $title = get_the_title($galgdr_id);
+        $url = get_permalink($galgdr_id);
+        return '<a href="' . esc_url($url) . '">' . esc_html($title) . '</a>';
+    }
+    return '';
+}
+add_shortcode('proyectos_galgdr_link', 'elementor_blank_proyectos_galgdr_link_shortcode');
+
+/**
+ * Shortcode to show linked Municipio from proyectos meta
+ * Usage: [proyectos_municipio_link] (uses current post) or [proyectos_municipio_link id="123"]
+ */
+function elementor_blank_proyectos_municipio_link_shortcode($atts) {
+    $atts = shortcode_atts(array('id' => get_the_ID()), $atts);
+    $post_id = absint($atts['id']);
+    
+    $municipio_id = get_post_meta($post_id, '_proyectos_municipio_asociado', true);
+    
+    if ($municipio_id) {
+        $title = get_the_title($municipio_id);
+        $url = get_permalink($municipio_id);
+        return '<a href="' . esc_url($url) . '">' . esc_html($title) . '</a>';
+    }
+    return '';
+}
+add_shortcode('proyectos_municipio_link', 'elementor_blank_proyectos_municipio_link_shortcode');
+
+/**
+ * Shortcode to show provincia name from proyectos meta
+ * Usage: [proyectos_provincia_name] (uses current post) or [proyectos_provincia_name id="123"]
+ */
+function elementor_blank_proyectos_provincia_name_shortcode($atts) {
+    $atts = shortcode_atts(array('id' => get_the_ID()), $atts);
+    $post_id = absint($atts['id']);
+    
+    $provincia_id = get_post_meta($post_id, '_proyectos_provincia', true);
+    
+    if ($provincia_id) {
+        $term = get_term($provincia_id, 'provincia');
+        if ($term && !is_wp_error($term)) {
+            return esc_html($term->name);
+        }
+    }
+    return '';
+}
+add_shortcode('proyectos_provincia_name', 'elementor_blank_proyectos_provincia_name_shortcode');
+
+/**
  * Register Noticias Slider Post Type
  */
 function elementor_blank_register_noticias_slider_cpt() {
