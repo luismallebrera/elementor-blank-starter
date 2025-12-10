@@ -661,6 +661,47 @@ function elementor_blank_proyectos_gdr_link_shortcode($atts) {
 add_shortcode('proyectos_gdr_link', 'elementor_blank_proyectos_gdr_link_shortcode');
 
 /**
+ * Shortcode to display Provincia name from proyectos
+ * Usage: [proyectos_provincia] or [proyectos_provincia id="123"]
+ */
+function elementor_blank_proyectos_provincia_shortcode($atts) {
+    $atts = shortcode_atts(array('id' => get_the_ID()), $atts);
+    $post_id = absint($atts['id']);
+    
+    if ($post_id) {
+        $provincia_id = get_post_meta($post_id, '_proyectos_provincia', true);
+        
+        if ($provincia_id) {
+            $term = get_term($provincia_id, 'provincia');
+            if ($term && !is_wp_error($term)) {
+                return esc_html($term->name);
+            }
+        }
+    }
+    return '';
+}
+add_shortcode('proyectos_provincia', 'elementor_blank_proyectos_provincia_shortcode');
+
+/**
+ * Shortcode to display Municipio name from proyectos
+ * Usage: [proyectos_municipio] or [proyectos_municipio id="123"]
+ */
+function elementor_blank_proyectos_municipio_shortcode($atts) {
+    $atts = shortcode_atts(array('id' => get_the_ID()), $atts);
+    $post_id = absint($atts['id']);
+    
+    if ($post_id) {
+        $municipio_id = get_post_meta($post_id, '_proyectos_municipio', true);
+        
+        if ($municipio_id) {
+            return esc_html(get_the_title($municipio_id));
+        }
+    }
+    return '';
+}
+add_shortcode('proyectos_municipio', 'elementor_blank_proyectos_municipio_shortcode');
+
+/**
  * Register Noticias Slider Post Type
  */
 function elementor_blank_register_noticias_slider_cpt() {
