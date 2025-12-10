@@ -2148,14 +2148,21 @@ function elementor_blank_slider_meta_box($post) {
     $current = wp_get_object_terms($post->ID, 'slider', array('fields' => 'ids'));
     $current_id = !empty($current) ? $current[0] : 0;
     
+    wp_nonce_field('slider_taxonomy_nonce', 'slider_taxonomy_nonce_field');
+    
     echo '<div id="taxonomy-slider" class="categorydiv">';
-    echo '<input type="hidden" name="tax_input[slider][]" value="0" />';
+    
+    // None option
+    echo '<label style="display: block; margin: 5px 0;">';
+    echo '<input type="radio" name="slider_term" value="0" ' . checked($current_id, 0, false) . '> ';
+    echo esc_html__('None', 'elementor-blank-starter');
+    echo '</label>';
     
     if (!empty($terms)) {
         foreach ($terms as $term) {
-            $checked = ($current_id == $term->term_id) ? 'checked="checked"' : '';
+            $checked = checked($current_id, $term->term_id, false);
             echo '<label style="display: block; margin: 5px 0;">';
-            echo '<input type="radio" name="tax_input[slider][]" value="' . esc_attr($term->term_id) . '" ' . $checked . '> ';
+            echo '<input type="radio" name="slider_term" value="' . esc_attr($term->term_id) . '" ' . $checked . '> ';
             echo esc_html($term->name);
             echo '</label>';
         }
@@ -2165,6 +2172,39 @@ function elementor_blank_slider_meta_box($post) {
     
     echo '</div>';
 }
+
+/**
+ * Save Slider taxonomy selection
+ */
+function elementor_blank_save_slider_taxonomy($post_id) {
+    // Check nonce
+    if (!isset($_POST['slider_taxonomy_nonce_field']) || 
+        !wp_verify_nonce($_POST['slider_taxonomy_nonce_field'], 'slider_taxonomy_nonce')) {
+        return;
+    }
+    
+    // Check autosave
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    
+    // Check permissions
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+    
+    // Save the term
+    if (isset($_POST['slider_term'])) {
+        $term_id = intval($_POST['slider_term']);
+        
+        if ($term_id > 0) {
+            wp_set_object_terms($post_id, $term_id, 'slider', false);
+        } else {
+            wp_delete_object_term_relationships($post_id, 'slider');
+        }
+    }
+}
+add_action('save_post', 'elementor_blank_save_slider_taxonomy');
 
 /**
  * Flush rewrite rules on theme activation
