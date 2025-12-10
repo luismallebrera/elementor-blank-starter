@@ -2330,6 +2330,19 @@ function elementor_blank_sync_to_noticias_slider($post_id) {
         return;
     }
     
+    // Get slider fields from original post
+    $titulo_slider = get_post_meta($post_id, '_slider_titulo_slider', true);
+    $titulo_link = get_post_meta($post_id, '_slider_titulo_link', true);
+    $url_link = get_post_meta($post_id, '_slider_url_link', true);
+    
+    // Use defaults if empty
+    if (empty($titulo_slider)) {
+        $titulo_slider = $post->post_title;
+    }
+    if (empty($url_link)) {
+        $url_link = get_permalink($post_id);
+    }
+    
     // Check if already synced
     $existing = get_post_meta($post_id, '_noticias_slider_id', true);
     
@@ -2348,6 +2361,11 @@ function elementor_blank_sync_to_noticias_slider($post_id) {
             $thumbnail_id = get_post_thumbnail_id($post_id);
             set_post_thumbnail($existing, $thumbnail_id);
         }
+        
+        // Sync slider fields
+        update_post_meta($existing, '_slider_titulo_slider', $titulo_slider);
+        update_post_meta($existing, '_slider_titulo_link', $titulo_link);
+        update_post_meta($existing, '_slider_url_link', $url_link);
     } else {
         // Create new noticias_slider post
         $slider_id = wp_insert_post(array(
@@ -2368,6 +2386,11 @@ function elementor_blank_sync_to_noticias_slider($post_id) {
                 $thumbnail_id = get_post_thumbnail_id($post_id);
                 set_post_thumbnail($slider_id, $thumbnail_id);
             }
+            
+            // Sync slider fields
+            update_post_meta($slider_id, '_slider_titulo_slider', $titulo_slider);
+            update_post_meta($slider_id, '_slider_titulo_link', $titulo_link);
+            update_post_meta($slider_id, '_slider_url_link', $url_link);
         }
     }
 }
