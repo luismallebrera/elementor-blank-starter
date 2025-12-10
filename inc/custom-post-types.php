@@ -2105,6 +2105,68 @@ function elementor_blank_register_noticias_tag() {
 add_action('init', 'elementor_blank_register_noticias_tag', 0);
 
 /**
+ * Register Slider Taxonomy for Posts (Yes/No)
+ */
+function elementor_blank_register_slider_taxonomy() {
+    $labels = array(
+        'name'              => _x('Slider', 'taxonomy general name', 'elementor-blank-starter'),
+        'singular_name'     => _x('Slider', 'taxonomy singular name', 'elementor-blank-starter'),
+        'search_items'      => __('Search Slider', 'elementor-blank-starter'),
+        'all_items'         => __('All Slider Options', 'elementor-blank-starter'),
+        'edit_item'         => __('Edit Slider', 'elementor-blank-starter'),
+        'update_item'       => __('Update Slider', 'elementor-blank-starter'),
+        'add_new_item'      => __('Add New Slider Option', 'elementor-blank-starter'),
+        'new_item_name'     => __('New Slider Option Name', 'elementor-blank-starter'),
+        'menu_name'         => __('Slider', 'elementor-blank-starter'),
+    );
+
+    $args = array(
+        'labels'                     => $labels,
+        'hierarchical'               => false,
+        'public'                     => true,
+        'show_ui'                    => true,
+        'show_admin_column'          => true,
+        'show_in_nav_menus'          => false,
+        'show_tagcloud'              => false,
+        'show_in_rest'               => true,
+        'meta_box_cb'                => 'elementor_blank_slider_meta_box',
+    );
+
+    register_taxonomy('slider', array('post'), $args);
+}
+add_action('init', 'elementor_blank_register_slider_taxonomy', 0);
+
+/**
+ * Custom meta box for Slider taxonomy (radio buttons)
+ */
+function elementor_blank_slider_meta_box($post) {
+    $terms = get_terms(array(
+        'taxonomy' => 'slider',
+        'hide_empty' => false,
+    ));
+    
+    $current = wp_get_object_terms($post->ID, 'slider', array('fields' => 'ids'));
+    $current_id = !empty($current) ? $current[0] : 0;
+    
+    echo '<div id="taxonomy-slider" class="categorydiv">';
+    echo '<input type="hidden" name="tax_input[slider][]" value="0" />';
+    
+    if (!empty($terms)) {
+        foreach ($terms as $term) {
+            $checked = ($current_id == $term->term_id) ? 'checked="checked"' : '';
+            echo '<label style="display: block; margin: 5px 0;">';
+            echo '<input type="radio" name="tax_input[slider][]" value="' . esc_attr($term->term_id) . '" ' . $checked . '> ';
+            echo esc_html($term->name);
+            echo '</label>';
+        }
+    } else {
+        echo '<p>' . __('No slider options available. Please create "Yes" and "No" terms first.', 'elementor-blank-starter') . '</p>';
+    }
+    
+    echo '</div>';
+}
+
+/**
  * Flush rewrite rules on theme activation
  */
 function elementor_blank_flush_rewrite_rules() {
@@ -2117,6 +2179,7 @@ function elementor_blank_flush_rewrite_rules() {
     elementor_blank_register_noticias_cpt();
     elementor_blank_register_noticias_category();
     elementor_blank_register_noticias_tag();
+    elementor_blank_register_slider_taxonomy();
     flush_rewrite_rules();
 }
 register_activation_hook(__FILE__, 'elementor_blank_flush_rewrite_rules');
