@@ -2294,6 +2294,65 @@ function elementor_blank_save_slider_link_fields($post_id) {
 add_action('save_post', 'elementor_blank_save_slider_link_fields');
 
 /**
+ * Add Slider column to posts admin list
+ */
+function elementor_blank_add_slider_column($columns) {
+    $new_columns = array();
+    
+    foreach ($columns as $key => $value) {
+        $new_columns[$key] = $value;
+        
+        // Add Slider column after title
+        if ($key === 'title') {
+            $new_columns['show_in_slider'] = __('Slider', 'elementor-blank-starter');
+        }
+    }
+    
+    return $new_columns;
+}
+add_filter('manage_post_posts_columns', 'elementor_blank_add_slider_column');
+
+/**
+ * Display Slider column content
+ */
+function elementor_blank_display_slider_column($column, $post_id) {
+    if ($column === 'show_in_slider') {
+        $is_in_slider = get_post_meta($post_id, '_show_in_slider', true);
+        
+        if ($is_in_slider === '1') {
+            echo '<span style="color: #46b450; font-weight: bold;">✓ Yes</span>';
+        } else {
+            echo '<span style="color: #dc3232;">✕ No</span>';
+        }
+    }
+}
+add_action('manage_post_posts_custom_column', 'elementor_blank_display_slider_column', 10, 2);
+
+/**
+ * Make Slider column sortable
+ */
+function elementor_blank_sortable_slider_column($columns) {
+    $columns['show_in_slider'] = 'show_in_slider';
+    return $columns;
+}
+add_filter('manage_edit-post_sortable_columns', 'elementor_blank_sortable_slider_column');
+
+/**
+ * Handle Slider column sorting
+ */
+function elementor_blank_slider_column_orderby($query) {
+    if (!is_admin() || !$query->is_main_query()) {
+        return;
+    }
+    
+    if ($query->get('orderby') === 'show_in_slider') {
+        $query->set('meta_key', '_show_in_slider');
+        $query->set('orderby', 'meta_value');
+    }
+}
+add_action('pre_get_posts', 'elementor_blank_slider_column_orderby');
+
+/**
  * Sync post to Noticias Slider CPT when Slider = Yes
  */
 function elementor_blank_sync_to_noticias_slider($post_id) {
