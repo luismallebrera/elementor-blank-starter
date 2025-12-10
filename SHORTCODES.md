@@ -136,16 +136,6 @@ Muestra breadcrumbs (migas de pan) de navegación.
   - Soporte para jerarquías de posts y taxonomías
   - Compatible con CPTs personalizados
 
-### `[arcgis_map]`
-Inserta un mapa de ArcGIS mediante iframe.
-- **Uso:** `[arcgis_map layers="id" sublayer="num" height="600"]`
-- **Parámetros:**
-  - `layers` (opcional): ID de la capa. Por defecto: "0f8130f83d7b4faab7ecc4e148b4fd4f"
-  - `sublayer` (opcional): Número de subcapa. Por defecto: 66
-  - `height` (opcional): Altura en píxeles. Por defecto: 600
-  - `hidePanel` (opcional): "true" para ocultar panel. Por defecto: "true"
-- **Ejemplo:** `[arcgis_map layers="abc123" sublayer="10" height="800"]`
-
 ### `[image_pan_zoom]`
 Crea un visor de imagen con pan y zoom.
 - **Uso:** `[image_pan_zoom image="URL" zoom_min="1" zoom_max="3"]`

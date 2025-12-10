@@ -499,11 +499,6 @@ if (class_exists('Kirki')) {
     require_once get_template_directory() . '/inc/municipio-search-widget.php';
     
     /**
-     * ArcGIS Map Shortcode
-     */
-    require_once get_template_directory() . '/inc/arcgis-map-shortcode.php';
-    
-    /**
      * Image Pan & Zoom Shortcode
      */
     require_once get_template_directory() . '/inc/image-pan-zoom-shortcode.php';
