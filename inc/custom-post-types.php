@@ -2286,15 +2286,135 @@ add_filter('manage_post_posts_columns', 'elementor_blank_add_slider_column');
 function elementor_blank_display_slider_column($column, $post_id) {
     if ($column === 'show_in_slider') {
         $is_in_slider = get_post_meta($post_id, '_show_in_slider', true);
+        $nonce = wp_create_nonce('toggle_slider_' . $post_id);
         
         if ($is_in_slider === '1') {
-            echo '<span style="color: #46b450; font-weight: bold;">✓ Yes</span>';
+            echo '<a href="#" class="toggle-slider" data-post-id="' . esc_attr($post_id) . '" data-nonce="' . esc_attr($nonce) . '" data-status="1" style="text-decoration: none;">';
+            echo '<span style="color: #46b450; font-weight: bold; cursor: pointer;">✓ Yes</span>';
+            echo '</a>';
         } else {
-            echo '<span style="color: #dc3232;">✕ No</span>';
+            echo '<a href="#" class="toggle-slider" data-post-id="' . esc_attr($post_id) . '" data-nonce="' . esc_attr($nonce) . '" data-status="0" style="text-decoration: none;">';
+            echo '<span style="color: #dc3232; cursor: pointer;">✕ No</span>';
+            echo '</a>';
         }
     }
 }
 add_action('manage_post_posts_custom_column', 'elementor_blank_display_slider_column', 10, 2);
+
+/**
+ * Add AJAX handler for toggling slider
+ */
+function elementor_blank_ajax_toggle_slider() {
+    // Verify nonce
+    $post_id = intval($_POST['post_id']);
+    $nonce = sanitize_text_field($_POST['nonce']);
+    
+    if (!wp_verify_nonce($nonce, 'toggle_slider_' . $post_id)) {
+        wp_send_json_error('Invalid nonce');
+        return;
+    }
+    
+    // Check permissions
+    if (!current_user_can('edit_post', $post_id)) {
+        wp_send_json_error('No permission');
+        return;
+    }
+    
+    // Get current status and toggle
+    $current = get_post_meta($post_id, '_show_in_slider', true);
+    $new_status = ($current === '1') ? '0' : '1';
+    
+    // Update meta
+    update_post_meta($post_id, '_show_in_slider', $new_status);
+    
+    // Sync to Noticias Slider
+    if ($new_status === '1') {
+        elementor_blank_sync_to_noticias_slider($post_id);
+    } else {
+        elementor_blank_remove_from_noticias_slider($post_id);
+    }
+    
+    wp_send_json_success(array('status' => $new_status));
+}
+add_action('wp_ajax_toggle_slider', 'elementor_blank_ajax_toggle_slider');
+
+/**
+ * Add JavaScript for AJAX toggle
+ */
+function elementor_blank_slider_toggle_script() {
+    $screen = get_current_screen();
+    if ($screen && $screen->id === 'edit-post') {
+        ?>
+        <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            $(document).on('click', '.toggle-slider', function(e) {
+                e.preventDefault();
+                
+                var $link = $(this);
+                var postId = $link.data('post-id');
+                var nonce = $link.data('nonce');
+                var currentStatus = $link.data('status');
+                
+                // Show loading
+                $link.find('span').html('⟳ ...');
+                
+                $.ajax({
+                    url: ajaxurl,
+                    type: 'POST',
+                    data: {
+                        action: 'toggle_slider',
+                        post_id: postId,
+                        nonce: nonce
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            var newStatus = response.data.status;
+                            
+                            // Update display
+                            if (newStatus === '1') {
+                                $link.find('span').html('✓ Yes').css('color', '#46b450').css('font-weight', 'bold');
+                                $link.data('status', '1');
+                            } else {
+                                $link.find('span').html('✕ No').css('color', '#dc3232').css('font-weight', 'normal');
+                                $link.data('status', '0');
+                            }
+                            
+                            // Update nonce for next toggle
+                            $.post(ajaxurl, {
+                                action: 'get_new_slider_nonce',
+                                post_id: postId
+                            }, function(data) {
+                                if (data.success) {
+                                    $link.data('nonce', data.data.nonce);
+                                }
+                            });
+                        } else {
+                            alert('Error: ' + response.data);
+                            location.reload();
+                        }
+                    },
+                    error: function() {
+                        alert('Error toggling slider status');
+                        location.reload();
+                    }
+                });
+            });
+        });
+        </script>
+        <?php
+    }
+}
+add_action('admin_footer', 'elementor_blank_slider_toggle_script');
+
+/**
+ * Generate new nonce for next toggle
+ */
+function elementor_blank_ajax_new_slider_nonce() {
+    $post_id = intval($_POST['post_id']);
+    $nonce = wp_create_nonce('toggle_slider_' . $post_id);
+    wp_send_json_success(array('nonce' => $nonce));
+}
+add_action('wp_ajax_get_new_slider_nonce', 'elementor_blank_ajax_new_slider_nonce');
 
 /**
  * Make Slider column sortable
