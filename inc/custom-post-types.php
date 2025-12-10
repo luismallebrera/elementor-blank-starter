@@ -2105,38 +2105,6 @@ function elementor_blank_register_noticias_tag() {
 add_action('init', 'elementor_blank_register_noticias_tag', 0);
 
 /**
- * Register Slider Taxonomy for Posts (Yes/No)
- */
-function elementor_blank_register_slider_taxonomy() {
-    $labels = array(
-        'name'              => _x('Slider', 'taxonomy general name', 'elementor-blank-starter'),
-        'singular_name'     => _x('Slider', 'taxonomy singular name', 'elementor-blank-starter'),
-        'search_items'      => __('Search Slider', 'elementor-blank-starter'),
-        'all_items'         => __('All Slider Options', 'elementor-blank-starter'),
-        'edit_item'         => __('Edit Slider', 'elementor-blank-starter'),
-        'update_item'       => __('Update Slider', 'elementor-blank-starter'),
-        'add_new_item'      => __('Add New Slider Option', 'elementor-blank-starter'),
-        'new_item_name'     => __('New Slider Option Name', 'elementor-blank-starter'),
-        'menu_name'         => __('Slider', 'elementor-blank-starter'),
-    );
-
-    $args = array(
-        'labels'                     => $labels,
-        'hierarchical'               => false,
-        'public'                     => true,
-        'show_ui'                    => true,
-        'show_admin_column'          => true,
-        'show_in_nav_menus'          => false,
-        'show_tagcloud'              => false,
-        'show_in_rest'               => true,
-        'meta_box_cb'                => false, // Disable default meta box
-    );
-
-    register_taxonomy('slider', array('post'), $args);
-}
-add_action('init', 'elementor_blank_register_slider_taxonomy', 0);
-
-/**
  * Add custom meta box for Slider (toggle/checkbox)
  */
 function elementor_blank_add_slider_meta_box() {
@@ -2429,7 +2397,6 @@ function elementor_blank_flush_rewrite_rules() {
     elementor_blank_register_noticias_cpt();
     elementor_blank_register_noticias_category();
     elementor_blank_register_noticias_tag();
-    elementor_blank_register_slider_taxonomy();
     flush_rewrite_rules();
 }
 register_activation_hook(__FILE__, 'elementor_blank_flush_rewrite_rules');
