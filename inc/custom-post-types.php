@@ -702,6 +702,27 @@ function elementor_blank_proyectos_municipio_shortcode($atts) {
 add_shortcode('proyectos_municipio', 'elementor_blank_proyectos_municipio_shortcode');
 
 /**
+ * Shortcode to display GDR Siglas with link from proyectos
+ * Usage: [proyectos_gdr_siglas_link] or [proyectos_gdr_siglas_link id="123"]
+ */
+function elementor_blank_proyectos_gdr_siglas_link_shortcode($atts) {
+    $atts = shortcode_atts(array('id' => get_the_ID()), $atts);
+    $post_id = absint($atts['id']);
+    
+    if ($post_id) {
+        $siglas = get_post_meta($post_id, '_proyectos_gdr_siglas', true);
+        $gdr_id = get_post_meta($post_id, '_proyectos_gdr', true);
+        
+        if ($siglas && $gdr_id) {
+            $url = get_permalink($gdr_id);
+            return '<a href="' . esc_url($url) . '">' . esc_html($siglas) . '</a>';
+        }
+    }
+    return '';
+}
+add_shortcode('proyectos_gdr_siglas_link', 'elementor_blank_proyectos_gdr_siglas_link_shortcode');
+
+/**
  * Register Noticias Slider Post Type
  */
 function elementor_blank_register_noticias_slider_cpt() {
@@ -1084,6 +1105,12 @@ function elementor_blank_register_proyectos_cpt() {
         'single' => true,
         'type' => 'integer',
     ));
+    
+    register_post_meta('proyectos', '_proyectos_gdr_siglas', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'string',
+    ));
 }
 add_action('init', 'elementor_blank_register_proyectos_cpt', 0);
 
@@ -1126,6 +1153,15 @@ function elementor_blank_add_proyectos_provincia_meta_box() {
         'proyectos_gdr',
         __('GDR', 'elementor-blank-starter'),
         'elementor_blank_proyectos_gdr_callback',
+        'proyectos',
+        'side',
+        'default'
+    );
+    
+    add_meta_box(
+        'proyectos_gdr_siglas',
+        __('Siglas GDR', 'elementor-blank-starter'),
+        'elementor_blank_proyectos_gdr_siglas_callback',
         'proyectos',
         'side',
         'default'
@@ -1220,6 +1256,13 @@ function elementor_blank_proyectos_gdr_callback($post) {
     echo '</select>';
 }
 
+function elementor_blank_proyectos_gdr_siglas_callback($post) {
+    wp_nonce_field('proyectos_gdr_siglas_nonce', 'proyectos_gdr_siglas_nonce_field');
+    $value = get_post_meta($post->ID, '_proyectos_gdr_siglas', true);
+    echo '<label for="proyectos_gdr_siglas_field">' . __('Siglas GDR:', 'elementor-blank-starter') . '</label>';
+    echo '<input type="text" id="proyectos_gdr_siglas_field" name="proyectos_gdr_siglas" value="' . esc_attr($value) . '" class="widefat">';
+}
+
 function elementor_blank_save_proyectos_provincia($post_id) {
     // Provincia
     if (isset($_POST['proyectos_provincia_nonce_field']) && 
@@ -1264,6 +1307,18 @@ function elementor_blank_save_proyectos_provincia($post_id) {
             if (current_user_can('edit_post', $post_id)) {
                 if (isset($_POST['proyectos_gdr'])) {
                     update_post_meta($post_id, '_proyectos_gdr', absint($_POST['proyectos_gdr']));
+                }
+            }
+        }
+    }
+    
+    // Siglas GDR
+    if (isset($_POST['proyectos_gdr_siglas_nonce_field']) && 
+        wp_verify_nonce($_POST['proyectos_gdr_siglas_nonce_field'], 'proyectos_gdr_siglas_nonce')) {
+        if (!defined('DOING_AUTOSAVE') || !DOING_AUTOSAVE) {
+            if (current_user_can('edit_post', $post_id)) {
+                if (isset($_POST['proyectos_gdr_siglas'])) {
+                    update_post_meta($post_id, '_proyectos_gdr_siglas', sanitize_text_field($_POST['proyectos_gdr_siglas']));
                 }
             }
         }
