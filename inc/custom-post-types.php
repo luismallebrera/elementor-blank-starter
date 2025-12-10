@@ -2176,16 +2176,20 @@ add_action('add_meta_boxes', 'elementor_blank_add_slider_link_meta_boxes');
 function elementor_blank_slider_link_callback($post) {
     wp_nonce_field('slider_link_nonce', 'slider_link_nonce_field');
     
-    $titulo = get_post_meta($post->ID, '_slider_titulo', true);
-    $enlace = get_post_meta($post->ID, '_slider_enlace', true);
+    $titulo_slider = get_post_meta($post->ID, '_slider_titulo_slider', true);
+    $titulo_link = get_post_meta($post->ID, '_slider_titulo_link', true);
+    $url_link = get_post_meta($post->ID, '_slider_url_link', true);
     
-    echo '<p><label for="slider_titulo">' . __('Título Slider:', 'elementor-blank-starter') . '</label></p>';
-    echo '<input type="text" id="slider_titulo" name="slider_titulo" value="' . esc_attr($titulo) . '" class="widefat" placeholder="' . __('Link title', 'elementor-blank-starter') . '">';
+    echo '<p><label for="slider_titulo_slider">' . __('Título Slider:', 'elementor-blank-starter') . '</label></p>';
+    echo '<input type="text" id="slider_titulo_slider" name="slider_titulo_slider" value="' . esc_attr($titulo_slider) . '" class="widefat" placeholder="' . __('Slider title', 'elementor-blank-starter') . '">';
     
-    echo '<p style="margin-top: 15px;"><label for="slider_enlace">' . __('Enlace Slider:', 'elementor-blank-starter') . '</label></p>';
-    echo '<input type="url" id="slider_enlace" name="slider_enlace" value="' . esc_url($enlace) . '" class="widefat" placeholder="https://">';
+    echo '<p style="margin-top: 15px;"><label for="slider_titulo_link">' . __('Título Link:', 'elementor-blank-starter') . '</label></p>';
+    echo '<input type="text" id="slider_titulo_link" name="slider_titulo_link" value="' . esc_attr($titulo_link) . '" class="widefat" placeholder="' . __('Link title', 'elementor-blank-starter') . '">';
     
-    echo '<p class="description">' . __('Optional: Add a custom link title and URL for slider display.', 'elementor-blank-starter') . '</p>';
+    echo '<p style="margin-top: 15px;"><label for="slider_url_link">' . __('URL Link:', 'elementor-blank-starter') . '</label></p>';
+    echo '<input type="url" id="slider_url_link" name="slider_url_link" value="' . esc_url($url_link) . '" class="widefat" placeholder="https://">';
+    
+    echo '<p class="description">' . __('Optional: Add custom titles and URL for slider display.', 'elementor-blank-starter') . '</p>';
 }
 
 /**
@@ -2263,13 +2267,18 @@ function elementor_blank_save_slider_link_fields($post_id) {
     }
     
     // Save Título Slider
-    if (isset($_POST['slider_titulo'])) {
-        update_post_meta($post_id, '_slider_titulo', sanitize_text_field($_POST['slider_titulo']));
+    if (isset($_POST['slider_titulo_slider'])) {
+        update_post_meta($post_id, '_slider_titulo_slider', sanitize_text_field($_POST['slider_titulo_slider']));
     }
     
-    // Save Enlace Slider
-    if (isset($_POST['slider_enlace'])) {
-        update_post_meta($post_id, '_slider_enlace', esc_url_raw($_POST['slider_enlace']));
+    // Save Título Link
+    if (isset($_POST['slider_titulo_link'])) {
+        update_post_meta($post_id, '_slider_titulo_link', sanitize_text_field($_POST['slider_titulo_link']));
+    }
+    
+    // Save URL Link
+    if (isset($_POST['slider_url_link'])) {
+        update_post_meta($post_id, '_slider_url_link', esc_url_raw($_POST['slider_url_link']));
     }
 }
 add_action('save_post', 'elementor_blank_save_slider_link_fields');
