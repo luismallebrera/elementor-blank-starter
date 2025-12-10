@@ -2129,7 +2129,7 @@ function elementor_blank_register_slider_taxonomy() {
         'show_in_nav_menus'          => false,
         'show_tagcloud'              => false,
         'show_in_rest'               => true,
-        'meta_box_cb'                => 'elementor_blank_slider_meta_box',
+        'meta_box_cb'                => false, // Disable default meta box
     );
 
     register_taxonomy('slider', array('post'), $args);
@@ -2137,54 +2137,48 @@ function elementor_blank_register_slider_taxonomy() {
 add_action('init', 'elementor_blank_register_slider_taxonomy', 0);
 
 /**
- * Custom meta box for Slider taxonomy (radio buttons)
+ * Add custom meta box for Slider (toggle/checkbox)
  */
-function elementor_blank_slider_meta_box($post) {
-    $terms = get_terms(array(
-        'taxonomy' => 'slider',
-        'hide_empty' => false,
-    ));
+function elementor_blank_add_slider_meta_box() {
+    add_meta_box(
+        'slider_toggle',
+        __('Show in Slider', 'elementor-blank-starter'),
+        'elementor_blank_slider_toggle_callback',
+        'post',
+        'side',
+        'high'
+    );
+}
+add_action('add_meta_boxes', 'elementor_blank_add_slider_meta_box');
+
+/**
+ * Slider toggle meta box callback
+ */
+function elementor_blank_slider_toggle_callback($post) {
+    wp_nonce_field('slider_toggle_nonce', 'slider_toggle_nonce_field');
     
-    $current = wp_get_object_terms($post->ID, 'slider', array('fields' => 'ids'));
-    $current_id = !empty($current) ? $current[0] : 0;
+    $is_in_slider = get_post_meta($post->ID, '_show_in_slider', true);
+    $checked = ($is_in_slider === '1') ? 'checked="checked"' : '';
     
-    wp_nonce_field('slider_taxonomy_nonce', 'slider_taxonomy_nonce_field');
-    
-    echo '<div id="taxonomy-slider" class="categorydiv">';
-    
-    // None option
-    echo '<label style="display: block; margin: 5px 0;">';
-    echo '<input type="radio" name="slider_term" value="0" ' . checked($current_id, 0, false) . '> ';
-    echo esc_html__('None', 'elementor-blank-starter');
+    echo '<label style="display: block;">';
+    echo '<input type="checkbox" name="show_in_slider" value="1" ' . $checked . '> ';
+    echo __('Enable this post to appear in Noticias Slider', 'elementor-blank-starter');
     echo '</label>';
-    
-    if (!empty($terms)) {
-        foreach ($terms as $term) {
-            $checked = checked($current_id, $term->term_id, false);
-            echo '<label style="display: block; margin: 5px 0;">';
-            echo '<input type="radio" name="slider_term" value="' . esc_attr($term->term_id) . '" ' . $checked . '> ';
-            echo esc_html($term->name);
-            echo '</label>';
-        }
-    } else {
-        echo '<p>' . __('No slider options available. Please create "Yes" and "No" terms first.', 'elementor-blank-starter') . '</p>';
-    }
-    
-    echo '</div>';
+    echo '<p class="description">' . __('When enabled, this post will automatically sync to Noticias Slider CPT.', 'elementor-blank-starter') . '</p>';
 }
 
 /**
- * Save Slider taxonomy selection
+ * Save Slider toggle and sync to Noticias Slider
  */
-function elementor_blank_save_slider_taxonomy($post_id) {
+function elementor_blank_save_slider_toggle($post_id) {
     // Only process regular posts
     if (get_post_type($post_id) !== 'post') {
         return;
     }
     
     // Check nonce
-    if (!isset($_POST['slider_taxonomy_nonce_field']) || 
-        !wp_verify_nonce($_POST['slider_taxonomy_nonce_field'], 'slider_taxonomy_nonce')) {
+    if (!isset($_POST['slider_toggle_nonce_field']) || 
+        !wp_verify_nonce($_POST['slider_toggle_nonce_field'], 'slider_toggle_nonce')) {
         return;
     }
     
@@ -2198,27 +2192,18 @@ function elementor_blank_save_slider_taxonomy($post_id) {
         return;
     }
     
-    // Save the term
-    if (isset($_POST['slider_term'])) {
-        $term_id = intval($_POST['slider_term']);
-        
-        if ($term_id > 0) {
-            wp_set_object_terms($post_id, $term_id, 'slider', false);
-            
-            // Check if term is "Yes" (slug: yes)
-            $term = get_term($term_id, 'slider');
-            if ($term && !is_wp_error($term) && strtolower($term->slug) === 'yes') {
-                elementor_blank_sync_to_noticias_slider($post_id);
-            } else {
-                elementor_blank_remove_from_noticias_slider($post_id);
-            }
-        } else {
-            wp_delete_object_term_relationships($post_id, 'slider');
-            elementor_blank_remove_from_noticias_slider($post_id);
-        }
+    // Get the checkbox value
+    $show_in_slider = isset($_POST['show_in_slider']) ? '1' : '0';
+    update_post_meta($post_id, '_show_in_slider', $show_in_slider);
+    
+    // Sync to Noticias Slider based on toggle
+    if ($show_in_slider === '1') {
+        elementor_blank_sync_to_noticias_slider($post_id);
+    } else {
+        elementor_blank_remove_from_noticias_slider($post_id);
     }
 }
-add_action('save_post', 'elementor_blank_save_slider_taxonomy');
+add_action('save_post', 'elementor_blank_save_slider_toggle');
 
 /**
  * Sync post to Noticias Slider CPT when Slider = Yes
