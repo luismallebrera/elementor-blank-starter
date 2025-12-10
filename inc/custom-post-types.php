@@ -1157,15 +1157,6 @@ function elementor_blank_add_proyectos_provincia_meta_box() {
         'side',
         'default'
     );
-    
-    add_meta_box(
-        'proyectos_gdr_siglas',
-        __('Siglas GDR', 'elementor-blank-starter'),
-        'elementor_blank_proyectos_gdr_siglas_callback',
-        'proyectos',
-        'side',
-        'default'
-    );
 }
 add_action('add_meta_boxes', 'elementor_blank_add_proyectos_provincia_meta_box');
 
@@ -1256,13 +1247,6 @@ function elementor_blank_proyectos_gdr_callback($post) {
     echo '</select>';
 }
 
-function elementor_blank_proyectos_gdr_siglas_callback($post) {
-    wp_nonce_field('proyectos_gdr_siglas_nonce', 'proyectos_gdr_siglas_nonce_field');
-    $value = get_post_meta($post->ID, '_proyectos_gdr_siglas', true);
-    echo '<label for="proyectos_gdr_siglas_field">' . __('Siglas GDR:', 'elementor-blank-starter') . '</label>';
-    echo '<input type="text" id="proyectos_gdr_siglas_field" name="proyectos_gdr_siglas" value="' . esc_attr($value) . '" class="widefat">';
-}
-
 function elementor_blank_save_proyectos_provincia($post_id) {
     // Provincia
     if (isset($_POST['proyectos_provincia_nonce_field']) && 
@@ -1306,19 +1290,16 @@ function elementor_blank_save_proyectos_provincia($post_id) {
         if (!defined('DOING_AUTOSAVE') || !DOING_AUTOSAVE) {
             if (current_user_can('edit_post', $post_id)) {
                 if (isset($_POST['proyectos_gdr'])) {
-                    update_post_meta($post_id, '_proyectos_gdr', absint($_POST['proyectos_gdr']));
-                }
-            }
-        }
-    }
-    
-    // Siglas GDR
-    if (isset($_POST['proyectos_gdr_siglas_nonce_field']) && 
-        wp_verify_nonce($_POST['proyectos_gdr_siglas_nonce_field'], 'proyectos_gdr_siglas_nonce')) {
-        if (!defined('DOING_AUTOSAVE') || !DOING_AUTOSAVE) {
-            if (current_user_can('edit_post', $post_id)) {
-                if (isset($_POST['proyectos_gdr_siglas'])) {
-                    update_post_meta($post_id, '_proyectos_gdr_siglas', sanitize_text_field($_POST['proyectos_gdr_siglas']));
+                    $gdr_id = absint($_POST['proyectos_gdr']);
+                    update_post_meta($post_id, '_proyectos_gdr', $gdr_id);
+                    
+                    // Auto-sync siglas from GDR
+                    if ($gdr_id) {
+                        $siglas = get_post_meta($gdr_id, '_galgdr_siglas', true);
+                        update_post_meta($post_id, '_proyectos_gdr_siglas', $siglas);
+                    } else {
+                        delete_post_meta($post_id, '_proyectos_gdr_siglas');
+                    }
                 }
             }
         }

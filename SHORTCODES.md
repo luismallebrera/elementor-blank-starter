@@ -55,6 +55,7 @@ Muestra las siglas del GDR asociado con enlace a su página.
 - **Parámetros:**
   - `id` (opcional): ID del proyecto. Por defecto usa el proyecto actual
 - **Retorna:** Enlace HTML con las siglas del GDR (ej: `<a href="...">ADIMAN</a>`)
+- **Nota:** Las siglas se obtienen automáticamente del GDR asociado al proyecto
 
 ### `[proyectos_provincia]`
 Muestra el nombre de la provincia del proyecto.
@@ -163,7 +164,7 @@ Crea un visor de imagen con pan y zoom.
 - `_proyectos_municipio` - ID del post de municipio (integer)
 - `_proyectos_ayuda` - Texto de ayuda (string)
 - `_proyectos_gdr` - ID del post de GAL/GDR (integer)
-- `_proyectos_gdr_siglas` - Siglas del GDR (string)
+- `_proyectos_gdr_siglas` - Siglas del GDR (string, auto-sincronizado desde el GDR asociado)
 
 ### GAL/GDR
 - `_galgdr_siglas` - Siglas del GAL/GDR (string)
