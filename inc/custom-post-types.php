@@ -2185,6 +2185,11 @@ function elementor_blank_slider_link_callback($post) {
         $titulo_slider = get_the_title($post->ID);
     }
     
+    // Use post permalink as default if field is empty
+    if (empty($url_link)) {
+        $url_link = get_permalink($post->ID);
+    }
+    
     echo '<p><label for="slider_titulo_slider">' . __('Título Slider:', 'elementor-blank-starter') . '</label></p>';
     echo '<input type="text" id="slider_titulo_slider" name="slider_titulo_slider" value="' . esc_attr($titulo_slider) . '" class="widefat" placeholder="' . esc_attr(get_the_title($post->ID)) . '">';
     
@@ -2192,9 +2197,9 @@ function elementor_blank_slider_link_callback($post) {
     echo '<input type="text" id="slider_titulo_link" name="slider_titulo_link" value="' . esc_attr($titulo_link) . '" class="widefat" placeholder="' . __('Link title', 'elementor-blank-starter') . '">';
     
     echo '<p style="margin-top: 15px;"><label for="slider_url_link">' . __('URL Link:', 'elementor-blank-starter') . '</label></p>';
-    echo '<input type="url" id="slider_url_link" name="slider_url_link" value="' . esc_url($url_link) . '" class="widefat" placeholder="https://">';
+    echo '<input type="url" id="slider_url_link" name="slider_url_link" value="' . esc_url($url_link) . '" class="widefat" placeholder="' . esc_url(get_permalink($post->ID)) . '">';
     
-    echo '<p class="description">' . __('Optional: Add custom titles and URL for slider display. Título Slider defaults to post title if empty.', 'elementor-blank-starter') . '</p>';
+    echo '<p class="description">' . __('Optional: Add custom titles and URL for slider display. Defaults to post title and permalink if empty.', 'elementor-blank-starter') . '</p>';
 }
 
 /**
