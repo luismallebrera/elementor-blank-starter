@@ -2152,6 +2152,43 @@ function elementor_blank_add_slider_meta_box() {
 add_action('add_meta_boxes', 'elementor_blank_add_slider_meta_box');
 
 /**
+ * Add Slider Link custom fields to all posts, CPTs and pages
+ */
+function elementor_blank_add_slider_link_meta_boxes() {
+    $post_types = get_post_types(array('public' => true), 'names');
+    
+    foreach ($post_types as $post_type) {
+        add_meta_box(
+            'slider_link_fields',
+            __('Slider Link', 'elementor-blank-starter'),
+            'elementor_blank_slider_link_callback',
+            $post_type,
+            'side',
+            'default'
+        );
+    }
+}
+add_action('add_meta_boxes', 'elementor_blank_add_slider_link_meta_boxes');
+
+/**
+ * Slider link meta box callback
+ */
+function elementor_blank_slider_link_callback($post) {
+    wp_nonce_field('slider_link_nonce', 'slider_link_nonce_field');
+    
+    $titulo = get_post_meta($post->ID, '_slider_titulo', true);
+    $enlace = get_post_meta($post->ID, '_slider_enlace', true);
+    
+    echo '<p><label for="slider_titulo">' . __('Título Slider:', 'elementor-blank-starter') . '</label></p>';
+    echo '<input type="text" id="slider_titulo" name="slider_titulo" value="' . esc_attr($titulo) . '" class="widefat" placeholder="' . __('Link title', 'elementor-blank-starter') . '">';
+    
+    echo '<p style="margin-top: 15px;"><label for="slider_enlace">' . __('Enlace Slider:', 'elementor-blank-starter') . '</label></p>';
+    echo '<input type="url" id="slider_enlace" name="slider_enlace" value="' . esc_url($enlace) . '" class="widefat" placeholder="https://">';
+    
+    echo '<p class="description">' . __('Optional: Add a custom link title and URL for slider display.', 'elementor-blank-starter') . '</p>';
+}
+
+/**
  * Slider toggle meta box callback
  */
 function elementor_blank_slider_toggle_callback($post) {
@@ -2204,6 +2241,38 @@ function elementor_blank_save_slider_toggle($post_id) {
     }
 }
 add_action('save_post', 'elementor_blank_save_slider_toggle');
+
+/**
+ * Save Slider Link custom fields
+ */
+function elementor_blank_save_slider_link_fields($post_id) {
+    // Check nonce
+    if (!isset($_POST['slider_link_nonce_field']) || 
+        !wp_verify_nonce($_POST['slider_link_nonce_field'], 'slider_link_nonce')) {
+        return;
+    }
+    
+    // Check autosave
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    
+    // Check permissions
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+    
+    // Save Título Slider
+    if (isset($_POST['slider_titulo'])) {
+        update_post_meta($post_id, '_slider_titulo', sanitize_text_field($_POST['slider_titulo']));
+    }
+    
+    // Save Enlace Slider
+    if (isset($_POST['slider_enlace'])) {
+        update_post_meta($post_id, '_slider_enlace', esc_url_raw($_POST['slider_enlace']));
+    }
+}
+add_action('save_post', 'elementor_blank_save_slider_link_fields');
 
 /**
  * Sync post to Noticias Slider CPT when Slider = Yes
