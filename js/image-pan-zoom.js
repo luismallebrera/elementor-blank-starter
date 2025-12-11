@@ -227,7 +227,7 @@
     }
     
     // Re-init for dynamically loaded content (Elementor preview)
-    if (window.elementorFrontend) {
+    if (window.elementorFrontend && window.elementorFrontend.hooks) {
         window.elementorFrontend.hooks.addAction('frontend/element_ready/global', initImagePanZoom);
     }
 })();
