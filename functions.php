@@ -460,8 +460,9 @@ if (class_exists('Kirki')) {
     
     /**
      * Auto Rename Featured Image
+     * DISABLED: Waiting to resolve FileBird plugin conflict
      */
-    require_once get_template_directory() . '/inc/auto-rename-featured-image.php';
+    // require_once get_template_directory() . '/inc/auto-rename-featured-image.php';
     
     /**
      * Featured Image Admin Column
