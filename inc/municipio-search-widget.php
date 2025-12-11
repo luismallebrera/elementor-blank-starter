@@ -53,13 +53,22 @@ function elementor_blank_municipio_search_shortcode($atts) {
         $('#provincia-select').select2({
             placeholder: '<?php _e('-- Selecciona una provincia --', 'elementor-blank-starter'); ?>',
             allowClear: true,
-            width: '100%'
+            width: '100%',
+            dropdownCssClass: 'lenis-prevent-dropdown'
         });
         
         $('#municipio-select').select2({
             placeholder: '<?php _e('-- Selecciona un municipio --', 'elementor-blank-starter'); ?>',
             allowClear: true,
-            width: '100%'
+            width: '100%',
+            dropdownCssClass: 'lenis-prevent-dropdown'
+        });
+        
+        // Add data-lenis-prevent attribute to Select2 dropdowns when they open
+        $('#provincia-select, #municipio-select').on('select2:open', function() {
+            setTimeout(function() {
+                $('.select2-results__options').attr('data-lenis-prevent', '');
+            }, 0);
         });
         
         // When provincia changes, load municipios
