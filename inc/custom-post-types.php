@@ -569,12 +569,35 @@ function elementor_blank_municipio_galgdr_name_shortcode($atts) {
     $galgdr_id = get_post_meta($post_id, '_municipio_galgdr_asociado', true);
     
     if ($galgdr_id) {
-        return get_the_title($galgdr_id);
+        $url = get_permalink($galgdr_id);
+        $title = get_the_title($galgdr_id);
+        return '<a href="' . esc_url($url) . '">' . esc_html($title) . '</a>';
     }
     
     return '';
 }
 add_shortcode('municipio_galgdr_name', 'elementor_blank_municipio_galgdr_name_shortcode');
+
+/**
+ * Shortcode to display GAL/GDR featured image
+ * Usage: [municipio_galgdr_image] or [municipio_galgdr_image id="123" size="full"]
+ */
+function elementor_blank_municipio_galgdr_image_shortcode($atts) {
+    $atts = shortcode_atts(array(
+        'id' => get_the_ID(),
+        'size' => 'full'
+    ), $atts);
+    
+    $post_id = isset($_GET['municipio_id']) ? absint($_GET['municipio_id']) : $atts['id'];
+    $galgdr_id = get_post_meta($post_id, '_municipio_galgdr_asociado', true);
+    
+    if ($galgdr_id && has_post_thumbnail($galgdr_id)) {
+        return get_the_post_thumbnail($galgdr_id, $atts['size']);
+    }
+    
+    return '';
+}
+add_shortcode('municipio_galgdr_image', 'elementor_blank_municipio_galgdr_image_shortcode');
 
 function elementor_blank_municipio_provincia_name_shortcode($atts) {
     $atts = shortcode_atts(array(
